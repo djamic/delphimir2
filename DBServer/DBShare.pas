@@ -2,7 +2,7 @@ unit DBShare;
 
 interface
 uses
-  Windows, Messages, Classes, SysUtils, JSocket, IniFiles, Controls, Grobal2, Common, HumDB, MudUtil, SDK;
+  Windows, Messages, Classes, SysUtils, IniFiles, Controls, Grobal2, Common, HumDB, MudUtil, SDK;
 resourcestring
   g_sVersion = 'LOMCN - Mir Heroes';
   g_sUpDateTime = 'Build: 03/01/2011';

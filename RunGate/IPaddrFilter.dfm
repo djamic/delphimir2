@@ -4,8 +4,8 @@ object frmIPaddrFilter: TfrmIPaddrFilter
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'IP Filter'
-  ClientHeight = 295
-  ClientWidth = 390
+  ClientHeight = 369
+  ClientWidth = 488
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -15,37 +15,61 @@ object frmIPaddrFilter: TfrmIPaddrFilter
   OldCreateOrder = False
   OnCreate = FormCreate
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 15
   object PageControl1: TPageControl
-    Left = 8
-    Top = 8
-    Width = 377
-    Height = 281
+    Left = 10
+    Top = 10
+    Width = 471
+    Height = 351
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     ActivePage = TabSheet1
     TabOrder = 0
     object TabSheet1: TTabSheet
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'IP Blocks'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object LabelTempList: TLabel
-        Left = 8
-        Top = 8
-        Width = 54
-        Height = 12
+        Left = 10
+        Top = 10
+        Width = 91
+        Height = 15
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Caption = 'Temp Block List:'
       end
       object Label1: TLabel
-        Left = 136
-        Top = 8
-        Width = 54
-        Height = 12
+        Left = 170
+        Top = 10
+        Width = 56
+        Height = 15
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Caption = 'Block List:'
       end
       object ListBoxTempList: TListBox
-        Left = 9
-        Top = 26
-        Width = 121
-        Height = 225
+        Left = 11
+        Top = 33
+        Width = 152
+        Height = 281
         Hint = 'This is a list of temp blocked IPs'
-        ItemHeight = 12
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ItemHeight = 15
         Items.Strings = (
           '888.888.888.888')
         MultiSelect = True
@@ -57,12 +81,16 @@ object frmIPaddrFilter: TfrmIPaddrFilter
         OnKeyDown = ListBoxTempListKeyDown
       end
       object ListBoxBlockList: TListBox
-        Left = 136
-        Top = 24
-        Width = 121
-        Height = 225
+        Left = 170
+        Top = 30
+        Width = 151
+        Height = 281
         Hint = 'This is a list of blocked IPs'
-        ItemHeight = 12
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        ItemHeight = 15
         Items.Strings = (
           '888.888.888.888')
         MultiSelect = True
@@ -75,41 +103,65 @@ object frmIPaddrFilter: TfrmIPaddrFilter
       end
     end
     object TabSheet2: TTabSheet
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'Client'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label2: TLabel
-        Left = 8
-        Top = 20
-        Width = 54
-        Height = 12
+        Left = 10
+        Top = 25
+        Width = 63
+        Height = 15
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Caption = 'Max Ip Con:'
       end
       object Label9: TLabel
-        Left = 8
-        Top = 44
-        Width = 54
-        Height = 12
+        Left = 10
+        Top = 55
+        Width = 83
+        Height = 15
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Caption = 'Client Timeout:'
       end
       object Label7: TLabel
-        Left = 241
-        Top = 181
-        Width = 120
-        Height = 12
+        Left = 301
+        Top = 226
+        Width = 135
+        Height = 17
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Caption = 'LOMCN - Mir Heroes'
         Font.Charset = ANSI_CHARSET
         Font.Color = clRed
-        Font.Height = -12
+        Font.Height = -15
         Font.Name = #23435#20307
         Font.Style = []
         ParentFont = False
       end
       object EditMaxConnect: TSpinEdit
-        Left = 64
-        Top = 16
-        Width = 65
+        Left = 80
+        Top = 20
+        Width = 81
         Height = 21
         Hint = 'This is where you edit the maximum connections'
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         EditorEnabled = False
         MaxValue = 1000
         MinValue = 1
@@ -120,10 +172,14 @@ object frmIPaddrFilter: TfrmIPaddrFilter
         OnChange = EditMaxConnectChange
       end
       object EditClientTimeOutTime: TSpinEdit
-        Left = 64
-        Top = 40
-        Width = 65
+        Left = 80
+        Top = 50
+        Width = 81
         Height = 21
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         EditorEnabled = False
         MaxValue = 10
         MinValue = 1
@@ -134,53 +190,81 @@ object frmIPaddrFilter: TfrmIPaddrFilter
         OnChange = EditClientTimeOutTimeChange
       end
       object GroupBox4: TGroupBox
-        Left = 192
-        Top = 8
-        Width = 169
-        Height = 161
+        Left = 240
+        Top = 10
+        Width = 211
+        Height = 201
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Caption = 'Client'
         TabOrder = 2
         object Label6: TLabel
-          Left = 8
-          Top = 44
-          Width = 54
-          Height = 12
+          Left = 10
+          Top = 55
+          Width = 50
+          Height = 15
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Caption = 'Max Size:'
         end
         object Label8: TLabel
-          Left = 8
-          Top = 68
-          Width = 54
-          Height = 12
+          Left = 10
+          Top = 85
+          Width = 50
+          Height = 15
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Caption = 'Max Msg:'
         end
         object Label5: TLabel
-          Left = 8
-          Top = 20
-          Width = 54
-          Height = 12
+          Left = 10
+          Top = 25
+          Width = 48
+          Height = 15
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Caption = 'Min Size:'
         end
         object Label11: TLabel
-          Left = 8
-          Top = 92
-          Width = 78
-          Height = 12
+          Left = 10
+          Top = 115
+          Width = 35
+          Height = 15
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Caption = 'Attack:'
         end
         object Label12: TLabel
-          Left = 8
-          Top = 116
-          Width = 78
-          Height = 12
+          Left = 10
+          Top = 145
+          Width = 71
+          Height = 15
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Caption = 'Attack Count:'
         end
         object EditMaxSize: TSpinEdit
-          Left = 64
-          Top = 40
-          Width = 65
+          Left = 80
+          Top = 50
+          Width = 81
           Height = 21
           Hint = 'Maximum client packet size'
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           MaxValue = 20000
           MinValue = 1
           ParentShowHint = False
@@ -190,11 +274,15 @@ object frmIPaddrFilter: TfrmIPaddrFilter
           OnChange = EditMaxSizeChange
         end
         object EditMaxClientMsgCount: TSpinEdit
-          Left = 64
-          Top = 64
-          Width = 65
+          Left = 80
+          Top = 80
+          Width = 81
           Height = 21
           Hint = 'Maximum client message count'
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           EditorEnabled = False
           MaxValue = 100
           MinValue = 1
@@ -205,11 +293,15 @@ object frmIPaddrFilter: TfrmIPaddrFilter
           OnChange = EditMaxClientMsgCountChange
         end
         object CheckBoxLostLine: TCheckBox
-          Left = 64
-          Top = 136
-          Width = 97
-          Height = 17
+          Left = 80
+          Top = 170
+          Width = 121
+          Height = 21
           Hint = 'Auto mimimize on start up'
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           BiDiMode = bdLeftToRight
           Caption = 'Minimize'
           ParentBiDiMode = False
@@ -219,11 +311,15 @@ object frmIPaddrFilter: TfrmIPaddrFilter
           OnClick = CheckBoxLostLineClick
         end
         object EditNomSize: TSpinEdit
-          Left = 64
-          Top = 16
-          Width = 65
+          Left = 80
+          Top = 20
+          Width = 81
           Height = 21
           Hint = 'Minimum client packet size'
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Increment = 10
           MaxValue = 20000
           MinValue = 1
@@ -234,10 +330,14 @@ object frmIPaddrFilter: TfrmIPaddrFilter
           OnChange = EditNomSizeChange
         end
         object SpinEditAttackTick: TSpinEdit
-          Left = 88
-          Top = 88
-          Width = 65
+          Left = 110
+          Top = 110
+          Width = 81
           Height = 21
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Increment = 10
           MaxValue = 6000
           MinValue = 100
@@ -246,10 +346,14 @@ object frmIPaddrFilter: TfrmIPaddrFilter
           OnChange = SpinEditAttackTickChange
         end
         object SpinEditAttackCount: TSpinEdit
-          Left = 88
-          Top = 112
-          Width = 65
+          Left = 110
+          Top = 140
+          Width = 81
           Height = 21
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           MaxValue = 100
           MinValue = 1
           TabOrder = 5
@@ -258,18 +362,26 @@ object frmIPaddrFilter: TfrmIPaddrFilter
         end
       end
       object GroupBox3: TGroupBox
-        Left = 8
-        Top = 72
-        Width = 169
-        Height = 73
+        Left = 10
+        Top = 90
+        Width = 211
+        Height = 91
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Caption = 'Radio'
         TabOrder = 3
         object RadioAddBlockList: TRadioButton
-          Left = 16
-          Top = 48
-          Width = 129
-          Height = 17
+          Left = 20
+          Top = 60
+          Width = 161
+          Height = 21
           Hint = 'Not sure'
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Caption = 'Add Block'
           ParentShowHint = False
           ShowHint = True
@@ -277,23 +389,31 @@ object frmIPaddrFilter: TfrmIPaddrFilter
           OnClick = RadioAddBlockListClick
         end
         object RadioAddTempList: TRadioButton
-          Left = 16
-          Top = 32
-          Width = 129
-          Height = 17
+          Left = 20
+          Top = 40
+          Width = 161
+          Height = 21
+          Hint = 'Not sure'
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Caption = 'Add Temp'
-          Hint =  'Not sure'
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
           OnClick = RadioAddTempListClick
         end
         object RadioDisConnect: TRadioButton
-          Left = 16
-          Top = 16
-          Width = 129
-          Height = 17
+          Left = 20
+          Top = 20
+          Width = 161
+          Height = 21
           Hint = 'Not sure'
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
           Caption = 'Disconnect'
           ParentShowHint = False
           ShowHint = True
@@ -302,10 +422,14 @@ object frmIPaddrFilter: TfrmIPaddrFilter
         end
       end
       object ButtonOK: TButton
-        Left = 264
-        Top = 208
-        Width = 89
-        Height = 25
+        Left = 330
+        Top = 260
+        Width = 111
+        Height = 31
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
         Caption = 'OK (&O)'
         Default = True
         TabOrder = 4

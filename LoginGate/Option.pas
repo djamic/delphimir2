@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Main, Menus, JSocket, Spin, IniFiles, Mask, RzEdit,
+  Dialogs, StdCtrls, Main, Menus, Spin, IniFiles, Mask, RzEdit,
   RzBtnEdt;
 
 type
@@ -27,7 +27,6 @@ type
     BPOPMENU_CLEAR: TMenuItem;
     Label2: TLabel;
     EditMaxConnect: TSpinEdit;
-    Label3: TLabel;
     ButtonOK: TButton;
     Label5: TLabel;
     EditKeepConnectTimeOut: TSpinEdit;
@@ -43,14 +42,12 @@ type
     AYPOPMENU_DELETE: TMenuItem;
     Label1: TLabel;
     EditMaxOnlineCount: TSpinEdit;
-    Label4: TLabel;
     GroupBox3: TGroupBox;
     Label6: TLabel;
     ButtonLoadIpList: TButton;
     OpenDialog: TOpenDialog;
     Label7: TLabel;
     EditRefLoadIpListTime: TSpinEdit;
-    Label8: TLabel;
     EditIpList: TEdit;
     procedure APOPMENU_KICKClick(Sender: TObject);
     procedure APOPMENU_BLOCKLISTClick(Sender: TObject);
@@ -86,7 +83,7 @@ var
   frmOption: TfrmOption;
 
 implementation
-uses GateShare, HUtil32, Share;
+uses GateShare, HUtil32, Share, ScktComp;
 {$R *.dfm}
 
 procedure TfrmOption.APOPMENU_BLOCKLISTClick(Sender: TObject);

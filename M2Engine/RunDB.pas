@@ -2,7 +2,7 @@ unit RunDB;
 
 interface
 uses
-  Windows, Classes, SysUtils, Grobal2, JSocket, WinSock, Common, M2Share;
+  Windows, Classes, SysUtils, Grobal2, WinSock, Common, M2Share;
 function DBSocketWorking(): Boolean;
 function DBSocketConnected(): Boolean;
 function GetDBSockMsg(nQueryID: Integer; var nIdent: Integer; var nRecog: Integer; var sDefMsg, sStr: string; dwTimeOut: LongWord; SockData: TSockData): Boolean;

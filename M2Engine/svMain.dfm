@@ -150,6 +150,120 @@ object FrmMain: TFrmMain
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
+  object LabelVersion: TLabel
+    Left = 280
+    Top = 8
+    Width = 61
+    Height = 13
+    Caption = 'LabelVersion'
+  end
+  object LbRunTime: TLabel
+    Left = 280
+    Top = 24
+    Width = 55
+    Height = 13
+    Caption = 'LbRunTime'
+  end
+  object LbUserCount: TLabel
+    Left = 280
+    Top = 48
+    Width = 62
+    Height = 13
+    Caption = 'LbUserCount'
+  end
+  object Label1: TLabel
+    Left = 40
+    Top = 312
+    Width = 32
+    Height = 13
+    Caption = 'Label1'
+  end
+  object Label2: TLabel
+    Left = 168
+    Top = 303
+    Width = 32
+    Height = 13
+    Caption = 'Label1'
+  end
+  object Label3: TLabel
+    Left = 376
+    Top = 303
+    Width = 32
+    Height = 13
+    Caption = 'Label1'
+  end
+  object Label4: TLabel
+    Left = 248
+    Top = 312
+    Width = 32
+    Height = 13
+    Caption = 'Label1'
+  end
+  object LbTimeCount: TLabel
+    Left = 120
+    Top = 64
+    Width = 63
+    Height = 13
+    Caption = 'LbTimeCount'
+  end
+  object MemStatus: TLabel
+    Left = 384
+    Top = 16
+    Width = 53
+    Height = 13
+    Caption = 'MemStatus'
+  end
+  object LTotalRAM: TLabel
+    Left = 384
+    Top = 32
+    Width = 54
+    Height = 13
+    Caption = 'LTotalRAM'
+  end
+  object LFreeRAM: TLabel
+    Left = 392
+    Top = 56
+    Width = 51
+    Height = 13
+    Caption = 'LFreeRAM'
+  end
+  object LTotalVirtual: TLabel
+    Left = 232
+    Top = 64
+    Width = 59
+    Height = 13
+    Caption = 'LTotalVirtual'
+  end
+  object LFreeVirtual: TLabel
+    Left = 336
+    Top = 64
+    Width = 56
+    Height = 13
+    Caption = 'LFreeVirtual'
+  end
+  object LMemoryLoad: TLabel
+    Left = 104
+    Top = 312
+    Width = 67
+    Height = 13
+    Caption = 'LMemoryLoad'
+  end
+  object MemoLog: TMemo
+    Left = 24
+    Top = 80
+    Width = 441
+    Height = 217
+    Lines.Strings = (
+      'MemoLog')
+    TabOrder = 0
+  end
+  object GridGate: TStringGrid
+    Left = 88
+    Top = 144
+    Width = 320
+    Height = 120
+    TabOrder = 1
+  end
   object CloseTimer: TTimer
     Enabled = False
     Interval = 100

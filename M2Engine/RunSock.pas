@@ -2,8 +2,8 @@ unit RunSock;
 
 interface
 uses
-  Windows, Classes, SysUtils, StrUtils, SyncObjs, JSocket, ObjBase, ObjActor, ObjHero, Grobal2,
-  FrnEngn, UsrEngn, Common;
+  Windows, Classes, SysUtils, StrUtils, SyncObjs, ObjBase, ObjActor, ObjHero, Grobal2,
+  FrnEngn, UsrEngn, Common, ScktComp;
 type
   TGateUserInfo = record
     sAccount: string;

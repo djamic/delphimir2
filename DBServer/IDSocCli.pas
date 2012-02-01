@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics,
-  Controls, Forms, Dialogs, StdCtrls, ExtCtrls, JSocket, Common, Grobal2, DBShare, IniFiles;
+  Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Common, Grobal2, DBShare, IniFiles,
+  ScktComp;
 type
   TFrmIDSoc = class(TForm)
     IDSocket: TClientSocket;

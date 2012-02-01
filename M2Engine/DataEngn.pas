@@ -2,7 +2,7 @@ unit DataEngn;
 
 interface
 uses
-  Windows, Classes, SysUtils, Grobal2, SDK, JSocket, Forms;
+  Windows, Classes, SysUtils, Grobal2, SDK, Forms, ScktComp;
 type
   TDataEngine = class(TThread)
   private

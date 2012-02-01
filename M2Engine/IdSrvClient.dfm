@@ -1,9 +1,9 @@
 object FrmIDSoc: TFrmIDSoc
   Left = 837
   Top = 334
-  Width = 187
-  Height = 122
   Caption = 'FrmIDSoc'
+  ClientHeight = 95
+  ClientWidth = 179
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

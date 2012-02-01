@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics,
-  Controls, Forms, Dialogs, StdCtrls, JSocket, Common, LSShare;
+  Controls, Forms, Dialogs, StdCtrls, Common, LSShare, ScktComp;
 type
   TMsgServerInfo = record
     sReceiveMsg: string;
@@ -70,7 +70,7 @@ var
 begin
   Config := @g_Config;
   m_ServerList := TList.Create;
-  MSocket.Address := Config.sServerAddr;
+//  MSocket.Address := Config.sServerAddr;
   MSocket.Port := Config.nServerPort;
   MSocket.Active := True;
   LoadServerAddr();

@@ -1,4 +1,4 @@
-unit LogDataMain;
+锘縰nit LogDataMain;
 
 interface
 
@@ -62,7 +62,7 @@ begin
 
   m_boRemoteClose := False;
   SendGameCenterMsg(SG_FORMHANDLE, IntToStr(Self.Handle));
-  SendGameCenterMsg(SG_STARTNOW, '正在启动日志服务器...');
+  SendGameCenterMsg(SG_STARTNOW, '脮媒脭脷脝么露炉脠脮脰戮路镁脦帽脝梅...');
   LogMsgList := TStringList.Create;
   StartTimer.Enabled := True;
 end;
@@ -74,7 +74,7 @@ end;
 
 procedure TFrmLogData.CloseTimerTimer(Sender: TObject);
 begin
-  Caption := '正在关闭...';
+  Caption := 'data log...';
   if SearchStatus then QuitFlag := True else Close;
 end;
 
@@ -82,8 +82,8 @@ procedure TFrmLogData.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   if m_boRemoteClose then exit;
-  if Application.MessageBox('是否确认退出服务器？',
-    '提示信息',
+  if Application.MessageBox('kh么ng bi岷縯',
+    'C岷h b谩o',
     MB_YESNO + MB_ICONQUESTION) = IDYES then begin
     m_boRemoteClose := True;
     CloseTimer.Enabled := True;
@@ -108,7 +108,7 @@ begin
   DecodeTime(Time, Hour, Min, Sec, MSec); //ExtractFilePath(ParamStr(0)) +
   sLogDir := sBaseDir + IntToStr(Year) + '-' + IntToString(Month) + '-' + IntToString(Day);
   if not DirectoryExists(sLogDir) then begin
-    CreateDirectoryA(PChar(sLogDir), nil);
+    CreateDirectoryA(PAnsiChar(sLogDir), nil);
   end;
   sLogFile := sLogDir + '\Log-' + IntToString(Hour) + 'h' + IntToString((Min div 10) * 2) + 'm.txt';
   Label4.Caption := sLogFile;
@@ -139,7 +139,7 @@ var
 begin
   wIdent := HiWord(MsgData.From);
   //  ProgramType:=TProgamType(LoWord(MsgData.From));
-  sData := StrPas(MsgData.CopyDataStruct^.lpData);
+  sData := StrPas(Pansichar(MsgData.CopyDataStruct^.lpData));
   case wIdent of //
     GS_QUIT: begin
         m_boRemoteClose := True;
@@ -171,7 +171,7 @@ begin
   IdUDPServerLog.DefaultPort := nServerPort;
   IdUDPServerLog.Active := True;
   if boMinimize then Application.Minimize;
-  SendGameCenterMsg(SG_STARTOK, '日志服务器启动完成...');
+  SendGameCenterMsg(SG_STARTOK, 'C谩i g矛 膽芒y...');
 end;
 
 procedure TFrmLogData.IdUDPServerLogUDPRead(Sender: TObject; AData: TBytes;

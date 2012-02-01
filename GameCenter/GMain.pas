@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, INIFiles, ExtCtrls, IdTCPClient, IdHTTP,
-  Spin, JSocket, RzSpnEdt, Mask, RzEdit, RzBtnEdt, ShlObj, ActiveX, ShellApi,
-  VCLUnZip, VCLZip, Common;
+  Spin, RzSpnEdt, Mask, RzEdit, RzBtnEdt, ShlObj, ActiveX, ShellApi,
+  UnitZip, Common, ScktComp;
 
 type
   TfrmMain = class(TForm)
@@ -2097,7 +2097,7 @@ begin
   wIdent := HiWord(MsgData.From);
   wRecog := LoWord(MsgData.From);
   //ProgramType:=TProgamType(LoWord(MsgData.From));
-  sData := StrPas(MsgData.CopyDataStruct^.lpData);
+  sData := StrPas(PAnsichar(MsgData.CopyDataStruct^.lpData));
   case TProgamType(wRecog) of //
     tDBServer: ProcessDBServerMsg(wIdent, sData);
     tLoginSrv: ProcessLoginSrvMsg(wIdent, sData);
@@ -2626,7 +2626,7 @@ begin
   g_nServerPort := g_IniConf.ReadInteger('Client', 'ServerPort', g_nServerPort);
 
   try
-    ServerSocket.Address := g_sServerAddr;
+//    ServerSocket.Address := g_sServerAddr;
     ServerSocket.Port := g_nServerPort;
     ServerSocket.Active := True;
     m_dwShowTick := GetTickCount();

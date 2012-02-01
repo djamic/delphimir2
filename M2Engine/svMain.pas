@@ -4,11 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, JSocket, ExtCtrls, Buttons, StdCtrls, IniFiles, M2Share,
+  Dialogs, ExtCtrls, Buttons, StdCtrls, IniFiles, M2Share,
   Grobal2, SDK, HUtil32, RunSock, Envir, ItmUnit, ItemEvent, Magic, NoticeM, Guild, Event,
   Castle, FrnEngn, UsrEngn, Mudutil, SyncObjs, Menus, ComCtrls, Grids, ObjBase,
   IdBaseComponent, IdComponent, IdUDPBase, IdUDPClient, RzCommon, Common,
-  RzEdit, RzPanel, RzSplit, RzGrids, ImgList, Gauges, DataEngn, Spin;
+  RzEdit, RzPanel, RzSplit, RzGrids, ImgList, Gauges, DataEngn, Spin, ScktComp;
 
 type
   TFrmMain = class(TForm)
@@ -55,32 +55,27 @@ type
     MENU_TOOLS_IPSEARCH: TMenuItem;
     MENU_MANAGE_CASTLE: TMenuItem;
     MENU_HELP_REGKEY: TMenuItem;
-    RzSplitter: TRzSplitter;
-    MemoLog: TRzMemo;
-    RzSplitter1: TRzSplitter;
     MonItems: TMenuItem;
     MENU_OPTION_HERO: TMenuItem;
     MENU_CONTROL_REFSERVERCONFIG: TMenuItem;
     MENU_MANAGE_SYS: TMenuItem;
-    Panel: TPanel;
+    IdUDPClientLog: TIdUDPClient;
+    MemoLog: TMemo;
+    LabelVersion: TLabel;
+    LbRunTime: TLabel;
+    LbUserCount: TLabel;
     Label1: TLabel;
     Label2: TLabel;
-    Lbcheck: TLabel;
-    LbRunSocketTime: TLabel;
-    LbRunTime: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
     LbTimeCount: TLabel;
-    LbUserCount: TLabel;
     MemStatus: TLabel;
-    LabelVersion: TLabel;
     LTotalRAM: TLabel;
     LFreeRAM: TLabel;
     LTotalVirtual: TLabel;
     LFreeVirtual: TLabel;
     LMemoryLoad: TLabel;
     GridGate: TStringGrid;
-    Label5: TLabel;
-    Label20: TLabel;
-    IdUDPClientLog: TIdUDPClient;
 
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure MemoLogChange(Sender: TObject);
@@ -551,14 +546,14 @@ begin
       UserEngine.dwProcessNpcTimeMax,
       g_nProcessHumanLoopTime]);
 
-  Label5.Caption := g_sMonGenInfo1 + ' - ' + g_sMonGenInfo2 + '    ';
+  Label3.Caption := g_sMonGenInfo1 + ' - ' + g_sMonGenInfo2 + '    ';
 
 
   {Label20.Caption:='MonG' + IntToStr(g_nMonGenTime) + '/' + IntToStr(g_nMonGenTimeMin) + '/' + IntToStr(g_nMonGenTimeMax) + ' ' +
                    'MonP' + IntToStr(g_nMonProcTime) + '/' + IntToStr(g_nMonProcTimeMin) + '/' + IntToStr(g_nMonProcTimeMax) + ' ' +
                    'ObjRun' + IntToStr(g_nBaseObjTimeMin) + '/' + IntToStr(g_nBaseObjTimeMax);
  }
-  Label20.Caption := Format('Test8(%d/%d/%d) Test9(%d/%d/%d) Test10(%d/%d)', [g_nMonGenTime, g_nMonGenTimeMin, g_nMonGenTimeMax, g_nMonProcTime, g_nMonProcTimeMin, g_nMonProcTimeMax, g_nBaseObjTimeMin, g_nBaseObjTimeMax]);
+  Label4.Caption := Format('Test8(%d/%d/%d) Test9(%d/%d/%d) Test10(%d/%d)', [g_nMonGenTime, g_nMonGenTimeMin, g_nMonGenTimeMax, g_nMonProcTime, g_nMonProcTimeMin, g_nMonProcTimeMax, g_nBaseObjTimeMin, g_nBaseObjTimeMax]);
 
   //MemStatus.Caption:='ÄÚ´æ: ' + IntToStr(ROUND(AllocMemSize / 1024)) + 'KB';// + ' ÄÚ´æ¿éÊý: ' + IntToStr(AllocMemCount);
   //Lbcheck.Caption:='check' + IntToStr(g_CheckCode.dwThread0) + '/w' + IntToStr(g_ProcessMsg.wIdent) + '/' + IntToStr(g_ProcessMsg.nParam1) + '/' +  IntToStr(g_ProcessMsg.nParam2) + '/' +  IntToStr(g_ProcessMsg.nParam3) + '/' + g_ProcessMsg.sMsg;
@@ -864,7 +859,7 @@ begin
 
     RunTimer.Enabled := True;
     SendGameCenterMsg(SG_STARTOK, 'Rungate Started...');
-    GateSocket.Address := g_Config.sGateAddr;
+//    GateSocket.Address := g_Config.sGateAddr;
     GateSocket.Port := g_Config.nGatePort;
     g_GateSocket := GateSocket;
     nError := 6;
@@ -1848,7 +1843,7 @@ resourcestring
 begin
   if not GateSocket.Active then begin
     GateSocket.Active := True;
-    MainOutMessage(Format(sGatePortOpen, [GateSocket.Address, GateSocket.Port]));
+//    MainOutMessage(Format(sGatePortOpen, [GateSocket.Address, GateSocket.Port]));
   end;
 end;
 
@@ -1868,7 +1863,7 @@ begin
       GateSocket.Socket.Connections[I].Close;
     end;
     GateSocket.Active := False;
-    MainOutMessage(Format(sGatePortClose, [GateSocket.Address, GateSocket.Port]));
+//    MainOutMessage(Format(sGatePortClose, [GateSocket.Address, GateSocket.Port]));
   end;
 end;
 
@@ -2010,7 +2005,7 @@ var
   wIdent: Word;
 begin
   wIdent := HiWord(MsgData.From);
-  sData := StrPas(MsgData.CopyDataStruct^.lpData);
+  sData := StrPas(Pansichar(MsgData.CopyDataStruct^.lpData));
   case wIdent of
     GS_QUIT: begin
         g_boExitServer := True;

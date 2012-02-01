@@ -1,9 +1,9 @@
 object FrmMain: TFrmMain
   Left = 722
   Top = 263
-  Width = 308
-  Height = 334
   Caption = 'FrmMain'
+  ClientHeight = 288
+  ClientWidth = 300
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -20,8 +20,8 @@ object FrmMain: TFrmMain
   object MemoLog: TMemo
     Left = 0
     Top = 81
-    Width = 292
-    Height = 195
+    Width = 300
+    Height = 207
     Align = alClient
     ScrollBars = ssBoth
     TabOrder = 0
@@ -30,7 +30,7 @@ object FrmMain: TFrmMain
   object RzPanel1: TRzPanel
     Left = 0
     Top = 0
-    Width = 292
+    Width = 300
     Height = 81
     Align = alTop
     BorderOuter = fsNone

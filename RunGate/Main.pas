@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, StrUtils, Variants, Classes, Controls, Forms,
-  Dialogs, JSocket, ExtCtrls, StdCtrls, WinSock, Grobal2, IniFiles, Menus, GateShare,
-  ComCtrls, RzPanel, Common;
+  Dialogs, ExtCtrls, StdCtrls, WinSock, Grobal2, IniFiles, Menus, GateShare,
+  ComCtrls, RzPanel, Common, ScktComp;
 
 type
   TFrmMain = class(TForm)
@@ -742,7 +742,7 @@ begin
     dwRefConsolMsgTick := GetTickCount();
 
     ServerSocket.Active := False;
-    ServerSocket.Address := GateAddr;
+//    ServerSocket.Address := GateAddr;
     ServerSocket.Port := GatePort;
     ServerSocket.Active := True;
 
@@ -1024,7 +1024,7 @@ var
   sRemoteAddress: string;
   UserSession: pTSessionInfo;
 begin
-  Socket.nIndex := -1;
+//  Socket.nIndex := -1;
   sRemoteAddress := Socket.RemoteAddress;
   if boGateReady then begin
 
@@ -1088,7 +1088,7 @@ begin
           UserSession.GameSpeed.nRunCount := 0;
           UserSession.GameSpeed.nWalkCount := 0;
           UserSession.GameSpeed.nTurnCount := 0; }
-          Socket.nIndex := nSockIdx;
+//          Socket.nIndex := nSockIdx;
           Inc(SessionCount);
           break;
         end;
@@ -1098,15 +1098,15 @@ begin
     end;
     if nSockIdx < GATEMAXSESSION then begin
       SendServerMsg(GM_OPEN, nSockIdx, Socket.SocketHandle, 0, Length(Socket.RemoteAddress) + 1, PChar(Socket.RemoteAddress));
-      Socket.nIndex := nSockIdx;
+//      Socket.nIndex := nSockIdx;
       AddMainLogMsg('开始连接: ' + sRemoteAddress, 5);
     end else begin
-      Socket.nIndex := -1;
+//      Socket.nIndex := -1;
       Socket.Close;
       AddMainLogMsg('禁止连接: ' + sRemoteAddress, 1);
     end;
   end else begin
-    Socket.nIndex := -1;
+//    Socket.nIndex := -1;
     Socket.Close;
     AddMainLogMsg('禁止连接: ' + sRemoteAddress, 1);
   end;
@@ -1124,8 +1124,8 @@ var
   IPList: TList;
 begin
   sRemoteAddr := Socket.RemoteAddress;
-  nSockIndex := Socket.nIndex;
-  nIPaddr := inet_addr(PChar(sRemoteAddr));
+//  nSockIndex := Socket.nIndex;
+  nIPaddr := inet_addr(PAnsiChar(sRemoteAddr));
   CurrIPaddrList.Lock;
   try
     for i := CurrIPaddrList.Count - 1 downto 0 do begin
@@ -1155,7 +1155,7 @@ begin
     UserSession.nSckHandle := -1;
     UserSession.sSocData := '';
     UserSession.sSendData := '';
-    Socket.nIndex := -1;
+//    Socket.nIndex := -1;
     Dec(SessionCount);
     if boGateReady then begin
       SendServerMsg(GM_CLOSE, 0, Socket.SocketHandle, 0, 0, nil);
@@ -1190,7 +1190,7 @@ begin
     dwProcessMsgTick := GetTickCount();
     //nReviceLen:=Socket.ReceiveLength;
     sRemoteAddress := Socket.RemoteAddress;
-    nSocketIndex := Socket.nIndex;
+//    nSocketIndex := Socket.nIndex;
     sReviceMsg := Socket.ReceiveText;
     //TestList.Add('IP:'+sRemoteAddress+' '+sReviceMsg);
     nReviceLen := Length(sReviceMsg);
@@ -1580,7 +1580,7 @@ begin
   Result := False;
   TempBlockIPList.Lock;
   try
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := 0 to TempBlockIPList.Count - 1 do begin
       IPaddr := pTSockaddr(TempBlockIPList.Items[i]);
       if IPaddr.nIPaddr = nIPaddr then begin
@@ -1617,7 +1617,7 @@ begin
   BlockIPList.Lock;
   try
     Result := 0;
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := 0 to BlockIPList.Count - 1 do begin
       IPaddr := pTSockaddr(BlockIPList.Items[i]);
       if IPaddr.nIPaddr = nIPaddr then begin
@@ -1645,7 +1645,7 @@ begin
   TempBlockIPList.Lock;
   try
     Result := 0;
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := 0 to TempBlockIPList.Count - 1 do begin
       IPaddr := pTSockaddr(TempBlockIPList.Items[i]);
       if IPaddr.nIPaddr = nIPaddr then begin
@@ -1675,7 +1675,7 @@ begin
   try
     Result := False;
     bo01 := False;
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := AttackIPaddrList.Count - 1 downto 0 do begin
       IPaddr := pTSockaddr(AttackIPaddrList.Items[i]);
       if IPaddr.nIPaddr = nIPaddr then begin
@@ -1721,7 +1721,7 @@ begin
   AttackIPaddrList.Lock;
   try
     Result := 0;
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := AttackIPaddrList.Count - 1 downto 0 do begin
       IPaddr := pTSockaddr(AttackIPaddrList.Items[i]);
       if IPaddr.nIPaddr = nIPaddr then begin
@@ -1745,7 +1745,7 @@ begin
   CurrIPaddrList.Lock;
   try
     bo01 := False;
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := 0 to CurrIPaddrList.Count - 1 do begin
       IPList := TList(CurrIPaddrList.Items[i]);
       if (IPList <> nil) and (IPList.Count > 0) then begin
@@ -1792,7 +1792,7 @@ begin
   Result := 0;
   CurrIPaddrList.Lock;
   try
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := 0 to CurrIPaddrList.Count - 1 do begin
       IPList := TList(CurrIPaddrList.Items[i]);
       if (IPList <> nil) and (IPList.Count > 0) then begin
@@ -1922,7 +1922,7 @@ var
   wIdent: Word;
 begin
   wIdent := HiWord(MsgData.From);
-  sData := StrPas(MsgData.CopyDataStruct^.lpData);
+  sData := StrPas(PAnsiChar(MsgData.CopyDataStruct^.lpData));
   case wIdent of
     GS_QUIT: begin
         if boServiceStart then begin

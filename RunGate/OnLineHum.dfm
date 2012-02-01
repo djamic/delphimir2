@@ -2,51 +2,60 @@ object FrmOnLineHum: TFrmOnLineHum
   Left = 677
   Top = 213
   BorderStyle = bsDialog
-  Caption = #22312#32447#20154#29289
-  ClientHeight = 320
-  ClientWidth = 504
+  Caption = 'ng'#432#7901'i tr'#7921'c tuy'#7871'n'
+  ClientHeight = 427
+  ClientWidth = 672
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
-  Font.Name = #23435#20307
+  Font.Name = 'Arial Unicode MS'
   Font.Style = []
   OldCreateOrder = False
   Position = poMainFormCenter
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object GroupBox1: TGroupBox
-    Left = 8
-    Top = 8
-    Width = 489
-    Height = 273
-    Caption = #22312#32447#20154#29289
+    Left = 11
+    Top = 11
+    Width = 652
+    Height = 364
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'ng'#432#7901'i tr'#7921'c tuy'#7871'n'
     TabOrder = 0
     object ListViewOnLine: TListView
-      Left = 8
-      Top = 16
-      Width = 473
-      Height = 249
-      Hint = 'Ctrl + F '#26597#25214'IP'
+      Left = 11
+      Top = 21
+      Width = 630
+      Height = 332
+      Hint = 'Ctrl + F T'#236'm IP'
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Columns = <
         item
-          Caption = #24207#21495
+          Caption = 's'#7889
+          Width = 67
         end
         item
-          Caption = #30331#38470'IP'#22320#22336
-          Width = 100
+          Caption = #272#259'ng nh'#7853'p '#273#7883'a ch'#7881' IP'
+          Width = 133
         end
         item
-          Caption = #20250#35805#26631#35782
-          Width = 80
+          Caption = 'session ID'
+          Width = 107
         end
         item
-          Caption = #25968#25454#38271#24230
-          Width = 80
+          Caption = 'chi'#7873'u d'#224'i d'#7919' li'#7879'u'
+          Width = 107
         end
         item
-          Caption = #24403#21069#29366#24577
-          Width = 150
+          Caption = 'c'#225'c tr'#7841'ng th'#225'i hi'#7879'n t'#7841'i'
+          Width = 200
         end>
       GridLines = True
       ReadOnly = True
@@ -60,38 +69,54 @@ object FrmOnLineHum: TFrmOnLineHum
     end
   end
   object ButtonRef: TButton
-    Left = 8
-    Top = 288
-    Width = 75
-    Height = 25
-    Caption = #21047#26032'(&R)'
+    Left = 11
+    Top = 384
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'L'#224'm m'#7899'i(&R)'
     TabOrder = 1
     OnClick = ButtonRefClick
   end
   object ButtonKick: TButton
-    Left = 88
-    Top = 288
-    Width = 75
-    Height = 25
-    Caption = #36386#19979#32447'(&T)'
+    Left = 117
+    Top = 384
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'Kh'#7903'i '#273#7897'ng(&T)'
     TabOrder = 2
     OnClick = ButtonKickClick
   end
   object ButtonAddTempList: TButton
-    Left = 232
-    Top = 288
-    Width = 129
-    Height = 25
-    Caption = #21152#20837#21160#24577#36807#28388#21015#34920'(&A)'
+    Left = 309
+    Top = 384
+    Width = 172
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'Th'#234'm n'#259'ng '#273#7897'ng(&A)'
     TabOrder = 3
     OnClick = ButtonAddTempListClick
   end
   object ButtonAddBlockList: TButton
-    Left = 368
-    Top = 288
-    Width = 129
-    Height = 25
-    Caption = #21152#20837#27704#20037#36807#28388#21015#34920'(&D)'
+    Left = 491
+    Top = 384
+    Width = 172
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'Th'#234'm v'#224'o danh s'#225'ch l'#7885'c(&D)'
     TabOrder = 4
     OnClick = ButtonAddBlockListClick
   end

@@ -1,7 +1,7 @@
 program DataViewer;
 
 uses
-  FastMM4,
+//  FastMM4,
   Forms,
   Main in 'Main.pas' {frmMain},
   InPutDlgMain in 'InPutDlgMain.pas' {frmInPutDlg},

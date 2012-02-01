@@ -4,9 +4,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, JSocket, ExtCtrls, StdCtrls, Common, EncryptUnit, Grobal2,
+  Dialogs, ExtCtrls, StdCtrls, Common, EncryptUnit, Grobal2,
   ComCtrls, RzListVw, ImgList, RzButton, Menus, RzPanel, RzStatus,
-  HUtil32, GateShare, Share, Mudutil, Clipbrd, IniFiles, HTTPGet;
+  HUtil32, GateShare, Share, Mudutil, Clipbrd, IniFiles, ScktComp;
 
 type
 
@@ -45,7 +45,6 @@ type
     ServerSocket: TServerSocket;
     POPUPMENU_COPY: TMenuItem;
     POPUPMENU_SELALL: TMenuItem;
-    HTTPGet: THTTPGet;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure TimerStartTimer(Sender: TObject);
@@ -187,7 +186,7 @@ begin
     g_ClientThread.Resume;
 
     ServerSocket.Port := g_Config.GatePort; { Use telnet port   }
-    ServerSocket.Address := g_Config.GateAddr; { Use any interface }
+//    ServerSocket.Address := g_Config.GateAddr; { Use any interface }
     ServerSocket.Active := True;
     g_boServiceStart := True;
     g_boServerReady := True;
@@ -276,7 +275,7 @@ var
   wIdent: Word;
 begin
   wIdent := HiWord(MsgData.From);
-  sData := StrPas(MsgData.CopyDataStruct^.lpData);
+  sData := StrPas(Pansichar(MsgData.CopyDataStruct^.lpData));
   case wIdent of
     GS_QUIT: begin
         Caption := g_Config.TitleName + ' [正在关闭服务...]';
@@ -527,7 +526,7 @@ var
   sRemoteIPaddr: string;
   boIsUserIPList: Boolean;
 begin
-  Socket.nIndex := -1;
+//  Socket.nIndex := -1;
   if g_boGateReady then begin
     sRemoteIPaddr := Socket.RemoteAddress;
 
@@ -588,11 +587,12 @@ begin
       end;
     end;
 
-    Socket.nIndex := g_SessionList.Add(Session);
-    if Socket.nIndex < 0 then begin
-      MainOutMessage('Kick: ' + sRemoteIPaddr, nil);
-      Socket.Close;
-    end else begin
+//    Socket.nIndex := g_SessionList.Add(Session);
+//    if Socket.nIndex < 0 then begin
+//      MainOutMessage('Kick: ' + sRemoteIPaddr, nil);
+//      Socket.Close;
+//    end else
+    begin
       Session.Socket := Socket;
       Session.sRemoteIPaddr := sRemoteIPaddr;
       Session.dwConnctCheckTick := GetTickCount;
@@ -623,7 +623,7 @@ begin
       end else begin
         g_QuickList.AddRecord(sRemoteIPaddr, 1);
       end;
-      g_ClientThread.SendText('%N' + IntToStr(Socket.nIndex) + '/' + sRemoteIPaddr + '/' + sRemoteIPaddr + '$');
+//      g_ClientThread.SendText('%N' + IntToStr(Socket.nIndex) + '/' + sRemoteIPaddr + '/' + sRemoteIPaddr + '$');
     end;
   end else Socket.Close;
 end;
@@ -635,7 +635,7 @@ var
   nCount: Integer;
   Session: pTSession;
 begin
-  Session := g_SessionList.Items[Socket.nIndex];
+//  Session := g_SessionList.Items[Socket.nIndex];
   if Session <> nil then begin
     nIdx := g_QuickList.GetIndex(Session.sRemoteIPaddr);
     if nIdx >= 0 then begin
@@ -647,8 +647,8 @@ begin
         g_QuickList.Delete(nIdx);
       end;
     end;
-    g_ClientThread.SendText('%C' + IntToStr(Integer(Socket.nIndex)) + '$');
-    g_SessionList.Delete(Socket.nIndex);
+//    g_ClientThread.SendText('%C' + IntToStr(Integer(Socket.nIndex)) + '$');
+//    g_SessionList.Delete(Socket.nIndex);
   end;
 end;
 
@@ -672,7 +672,7 @@ var
   nPos: Integer;
   Session: pTSession;
 begin
-  Session := g_SessionList.Items[Socket.nIndex];
+//  Session := g_SessionList.Items[Socket.nIndex];
   if Session <> nil then begin
     sReviceMsg := Socket.ReceiveText;
     if g_boCheckAttack then begin
@@ -772,7 +772,7 @@ begin
       end;
     end;
     if MENU_VIEW_SENDMSG.Checked then MainOutMessage(sReviceMsg, nil);
-    g_ClientThread.SendText('%D' + IntToStr(Integer(Socket.nIndex)) + '/' + sReviceMsg + '$');
+//    g_ClientThread.SendText('%D' + IntToStr(Integer(Socket.nIndex)) + '/' + sReviceMsg + '$');
   end else Socket.Close;
 end;
 
@@ -837,9 +837,9 @@ procedure TfrmMain.HTTPGetIpList();
 begin
   if g_boHttpWork then Exit;
   g_boHttpWork := True;
-  HTTPGet.Abort;
-  HTTPGet.URL := g_sIpListUrl;
-  HTTPGet.GetString;
+//  HTTPGet.Abort;
+//  HTTPGet.URL := g_sIpListUrl;
+//  HTTPGet.GetString;
 end;
 
 end.

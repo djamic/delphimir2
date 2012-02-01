@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics,
-  Controls, Forms, Dialogs, StdCtrls, ExtCtrls, JSocket;
+  Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ScktComp;
 type
   TFrmMonSoc = class(TForm)
     MonSocket: TServerSocket;
@@ -35,7 +35,7 @@ var
 begin
   Config := @g_Config;
   MonSocket.Active := False;
-  MonSocket.Address := Config.sMonAddr;
+//  MonSocket.Address := Config.sMonAddr;
   MonSocket.Port := Config.nMonPort;
   MonSocket.Active := True;
 end;
