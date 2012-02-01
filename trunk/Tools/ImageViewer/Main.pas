@@ -1,4 +1,4 @@
-unit Main;
+ï»¿unit Main;
 
 interface
 
@@ -81,7 +81,7 @@ uses InPutDlgMain, InPutManyDlgMain, DelDlgMain, OutPutDlgMain,
 procedure TfrmMain.OnProgramException(Sender: TObject; E: Exception);
 begin
   g_ErrorList.Add(E.Message);
-  //Application.MessageBox(PChar(E.Message), '´íÎó', MB_ICONERROR);
+  //Application.MessageBox(PChar(E.Message), 'Â´Ã­ÃÃ³', MB_ICONERROR);
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
@@ -117,7 +117,7 @@ begin
     Image.Invalidate;
     StatusPane1.Caption := OpenDialog.FileName;
     StatusPane2.Caption := '0/' + IntToStr(CurrImageFile.Count);
-    //StatusBar1.Panels[0].Text := OpenDialog1.FileName + ', Í¼Æ¬ÊıÁ¿:' + IntTosTr(CurrIdsFile.ImageCount);
+    //StatusBar1.Panels[0].Text := OpenDialog1.FileName + ', ÃÂ¼Ã†Â¬ÃŠÃ½ÃÂ¿:' + IntTosTr(CurrIdsFile.ImageCount);
     //bChanged := false;
   end; }
 end;
@@ -217,7 +217,7 @@ begin
     Image.Picture.Bitmap.Canvas.Draw(0, 0, Bitmap);
 
     StatusPane2.Caption := IntToStr(Index + 1) + '/' + IntToStr(CurrImageFile.ImageCount);
-    StatusPane3.Caption := Format('ĞòºÅ:%.5d ¿í:%d ¸ß:%d Æ«ÒÆ×ø±ê:%d,%d', [Index, nImageWidth, nImageHeight, nImageX, nImageY]);
+    StatusPane3.Caption := Format('STT:%.5d Cao:%d Rá»™ng:%d Vá»‹ trÃ­:%d,%d', [Index, nImageWidth, nImageHeight, nImageX, nImageY]);
   end;
 end;
 
@@ -294,9 +294,9 @@ begin
         t_GT: ;
       end;
       if CurrImageFile.BitCount >= 16 then
-        StatusPane4.Caption := StatusPane4.Caption + 'Î»Õæ²Ê'
+        StatusPane4.Caption := StatusPane4.Caption + 'HeightBit'
       else
-        StatusPane4.Caption := StatusPane4.Caption + 'Î»É«';
+        StatusPane4.Caption := StatusPane4.Caption + 'LowBit';
 
       if ImageType = t_Fir then
         StatusPane4.Caption := StatusPane4.Caption +' Comp:'+ IntToStr(TData(CurrImageFile).Compression);
@@ -370,26 +370,26 @@ begin
         if frmInPutDlg.RadioGroup.ItemIndex = 0 then begin
           Index := DrawGrid.Row * DrawGrid.ColCount + DrawGrid.Col;
           if Index < CurrImageFile.ImageCount then begin
-            if CurrImageFile.Replace(Index, Source) then begin //Ìæ»»Í¼Æ¬
-              Application.MessageBox('Í¼Æ¬µ¼Èë³É¹¦ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
-            end else Application.MessageBox('Í¼Æ¬µ¼ÈëÊ§°Ü £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+            if CurrImageFile.Replace(Index, Source) then begin //ÃŒÃ¦Â»Â»ÃÂ¼Ã†Â¬
+              Application.MessageBox('ÄÃ£ hoÃ n thÃ nh viá»‡c thÃªm áº£nh', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
+            end else Application.MessageBox('CÃ³ lá»—i, quÃ¡ nhiá»u áº£nh!', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
           end;
         end else
-          if frmInPutDlg.RadioGroup.ItemIndex = 1 then begin //²åÈëÍ¼Æ¬
+          if frmInPutDlg.RadioGroup.ItemIndex = 1 then begin //Â²Ã¥ÃˆÃ«ÃÂ¼Ã†Â¬
           Index := DrawGrid.Row * DrawGrid.ColCount + DrawGrid.Col;
           if Index < CurrImageFile.ImageCount then begin
             if CurrImageFile.StartInsert(Index, P, Size) and
               CurrImageFile.Insert(Index, Source, frmInPutDlg.EditX.IntValue, frmInPutDlg.EditY.IntValue)
               and CurrImageFile.StopInsert(Index, 1, InsertSize, P, Size) then begin
-              Application.MessageBox('Í¼Æ¬µ¼Èë³É¹¦ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
-            end else Application.MessageBox('Í¼Æ¬µ¼ÈëÊ§°Ü £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+              Application.MessageBox('ÄÃ£ hoÃ n thÃ nh viá»‡c thÃªm áº£nh', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
+            end else Application.MessageBox('CÃ³ lá»—i, quÃ¡ nhiá»u áº£nh!', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
           end;
-        end else begin //Ä©Î²Ìí¼ÓÍ¼Æ¬
+        end else begin //Ã„Â©ÃÂ²ÃŒÃ­Â¼Ã“ÃÂ¼Ã†Â¬
           if CurrImageFile.Add(Source, frmInPutDlg.EditX.IntValue, frmInPutDlg.EditY.IntValue) then begin
             DrawGrid.Invalidate;
             Image.Invalidate;
-            Application.MessageBox('Í¼Æ¬µ¼Èë³É¹¦ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
-          end else Application.MessageBox('Í¼Æ¬µ¼ÈëÊ§°Ü £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+            Application.MessageBox('ÄÃ£ hoÃ n thÃ nh viá»‡c thÃªm áº£nh', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
+          end else Application.MessageBox('CÃ³ lá»—i, quÃ¡ nhiá»u áº£nh!', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
         end;
       end;
       Source.Free;
@@ -437,9 +437,9 @@ begin
           if Bitmap <> nil then begin
             try
               Bitmap.SaveToFile(FileName);
-              Application.MessageBox('Í¼Æ¬µ¼³ö³É¹¦ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+              Application.MessageBox('HoÃ n thÃ nh lÆ°u áº£nh', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
             except
-              Application.MessageBox('Í¼Æ¬µ¼³öÊ§°Ü £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+              Application.MessageBox('CÃ³ lá»—i, chÆ°a hoÃ n thÃ nh lÆ°u áº£nh', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
             end;
           end;
         end;
@@ -466,7 +466,7 @@ begin
 
         case ImageType of
           t_Wil: begin
-              Filter := '´«ÆæÍ¼Æ¬×ÊÔ´ÎÄ¼ş|*.Wil|*.Wil';
+              Filter := 'Dá»¯ liá»‡u dáº¡ng WIL|*.Wil|*.Wil';
               FileName := ExtractFilePath(FileName) + ExtractFileNameOnly(FileName) + '.Wil';
               case FrmCreateData.RadioGroupBitCount.ItemIndex of
                 0: BitCount := 8;
@@ -478,7 +478,7 @@ begin
           t_Wis: ;
           t_Fir: begin
               BitCount := 16;
-              Filter := '´«ÆæÍ¼Æ¬×ÊÔ´ÎÄ¼ş|*.Data|*.Data';
+              Filter := 'Dá»¯ liá»‡u dáº¡ng DATA|*.Data|*.Data';
               FileName := ExtractFilePath(FileName) + ExtractFileNameOnly(FileName) + '.Data';
             end;
           t_GT: ;
@@ -486,9 +486,9 @@ begin
         if Execute and (FileName <> '') then begin
           MirImages := TMirImages.Create(FileName, ImageType);
           if MirImages.CreateFile(BitCount) then
-            Application.MessageBox('´´½¨³É¹¦ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION)
+            Application.MessageBox('Táº¡o thÃ nh cÃ´ng', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION)
           else
-            Application.MessageBox('´´½¨Ê§°Ü £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+            Application.MessageBox('CÃ³ lá»—i, khÃ´ng táº¡o thÃ nh cÃ´ng', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
           MirImages.Free;
         end;
       end;
@@ -525,7 +525,7 @@ begin
         Pt.X := frmXYDlg.EditX.IntValue;
         Pt.Y := frmXYDlg.EditY.IntValue;
         CurrImageFile.ImagePoint[Index] := Pt;
-        Application.MessageBox('Í¼Æ¬×ø±êĞŞ¸Ä³É¹¦ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+        Application.MessageBox('Má»Ÿ quÃ¡ nhiá»u', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
       end;
     end;
   finally
@@ -576,7 +576,7 @@ begin
       ShortName := Trim(frmConvertDlg.EditFileDir.Text);
       case GetWilFileVersion(ShortName) of
         -1: begin
-            Application.MessageBox('¸ÃWILÎÄ¼şÒÑËğ»µ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+            Application.MessageBox('Â¸ÃƒWILÃÃ„Â¼Ã¾Ã’Ã‘Ã‹Ã°Â»Âµ Â£Â¡Â£Â¡Â£Â¡', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
             g_boWalking := False;
             Exit;
           end;
@@ -667,7 +667,7 @@ begin
       WMImages.Free;
 
       boConvert := True;
-    end else begin //SGLÎÄ¼ş
+    end else begin //SGLÃÃ„Â¼Ã¾
       SglFile := TSglFile.Create;
       if SglFile.Open(frmConvertDlg.EditFileDir.Text) then begin
 
@@ -797,8 +797,8 @@ begin
     Exit;
   end;
 
-  if boConvert then Application.MessageBox('×ª»»³É¹¦ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION)
-  else Application.MessageBox('×ª»»Ê§°Ü £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+  if boConvert then Application.MessageBox('Ã—ÂªÂ»Â»Â³Ã‰Â¹Â¦ Â£Â¡Â£Â¡Â£Â¡', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION)
+  else Application.MessageBox('Ã—ÂªÂ»Â»ÃŠÂ§Â°Ãœ Â£Â¡Â£Â¡Â£Â¡', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
   g_boWalking := False;
   *)
  // ShowMessage('I:' + IntToStr(I) + ' J:' + IntToStr(J) + ' Width:' + IntToStr(BM.Width));

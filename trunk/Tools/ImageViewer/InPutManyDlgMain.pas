@@ -1,4 +1,4 @@
-unit InPutManyDlgMain;
+ï»¿unit InPutManyDlgMain;
 
 interface
 
@@ -272,7 +272,7 @@ begin
     BitBtnClose.Enabled := True;
     g_boWalking := False;
   end;
-  Application.MessageBox('Í¼Æ¬µ¼Èë³É¹¦ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+  Application.MessageBox('HoÃ n thÃ nh', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
   Close;
 end;
 
@@ -288,27 +288,27 @@ begin
         EditFileDir.Enabled := True;
         RadioGroup3.Enabled := True;
         GroupBox4.Enabled := True;
-        RzLabel.Caption := 'Í¼Æ¬ËùÔÚÎÄ¼ş¼Ğ:';
+        RzLabel.Caption := 'áº¢nh vÃ  tá»a Ä‘á»™:';
       end;
     1: begin
         EditFileDir.Enabled := True;
         RadioGroup3.Enabled := True;
         GroupBox4.Enabled := False;
-        RzLabel.Caption := 'Í¼Æ¬ËùÔÚÎÄ¼ş¼Ğ:';
+        RzLabel.Caption := 'HÃ¬nh áº£nh:';
       end;
     2: begin
         EditFileDir.Enabled := True;
         GroupBox4.Enabled := True;
         RadioGroup3.ItemIndex := 2;
         RadioGroup3.Enabled := False;
-        RzLabel.Caption := '×ø±êËùÔÚÎÄ¼ş¼Ğ:';
+        RzLabel.Caption := 'Phá»‘i há»£p:';
       end;
     3: begin
         EditFileDir.Enabled := False;
         //RadioGroup3.ItemIndex := 0;
         RadioGroup3.Enabled := True;
         GroupBox4.Enabled := False;
-        RzLabel.Caption := 'Í¼Æ¬ËùÔÚÎÄ¼ş¼Ğ:';
+        RzLabel.Caption := 'HÃ¬nh áº£nh rá»—ng:';
       end;
   end;
 end;
@@ -338,7 +338,7 @@ procedure TfrmInPutManyDlg.EditFileDirButtonClick(Sender: TObject);
 var
   Directory: string;
 begin
-  if SelectDirectory('ä¯ÀÀÎÄ¼ş¼Ğ', '', Directory, frmInPutManyDlg.Handle) then begin
+  if SelectDirectory('Lá»¥a chá»n Ä‘Æ°á»ng dáº«n', '', Directory, frmInPutManyDlg.Handle) then begin
     EditFileDir.Text := Directory;
   end;
 end;

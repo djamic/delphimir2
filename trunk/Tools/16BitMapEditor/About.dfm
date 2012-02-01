@@ -2,9 +2,9 @@ object frmAbout: TfrmAbout
   Left = 572
   Top = 406
   BorderStyle = bsDialog
-  Caption = #20851#20110
-  ClientHeight = 49
-  ClientWidth = 383
+  Caption = 'Th'#244'ng tin'
+  ClientHeight = 65
+  ClientWidth = 511
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -14,26 +14,38 @@ object frmAbout: TfrmAbout
   OldCreateOrder = False
   Position = poMainFormCenter
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object Label1: TLabel
-    Left = 16
-    Top = 16
-    Width = 252
-    Height = 12
-    Caption = 'MakeGM'#30495#24425#22320#22270#32534#36753#22120' http://www.MakeGM.com'
+    Left = 21
+    Top = 21
+    Width = 335
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'MakeGM True-m'#224'u bi'#234'n t'#7853'p b'#7843'n '#273#7891'  http://www.MakeGM.com'
   end
   object Label2: TLabel
-    Left = 56
-    Top = 52
-    Width = 6
-    Height = 12
+    Left = 75
+    Top = 69
+    Width = 3
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
   end
   object ButtonOK: TButton
-    Left = 296
-    Top = 13
-    Width = 75
-    Height = 25
-    Caption = #30830#23450'(&O)'
+    Left = 395
+    Top = 17
+    Width = 100
+    Height = 34
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'X'#225'c '#273#7883'nh (&O)'
     TabOrder = 0
     OnClick = ButtonOKClick
   end

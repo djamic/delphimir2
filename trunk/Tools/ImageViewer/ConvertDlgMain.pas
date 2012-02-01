@@ -1,4 +1,4 @@
-unit ConvertDlgMain;
+ï»¿unit ConvertDlgMain;
 
 interface
 
@@ -41,7 +41,7 @@ uses MirShare;
 
 procedure TfrmConvertDlg.Open;
 begin
-  Caption := 'Êý¾Ý×ª»»';
+  Caption := 'Chuyá»ƒn Ä‘á»•i dá»¯ liá»‡u';
   ProgressBar.Position := 0;
   ShowModal;
 end;
@@ -55,9 +55,9 @@ procedure TfrmConvertDlg.EditFileDirButtonClick(Sender: TObject);
 begin
   with OpenDialog do begin
     case RadioGroup.ItemIndex of
-      0, 2: Filter := 'WilÍ¼Æ¬×ÊÔ´ÎÄ¼þ ÎÄ¼þ (*.Wil)|*.Wil';
-      1, 4: Filter := 'WisÍ¼Æ¬×ÊÔ´ÎÄ¼þ ÎÄ¼þ (*.Wis)|*.Wis';
-      3, 5: Filter := 'DataÍ¼Æ¬×ÊÔ´ÎÄ¼þ ÎÄ¼þ (*.Data)|*.Data';
+      0, 2: Filter := 'Dá»¯ liá»‡u dáº¡ng WIL (*.Wil)|*.Wil';
+      1, 4: Filter := 'Dá»¯ liá»‡u dáº¡ng WIS (*.Wis)|*.Wis';
+      3, 5: Filter := 'Dá»¯ liá»‡u dáº¡ng Data (*.Data)|*.Data';
     end;
     if Execute and (FileName <> '') then begin
       EditFileDir.Text := FileName;
@@ -74,9 +74,9 @@ procedure TfrmConvertDlg.EditSaveDirButtonClick(Sender: TObject);
 begin
   with SaveDialog do begin
     case RadioGroup.ItemIndex of
-      1, 3: Filter := 'WilÍ¼Æ¬×ÊÔ´ÎÄ¼þ ÎÄ¼þ (*.Wil)|*.Wil';
-      0, 5: Filter := 'WisÍ¼Æ¬×ÊÔ´ÎÄ¼þ ÎÄ¼þ (*.Wis)|*.Wis';
-      2, 4: Filter := 'DataÍ¼Æ¬×ÊÔ´ÎÄ¼þ ÎÄ¼þ (*.Data)|*.Data';
+      1, 3: Filter := 'Dá»¯ liá»‡u dáº¡ng WIL (*.Wil)|*.Wil';
+      0, 5: Filter := 'Dá»¯ liá»‡u dáº¡ng WIS (*.Wis)|*.Wis';
+      2, 4: Filter := 'Dá»¯ liá»‡u dáº¡ng Data (*.Data)|*.Data';
     end;
     FileName := ExtractFilePath(EditFileDir.Text) + ExtractFileNameOnly(EditFileDir.Text) + ExtractFileExt(EditFileDir.Text);
     if Execute and (FileName <> '') then begin
@@ -195,7 +195,7 @@ begin
           Application.ProcessMessages;
           ProgressBar.Position := ProgressBar.Position + 1;
           Source := GameImages.Get(I, X, Y);
-          Caption := Format('Êý¾Ý×ª»»(%d/%d)', [I + 1, GameImages.ImageCount]);
+          Caption := Format('HoÃ n thÃ nh Â»Â»(%d/%d)', [I + 1, GameImages.ImageCount]);
           if Source <> nil then begin
             DIB := GetDIB(Source, GameImages.BitCount);
             case RadioGroup.ItemIndex of
@@ -220,8 +220,8 @@ begin
                         if Integer(RGB) = 0 then begin
                           PWord(DesP)^ := 0;
                         end else begin
-                          //PWord(DesP)^ := Word((_Max(RGB.rgbRed and $F8, 8) shl 8) or (_Max(RGB.rgbGreen and $FC, 8) shl 3) or (_Max(RGB.rgbBlue and $F8, 8) shr 3)); //565¸ñÊ½
-                          PWord(DesP)^ := Word((RGB.rgbRed and $F8 shl 8) or (RGB.rgbGreen and $FC shl 3) or (RGB.rgbBlue and $F8 shr 3)); //565¸ñÊ½
+                          //PWord(DesP)^ := Word((_Max(RGB.rgbRed and $F8, 8) shl 8) or (_Max(RGB.rgbGreen and $FC, 8) shl 3) or (_Max(RGB.rgbBlue and $F8, 8) shr 3)); //565Â¸Ã±ÃŠÂ½
+                          PWord(DesP)^ := Word((RGB.rgbRed and $F8 shl 8) or (RGB.rgbGreen and $FC shl 3) or (RGB.rgbBlue and $F8 shr 3)); //565Â¸Ã±ÃŠÂ½
                         end;
                         Inc(SrcP);
                         Inc(PWord(DesP));
@@ -252,7 +252,7 @@ begin
       end else NewGameImages.Free;
       GameImages.Free;
     end;
-    Application.MessageBox('×ª»»³É¹¦ £¡£¡£¡', 'ÌáÊ¾ÐÅÏ¢', MB_ICONQUESTION);
+    Application.MessageBox('HoÃ n thÃ nh chuyá»ƒn Ä‘á»•i dá»¯ liá»‡u', 'Cáº£nh bÃ¡o!', MB_ICONQUESTION);
   finally
     g_boWalking := False;
     BitBtnOK.Enabled := True;

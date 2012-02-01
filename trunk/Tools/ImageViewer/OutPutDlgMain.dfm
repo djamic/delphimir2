@@ -2,9 +2,9 @@ object frmOutPutDlg: TfrmOutPutDlg
   Left = 1384
   Top = 302
   BorderStyle = bsDialog
-  Caption = #25209#37327#23548#20986#22270#29255
-  ClientHeight = 176
-  ClientWidth = 266
+  Caption = 'Xu'#7845't kh'#7849'u h'#224'ng lo'#7841't h'#236'nh '#7843'nh'
+  ClientHeight = 235
+  ClientWidth = 404
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -15,74 +15,105 @@ object frmOutPutDlg: TfrmOutPutDlg
   Position = poMainFormCenter
   OnCloseQuery = FormCloseQuery
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object RzLabel: TLabel
-    Left = 8
-    Top = 10
-    Width = 90
-    Height = 12
-    Caption = #22270#29255#25152#22312#25991#20214#22841':'
+    Left = 11
+    Top = 13
+    Width = 150
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'H'#236'nh '#7843'nh th'#432' m'#7909'c '#273#432#7907'c '#273#7863't:'
     Transparent = False
   end
   object EditFileDir: TRzButtonEdit
-    Left = 104
-    Top = 8
-    Width = 153
-    Height = 20
+    Left = 169
+    Top = 11
+    Width = 226
+    Height = 24
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 0
-    AltBtnWidth = 15
-    ButtonWidth = 15
+    AltBtnWidth = 20
+    ButtonWidth = 20
     OnButtonClick = EditFileDirButtonClick
   end
   object GroupBox1: TRzGroupBox
-    Left = 8
-    Top = 32
-    Width = 249
-    Height = 81
-    Caption = #22270#29255#32534#21495
+    Left = 11
+    Top = 43
+    Width = 384
+    Height = 108
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'h'#236'nh '#7843'nh ID'
     GroupStyle = gsStandard
     TabOrder = 1
     object RzLabel1: TLabel
-      Left = 8
-      Top = 24
-      Width = 54
-      Height = 12
-      Caption = #36215#22987#32534#21495':'
+      Left = 11
+      Top = 32
+      Width = 74
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'B'#7855't '#273#7847'u t'#7915' s'#7889':'
       Transparent = False
     end
     object RzLabel2: TLabel
-      Left = 8
-      Top = 48
-      Width = 54
-      Height = 12
-      Caption = #32467#26463#32534#21495':'
+      Left = 11
+      Top = 64
+      Width = 114
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'K'#7871't th'#250'c c'#7911'a m'#227' n'#224'y:'
       Transparent = False
     end
     object EditX: TRzNumericEdit
-      Left = 72
-      Top = 24
-      Width = 169
-      Height = 20
+      Left = 144
+      Top = 32
+      Width = 225
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       TabOrder = 0
       DisplayFormat = '0'
     end
     object EditY: TRzNumericEdit
-      Left = 72
-      Top = 48
-      Width = 169
-      Height = 20
+      Left = 144
+      Top = 64
+      Width = 225
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       TabOrder = 1
       DisplayFormat = '0'
     end
   end
   object BitBtnOK: TBitBtn
-    Left = 48
-    Top = 126
-    Width = 75
-    Height = 25
-    Caption = #30830#23450
-    TabOrder = 2
-    OnClick = BitBtnOKClick
+    Left = 64
+    Top = 168
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'X'#225'c '#273#7883'nh'
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000330B0000330B00000001000000000000000000003300
@@ -136,15 +167,21 @@ object frmOutPutDlg: TfrmOutPutDlg
       E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = BitBtnOKClick
   end
   object BitBtnClose: TBitBtn
-    Left = 144
-    Top = 126
-    Width = 75
-    Height = 25
-    Caption = #21462#28040
-    TabOrder = 3
-    OnClick = BitBtnCloseClick
+    Left = 192
+    Top = 168
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'H'#7911'y b'#7887
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000230B0000230B00000001000000000000000000003300
@@ -198,13 +235,21 @@ object frmOutPutDlg: TfrmOutPutDlg
       E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 3
+    OnClick = BitBtnCloseClick
   end
   object ProgressBar: TProgressBar
     Left = 0
-    Top = 159
-    Width = 266
-    Height = 17
+    Top = 212
+    Width = 404
+    Height = 23
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alBottom
     TabOrder = 4
+    ExplicitWidth = 355
   end
 end

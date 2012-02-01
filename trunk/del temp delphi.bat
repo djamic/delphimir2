@@ -11,6 +11,8 @@ rem @for /r . %%a in (.) do @if exist "%%a\*.res" del "%%a\*.res"
 @for /r . %%a in (.) do @if exist "%%a\*.tvsconfig" del "%%a\*.tvsconfig"
 @for /r . %%a in (.) do @if exist "%%a\__history" RMDIR/s/q "%%a\__history"
 @for /r . %%a in (.) do @if exist "%%a\*humbs.db" del "%%a\*humbs.db"
+@for /r . %%a in (.) do @if exist "%%a\thumbs.db" del "%%a\thumbs.db"
+@for /r . %%a in (.) do @if exist "%%a\Thumbs.db" del "%%a\Thumbs.db"
 rem @for /r . %%a in (.) do @if exist "%%a\.svn" del "%%a\.svn"
 
 @echo Xong!

@@ -2,9 +2,9 @@ object FrmCreateData: TFrmCreateData
   Left = 1077
   Top = 196
   BorderStyle = bsDialog
-  Caption = #26032#24314
-  ClientHeight = 154
-  ClientWidth = 262
+  Caption = 'T'#7841'o m'#7899'i d'#7919' li'#7879'u'
+  ClientHeight = 205
+  ClientWidth = 349
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -14,15 +14,18 @@ object FrmCreateData: TFrmCreateData
   OldCreateOrder = False
   Position = poOwnerFormCenter
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object BitBtnOK: TBitBtn
-    Left = 8
-    Top = 120
-    Width = 75
-    Height = 25
-    Caption = #30830#23450
-    TabOrder = 0
-    OnClick = BitBtnOKClick
+    Left = 11
+    Top = 160
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'X'#225'c nh'#7853'n'
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000520B0000520B00000001000000000000000000003300
@@ -76,15 +79,21 @@ object FrmCreateData: TFrmCreateData
       5EE8E8E8E8E8E8E8E8E8E8AC81AC81AC81E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 0
+    OnClick = BitBtnOKClick
   end
   object BitBtnClose: TBitBtn
-    Left = 173
-    Top = 120
-    Width = 75
-    Height = 25
-    Caption = #21462#28040
-    TabOrder = 1
-    OnClick = BitBtnCloseClick
+    Left = 231
+    Top = 160
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'H'#7911'y b'#7887
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000730B0000730B00000001000000000000000000003300
@@ -138,35 +147,53 @@ object FrmCreateData: TFrmCreateData
       57E8E8E8E8E8E8E8E8E8E8E8E8AC818181E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    OnClick = BitBtnCloseClick
   end
   object RadioGroup: TRzRadioGroup
-    Left = 8
-    Top = 8
-    Width = 241
-    Caption = #31867#22411
+    Left = 11
+    Top = 11
+    Width = 321
+    Height = 140
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'Lo'#7841'i d'#7919' li'#7879'u'
     Columns = 8
     GroupStyle = gsStandard
+    ItemHeight = 23
     ItemIndex = 0
     Items.Strings = (
       'Wil'
       'Wis'
       'Data')
+    StartYPos = 3
     TabOrder = 2
+    VerticalSpacing = 4
     OnClick = RadioGroupClick
     object RadioGroupBitCount: TRzRadioGroup
-      Left = 8
-      Top = 48
-      Width = 225
-      Height = 41
+      Left = 11
+      Top = 64
+      Width = 300
+      Height = 55
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Columns = 4
       GroupStyle = gsStandard
+      ItemHeight = 23
       ItemIndex = 0
       Items.Strings = (
         '8Bit'
         '16Bit'
         '24Bit'
         '32Bit')
+      StartYPos = 3
       TabOrder = 0
+      VerticalSpacing = 4
     end
   end
 end
