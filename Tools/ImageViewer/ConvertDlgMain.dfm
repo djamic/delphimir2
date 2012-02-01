@@ -2,9 +2,9 @@ object frmConvertDlg: TfrmConvertDlg
   Left = 435
   Top = 155
   BorderStyle = bsDialog
-  Caption = #25968#25454#36716#25442
-  ClientHeight = 232
-  ClientWidth = 297
+  Caption = 'chuy'#7875'n '#273#7893'i d'#7919' li'#7879'u'
+  ClientHeight = 309
+  ClientWidth = 396
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -16,49 +16,69 @@ object frmConvertDlg: TfrmConvertDlg
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object RzLabel: TLabel
-    Left = 8
-    Top = 97
-    Width = 42
-    Height = 12
-    Caption = #26087#25991#20214':'
+    Left = 11
+    Top = 129
+    Width = 40
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'T'#7879'p c'#361':'
     Transparent = False
   end
   object RzLabel1: TLabel
-    Left = 8
-    Top = 141
-    Width = 42
-    Height = 12
-    Caption = #26032#25991#20214':'
+    Left = 11
+    Top = 188
+    Width = 48
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'T'#7879'p m'#7899'i:'
     Transparent = False
   end
   object EditFileDir: TRzButtonEdit
-    Left = 8
-    Top = 115
-    Width = 281
-    Height = 20
+    Left = 11
+    Top = 153
+    Width = 374
+    Height = 24
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 3
-    AltBtnWidth = 15
-    ButtonWidth = 15
+    AltBtnWidth = 20
+    ButtonWidth = 20
     OnButtonClick = EditFileDirButtonClick
   end
   object EditSaveDir: TRzButtonEdit
-    Left = 8
-    Top = 159
-    Width = 281
-    Height = 20
+    Left = 11
+    Top = 212
+    Width = 374
+    Height = 24
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 4
-    AltBtnWidth = 15
-    ButtonWidth = 15
+    AltBtnWidth = 20
+    ButtonWidth = 20
     OnButtonClick = EditSaveDirButtonClick
   end
   object RadioGroup: TRadioGroup
-    Left = 8
-    Top = 8
-    Width = 281
-    Height = 81
-    Caption = #36716#25442#31867#22411
+    Left = 11
+    Top = 11
+    Width = 374
+    Height = 108
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'chuy'#7875'n '#273#7893'i lo'#7841'i h'#236'nh'
     Color = clBtnFace
     Columns = 3
     ItemIndex = 1
@@ -74,13 +94,16 @@ object frmConvertDlg: TfrmConvertDlg
     OnClick = RadioGroupClick
   end
   object BitBtnOK: TBitBtn
-    Left = 51
-    Top = 185
-    Width = 75
-    Height = 25
-    Caption = #36716#25442
-    TabOrder = 1
-    OnClick = BitBtnOKClick
+    Left = 68
+    Top = 247
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'Chuy'#7875'n '#273#7893'i'
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000520B0000520B00000001000000000000000000003300
@@ -134,15 +157,21 @@ object frmConvertDlg: TfrmConvertDlg
       5EE8E8E8E8E8E8E8E8E8E8AC81AC81AC81E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    OnClick = BitBtnOKClick
   end
   object BitBtnClose: TBitBtn
-    Left = 174
-    Top = 185
-    Width = 75
-    Height = 25
-    Caption = #21462#28040
-    TabOrder = 2
-    OnClick = BitBtnCloseClick
+    Left = 232
+    Top = 247
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'H'#7911'y b'#7887
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000730B0000730B00000001000000000000000000003300
@@ -196,24 +225,31 @@ object frmConvertDlg: TfrmConvertDlg
       57E8E8E8E8E8E8E8E8E8E8E8E8AC818181E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = BitBtnCloseClick
   end
   object ProgressBar: TProgressBar
     Left = 0
-    Top = 215
-    Width = 297
-    Height = 17
+    Top = 287
+    Width = 396
+    Height = 22
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alBottom
     TabOrder = 5
   end
   object OpenDialog: TOpenDialog
-    Filter = #30495#24425#20256#22855#22270#29255#36164#28304#25991#20214' '#25991#20214' (*.Data)|*.Data'
+    Filter = 't'#7853'p tin h'#236'nh '#7843'nh (*.Data)|*.Data'
     Left = 112
     Top = 96
   end
   object SaveDialog: TSaveDialog
     DefaultExt = 'Data'
-    Filter = 'Data '#25991#20214'(16'#20301#33394')|*.Data'
-    Title = #21019#24314'Data'#25991#20214
+    Filter = 'Data t'#7879'p(16bit m'#224'u)|*.Data'
+    Title = 'T'#7841'o t'#7853'p tin d'#7919' li'#7879'u'
     Left = 144
     Top = 96
   end

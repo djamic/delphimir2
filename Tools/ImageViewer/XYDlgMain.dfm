@@ -2,9 +2,9 @@ object frmXYDlg: TfrmXYDlg
   Left = 589
   Top = 296
   BorderStyle = bsDialog
-  Caption = #20559#31227#22352#26631
-  ClientHeight = 136
-  ClientWidth = 209
+  Caption = 'D'#7883'ch chuy'#7875'n t'#7841'o '#273#7897
+  ClientHeight = 181
+  ClientWidth = 279
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -14,56 +14,79 @@ object frmXYDlg: TfrmXYDlg
   OldCreateOrder = False
   Position = poMainFormCenter
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object RzGroupBox1: TRzGroupBox
-    Left = 8
-    Top = 8
-    Width = 193
-    Height = 81
-    Caption = #22352#26631
+    Left = 11
+    Top = 11
+    Width = 257
+    Height = 108
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'Ph'#7889'i h'#7907'p'
     GroupStyle = gsStandard
     TabOrder = 0
     object RzLabel1: TLabel
-      Left = 8
-      Top = 24
-      Width = 12
-      Height = 12
+      Left = 11
+      Top = 32
+      Width = 11
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'X:'
       Transparent = False
     end
     object RzLabel2: TLabel
-      Left = 8
-      Top = 48
-      Width = 12
-      Height = 12
+      Left = 11
+      Top = 64
+      Width = 11
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'Y:'
       Transparent = False
     end
     object EditX: TRzNumericEdit
-      Left = 24
-      Top = 24
-      Width = 161
-      Height = 20
+      Left = 32
+      Top = 32
+      Width = 215
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       TabOrder = 0
       DisplayFormat = '0'
     end
     object EditY: TRzNumericEdit
-      Left = 24
-      Top = 48
-      Width = 161
-      Height = 20
+      Left = 32
+      Top = 64
+      Width = 215
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       TabOrder = 1
       DisplayFormat = '0'
     end
   end
   object BitBtnOK: TBitBtn
-    Left = 24
-    Top = 101
-    Width = 75
-    Height = 25
-    Caption = #30830#23450
-    TabOrder = 1
-    OnClick = BitBtnOKClick
+    Left = 32
+    Top = 135
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'X'#225'c nh'#7853'n'
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000330B0000330B00000001000000000000000000003300
@@ -117,15 +140,21 @@ object frmXYDlg: TfrmXYDlg
       E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    OnClick = BitBtnOKClick
   end
   object BitBtnClose: TBitBtn
-    Left = 120
-    Top = 101
-    Width = 75
-    Height = 25
-    Caption = #21462#28040
-    TabOrder = 2
-    OnClick = BitBtnCloseClick
+    Left = 160
+    Top = 135
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'H'#7911'y b'#7887
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000230B0000230B00000001000000000000000000003300
@@ -179,5 +208,8 @@ object frmXYDlg: TfrmXYDlg
       E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = BitBtnCloseClick
   end
 end

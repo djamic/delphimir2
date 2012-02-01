@@ -2,9 +2,9 @@ object frmInPutManyDlg: TfrmInPutManyDlg
   Left = 1063
   Top = 57
   BorderStyle = bsDialog
-  Caption = #25209#37327#23548#20837#22270#29255
-  ClientHeight = 274
-  ClientWidth = 345
+  Caption = 'Nh'#7853'p kh'#7849'u h'#224'ng lo'#7841't '#7843'nh'
+  ClientHeight = 365
+  ClientWidth = 460
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -17,147 +17,202 @@ object frmInPutManyDlg: TfrmInPutManyDlg
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object RzLabel: TLabel
-    Left = 8
-    Top = 58
-    Width = 90
-    Height = 12
-    Caption = #22270#29255#25152#22312#25991#20214#22841':'
+    Left = 11
+    Top = 77
+    Width = 150
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'H'#236'nh '#7843'nh th'#432' m'#7909'c '#273#432#7907'c '#273#7863't:'
     Transparent = False
   end
   object GroupBox2: TRzGroupBox
-    Left = 8
-    Top = 80
-    Width = 217
-    Height = 81
-    Caption = #22270#29255#32034#24341#21495
+    Left = 11
+    Top = 107
+    Width = 289
+    Height = 108
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'H'#236'nh '#7843'nh ch'#7881' s'#7889
     Enabled = False
     GroupStyle = gsStandard
     TabOrder = 1
     object RzLabel1: TLabel
-      Left = 8
-      Top = 24
-      Width = 54
-      Height = 12
-      Caption = #36215#22987#32534#21495':'
+      Left = 11
+      Top = 32
+      Width = 74
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'B'#7855't '#273#7847'u t'#7915' s'#7889':'
       Enabled = False
       Transparent = False
     end
     object RzLabel2: TLabel
-      Left = 8
-      Top = 48
-      Width = 54
-      Height = 12
-      Caption = #32467#26463#32534#21495':'
+      Left = 11
+      Top = 64
+      Width = 114
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'K'#7871't th'#250'c c'#7911'a m'#227' n'#224'y:'
       Enabled = False
       Transparent = False
     end
     object EditX: TRzNumericEdit
-      Left = 64
-      Top = 24
-      Width = 145
-      Height = 20
+      Left = 85
+      Top = 32
+      Width = 194
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Enabled = False
       TabOrder = 0
       DisplayFormat = '0'
     end
     object EditY: TRzNumericEdit
-      Left = 64
-      Top = 48
-      Width = 145
-      Height = 20
+      Left = 85
+      Top = 64
+      Width = 194
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Enabled = False
       TabOrder = 1
       DisplayFormat = '0'
     end
   end
   object EditFileDir: TRzButtonEdit
-    Left = 104
-    Top = 56
-    Width = 233
-    Height = 20
+    Left = 176
+    Top = 75
+    Width = 273
+    Height = 24
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     TabOrder = 3
-    AltBtnWidth = 15
-    ButtonWidth = 15
+    AltBtnWidth = 20
+    ButtonWidth = 20
     OnButtonClick = EditFileDirButtonClick
   end
   object GroupBox4: TRzGroupBox
-    Left = 8
-    Top = 168
-    Width = 329
-    Height = 49
-    Caption = #22352#26631#33719#24471#26041#24335
+    Left = 11
+    Top = 224
+    Width = 438
+    Height = 65
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'C'#225'ch '#273#7875' c'#243' '#273#432#7907'c t'#7885'a '#273#7897
     GroupStyle = gsStandard
     TabOrder = 4
     object RadioButton1: TRzRadioButton
-      Left = 8
-      Top = 20
-      Width = 97
-      Height = 17
-      Caption = #21516#21517#22352#26631#25991#20214
+      Left = 11
+      Top = 27
+      Width = 166
+      Height = 34
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'Ph'#7889'i h'#7907'p t'#7853'p tin c'#249'ng t'#234'n'
       Checked = True
       TabOrder = 0
       TabStop = True
     end
     object RadioButton2: TRzRadioButton
-      Left = 104
-      Top = 20
-      Width = 73
-      Height = 17
-      Caption = #30456#21516#22352#26631
+      Left = 179
+      Top = 27
+      Width = 150
+      Height = 34
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Caption = 'Vi'#7879'c ph'#7889'i h'#7907'p c'#249'ng'
       TabOrder = 1
     end
     object EditXY: TRzEdit
-      Left = 184
-      Top = 16
-      Width = 73
-      Height = 20
+      Left = 317
+      Top = 21
+      Width = 98
+      Height = 24
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Text = '0,0'
       TabOrder = 2
     end
   end
   object RadioGroup1: TRadioGroup
-    Left = 8
-    Top = 8
-    Width = 329
-    Height = 41
-    Caption = #23548#20837#20869#23481
+    Left = 11
+    Top = 11
+    Width = 438
+    Height = 54
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'nh'#7853'p kh'#7849'u n'#7897'i dung'
     Color = clBtnFace
     Columns = 4
     ItemIndex = 0
     Items.Strings = (
-      #22270#29255#21644#22352#26631
-      #22270#29255
-      #22352#26631
-      #31354#22270#29255)
+      #7842'nh v'#224' t'#7885'a '#273#7897
+      'h'#236'nh '#7843'nh'
+      'ph'#7889'i h'#7907'p'
+      'r'#7895'ng h'#236'nh '#7843'nh')
     ParentColor = False
     TabOrder = 0
     OnClick = RadioGroup1Click
   end
   object RadioGroup3: TRadioGroup
-    Left = 232
-    Top = 81
-    Width = 105
-    Height = 81
-    Caption = #23548#20837#26041#24335
+    Left = 309
+    Top = 108
+    Width = 140
+    Height = 108
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'ch'#7871' '#273#7897' nh'#7853'p kh'#7849'u'
     Color = clBtnFace
     Items.Strings = (
-      #20174#23614#37096#28155#21152
-      #25353#32534#21495#25554#20837
-      #25353#32534#21495#35206#30422)
+      'T'#7915' c'#225'ch th'#234'm '#273'u'#244'i'
+      'Ch'#232'n v'#224'o b'#7903'i s'#7889
+      'B'#7843'o hi'#7875'm theo s'#7889)
     ParentColor = False
     TabOrder = 2
     OnClick = RadioGroup3Click
   end
   object BitBtnOK: TBitBtn
-    Left = 48
-    Top = 224
-    Width = 75
-    Height = 25
-    Caption = #30830#23450
-    TabOrder = 5
-    OnClick = BitBtnOKClick
+    Left = 64
+    Top = 299
+    Width = 100
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'X'#225'c '#273#7883'nh'
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000330B0000330B00000001000000000000000000003300
@@ -211,15 +266,21 @@ object frmInPutManyDlg: TfrmInPutManyDlg
       E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 5
+    OnClick = BitBtnOKClick
   end
   object BitBtnClose: TBitBtn
-    Left = 232
-    Top = 223
-    Width = 75
-    Height = 25
-    Caption = #21462#28040
-    TabOrder = 6
-    OnClick = BitBtnCloseClick
+    Left = 309
+    Top = 297
+    Width = 100
+    Height = 34
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'H'#7911'y b'#7887
+    DoubleBuffered = True
     Glyph.Data = {
       36060000424D3606000000000000360400002800000020000000100000000100
       08000000000000020000230B0000230B00000001000000000000000000003300
@@ -273,12 +334,19 @@ object frmInPutManyDlg: TfrmInPutManyDlg
       E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
     Margin = 2
     NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 6
+    OnClick = BitBtnCloseClick
   end
   object ProgressBar: TProgressBar
     Left = 0
-    Top = 257
-    Width = 345
-    Height = 17
+    Top = 343
+    Width = 460
+    Height = 22
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alBottom
     TabOrder = 7
   end
