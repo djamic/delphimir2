@@ -2,8 +2,8 @@ unit Share;
 
 interface
 uses
-  Windows, Messages, Classes, SysUtils, JSocket, IniFiles, Mudutil, HUtil32,
-  Grobal2, GateShare;
+  Windows, Messages, Classes, SysUtils, IniFiles, Mudutil, HUtil32,
+  Grobal2, GateShare, ScktComp;
 resourcestring
   g_sUpDateTime = 'Updated: 02/01/2011';
   g_sProductName = 'LOMCN - Mir Heroes';

@@ -2889,7 +2889,7 @@ begin
         if Assigned(PlugInEngine.ObjectClientMsg) then begin
           PlugInEngine.ObjectClientMsg(PlayObject, DefMsg, Buff, @NewBuff);
           if @NewBuff = nil then sMsg := ''
-          else sMsg := StrPas(@NewBuff);
+          else sMsg := StrPas(Pchar(NewBuff[0]));
         end;
         PlayObject.SendMsg(PlayObject,
           DefMsg.Ident,

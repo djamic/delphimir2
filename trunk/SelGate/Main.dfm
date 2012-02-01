@@ -1,9 +1,9 @@
 object frmMain: TfrmMain
   Left = 995
   Top = 118
-  Width = 437
-  Height = 256
   Caption = 'frmMain'
+  ClientHeight = 210
+  ClientWidth = 429
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -15,12 +15,16 @@ object frmMain: TfrmMain
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object StatusBar: TRzStatusBar
     Left = 0
-    Top = 179
-    Width = 421
+    Top = 191
+    Width = 429
     Height = 19
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     BorderInner = fsNone
     BorderOuter = fsNone
     BorderSides = [sdLeft, sdTop, sdRight, sdBottom]
@@ -30,33 +34,54 @@ object frmMain: TfrmMain
     object StatusPane1: TRzStatusPane
       Left = 0
       Top = 0
-      Width = 105
+      Width = 140
       Height = 19
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alLeft
       Alignment = taCenter
+      ExplicitHeight = 25
     end
     object StatusPane2: TRzStatusPane
-      Left = 105
+      Left = 140
       Top = 0
-      Width = 120
+      Width = 160
       Height = 19
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alLeft
       Alignment = taCenter
+      ExplicitHeight = 25
     end
     object StatusPane3: TRzStatusPane
-      Left = 225
+      Left = 300
       Top = 0
-      Width = 196
+      Width = 129
       Height = 19
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alClient
       Alignment = taCenter
+      ExplicitWidth = 261
+      ExplicitHeight = 25
     end
   end
   object RzToolbar1: TRzToolbar
     Left = 0
     Top = 0
-    Width = 421
-    Height = 29
+    Width = 429
+    Height = 37
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    RowHeight = 33
     BorderInner = fsNone
     BorderOuter = fsGroove
     BorderSides = [sdTop]
@@ -68,8 +93,12 @@ object frmMain: TfrmMain
       ButtonStop)
     object ButtonStart: TRzToolButton
       Left = 4
-      Top = 2
+      Top = 6
       Hint = '????'
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ImageIndex = 98
       Images = imlMain
       ParentShowHint = False
@@ -78,8 +107,12 @@ object frmMain: TfrmMain
     end
     object ButtonStop: TRzToolButton
       Left = 29
-      Top = 2
+      Top = 6
       Hint = '????'
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ImageIndex = 100
       Images = imlMain
       ParentShowHint = False
@@ -89,30 +122,38 @@ object frmMain: TfrmMain
   end
   object RzPanel: TRzPanel
     Left = 0
-    Top = 29
-    Width = 421
-    Height = 150
+    Top = 37
+    Width = 429
+    Height = 154
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alClient
     BorderOuter = fsNone
     TabOrder = 2
     object ListViewLog: TRzListView
       Left = 0
       Top = 0
-      Width = 421
-      Height = 150
+      Width = 429
+      Height = 154
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alClient
       Columns = <
         item
           Caption = 'Date / Time'
-          Width = 120
+          Width = 160
         end
         item
           Caption = 'Information'
-          Width = 220
+          Width = 293
         end
         item
           Caption = 'Status'
-          Width = 60
+          Width = 80
         end>
       ColumnClick = False
       FrameVisible = True

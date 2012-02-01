@@ -17215,7 +17215,7 @@ begin
     if Assigned(PlugInEngine.IPLocal) then begin
       FillChar(sLocal, SizeOf(sLocal), 0);
       PlugInEngine.IPLocal(@sIPaddr[1], @sLocal, SizeOf(sLocal));
-      Result := StrPas(@sLocal);
+      Result := StrPas(PChar(sLocal[0]));
       Exit;
     end;
     Result := 'Î´Öª£¡£¡£¡';

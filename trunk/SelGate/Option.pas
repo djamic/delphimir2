@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Main, Menus, JSocket, Spin, IniFiles;
+  Dialogs, StdCtrls, Main, Menus, Spin, IniFiles;
 
 type
   TfrmOption = class(TForm)
@@ -73,7 +73,7 @@ var
   frmOption: TfrmOption;
 
 implementation
-uses GateShare, HUtil32, Share;
+uses GateShare, HUtil32, Share, ScktComp;
 {$R *.dfm}
 procedure TfrmOption.APOPMENU_BLOCKLISTClick(Sender: TObject);
 var

@@ -9,7 +9,7 @@ unit DataBackUp;
 interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, StdCtrls, INIFiles, ExtCtrls, VCLUnZip, VCLZip, ShellApi, StrUtils;
+  Dialogs, ComCtrls, StdCtrls, INIFiles, ExtCtrls, UnitZip, ShellApi, StrUtils;
 type
   TBackUpObject = class
     m_nIndex: Integer;
@@ -29,7 +29,7 @@ type
     m_TodayDate: TDateTime;
     m_BackUpFileList: TStringList;
     m_boStopSearch: Boolean;
-    m_Zip: TVCLZip;
+    m_Zip: TZipFileReader;
   private
     procedure DoSearchFile(path: string);
     procedure CopyFile(sSourceFile, sDestFile: string);
@@ -83,17 +83,17 @@ begin
   m_TodayDate := Now;
   m_BackUpFileList := TStringList.Create;
   m_boStopSearch := False;
-  m_Zip := TVCLZip.Create(nil);
-  m_Zip.ZipAction := zaUpdate;
-  m_Zip.StorePaths := True;
-  m_Zip.ZipName := '';
+//  m_Zip := TZipFileReader.Create(nil);
+//  m_Zip.ZipAction := zaUpdate;
+//  m_Zip.StorePaths := True;
+//  m_Zip.ZipName := '';
 end;
 
 destructor TBackUpObject.Destroy;
 begin
   m_boStopSearch := True;
   Sleep(10);
-  m_Zip.ClearZip;
+//  m_Zip.ClearZip;
   m_Zip.Free;
   m_BackUpFileList.Free;
   inherited;
@@ -308,12 +308,12 @@ function TBackUpObject.ZipFile(sDest: string): Boolean;
 begin
   try
     with m_Zip do begin
-      ClearZip;
-      ZipName := sDest;
-      FilesList.Clear;
-      FilesList.AddStrings(m_BackUpFileList);
-      Recurse := True;
-      Zip;
+//      ClearZip;
+//      ZipName := sDest;
+//      FilesList.Clear;
+//      FilesList.AddStrings(m_BackUpFileList);
+//      Recurse := True;
+//      Zip;
     end;
     Result := True;
   except

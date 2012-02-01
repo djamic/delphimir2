@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, IniFiles, JSocket, WinSock, Grobal2, Common, SDK, M2Share;
+  Dialogs, ExtCtrls, IniFiles, WinSock, Grobal2, Common, SDK, M2Share, ScktComp;
 
 type
   TFrmIDSoc = class(TForm)

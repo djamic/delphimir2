@@ -4,8 +4,8 @@ object frmOption: TfrmOption
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'IP Filter'
-  ClientHeight = 329
-  ClientWidth = 636
+  ClientHeight = 439
+  ClientWidth = 848
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -14,62 +14,94 @@ object frmOption: TfrmOption
   Font.Style = []
   OldCreateOrder = False
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object Label2: TLabel
-    Left = 440
-    Top = 20
-    Width = 54
-    Height = 12
+    Left = 587
+    Top = 27
+    Width = 75
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'Max Connect:'
   end
   object Label5: TLabel
-    Left = 440
-    Top = 44
-    Width = 42
-    Height = 12
+    Left = 587
+    Top = 59
+    Width = 76
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'Con TimeOut:'
   end
   object Label11: TLabel
-    Left = 440
-    Top = 68
-    Width = 78
-    Height = 12
+    Left = 587
+    Top = 91
+    Width = 64
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'Con Check:'
   end
   object Label1: TLabel
-    Left = 440
-    Top = 92
-    Width = 54
-    Height = 12
+    Left = 587
+    Top = 123
+    Width = 81
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'Max On Count:'
   end
   object Label7: TLabel
-    Left = 440
-    Top = 116
-    Width = 48
-    Height = 12
+    Left = 587
+    Top = 155
+    Width = 67
+    Height = 16
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'Load IP List:'
   end
   object GroupBoxActive: TGroupBox
-    Left = 8
-    Top = 8
-    Width = 137
-    Height = 257
+    Left = 11
+    Top = 11
+    Width = 182
+    Height = 342
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'Block List'
     TabOrder = 0
     object LabelActive: TLabel
-      Left = 8
-      Top = 24
-      Width = 54
-      Height = 12
+      Left = 11
+      Top = 32
+      Width = 29
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'test1:'
     end
     object ListBoxActiveList: TListBox
-      Left = 8
-      Top = 40
-      Width = 121
-      Height = 209
+      Left = 11
+      Top = 53
+      Width = 161
+      Height = 279
       Hint = ' command? Ctrl + F IP'
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ItemHeight = 12
       Items.Strings = (
         '888.888.888.888')
@@ -83,25 +115,37 @@ object frmOption: TfrmOption
     end
   end
   object GroupBox1: TGroupBox
-    Left = 152
-    Top = 8
-    Width = 137
-    Height = 257
+    Left = 203
+    Top = 11
+    Width = 182
+    Height = 342
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'Char Block List'
     TabOrder = 1
     object LabelBlock: TLabel
-      Left = 8
-      Top = 24
-      Width = 54
-      Height = 12
+      Left = 11
+      Top = 32
+      Width = 36
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'test13:'
     end
     object ListBoxBlockList: TListBox
-      Left = 13
-      Top = 42
-      Width = 121
-      Height = 209
+      Left = 17
+      Top = 56
+      Width = 162
+      Height = 279
       Hint = 'hint box 2'
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ItemHeight = 12
       Items.Strings = (
         '888.888.888.888')
@@ -115,11 +159,15 @@ object frmOption: TfrmOption
     end
   end
   object EditMaxConnect: TSpinEdit
-    Left = 520
-    Top = 16
-    Width = 65
+    Left = 693
+    Top = 21
+    Width = 87
     Height = 21
     Hint = 'hint box 6'
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     MaxValue = 10000
     MinValue = 1
     ParentShowHint = False
@@ -129,20 +177,28 @@ object frmOption: TfrmOption
     OnChange = EditMaxConnectChange
   end
   object ButtonOK: TButton
-    Left = 540
-    Top = 296
-    Width = 89
-    Height = 25
+    Left = 720
+    Top = 395
+    Width = 119
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'OK(&O)'
     Default = True
     TabOrder = 3
     OnClick = ButtonOKClick
   end
   object EditKeepConnectTimeOut: TSpinEdit
-    Left = 520
-    Top = 40
-    Width = 105
+    Left = 693
+    Top = 53
+    Width = 140
     Height = 21
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Increment = 1000
     MaxValue = 100000000
     MinValue = 10000
@@ -151,11 +207,15 @@ object frmOption: TfrmOption
     OnChange = EditKeepConnectTimeOutChange
   end
   object EditConnctCheckTime: TSpinEdit
-    Left = 520
-    Top = 64
-    Width = 81
+    Left = 693
+    Top = 85
+    Width = 108
     Height = 21
     Hint = 'hint box 5'
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Increment = 10
     MaxValue = 1000
     MinValue = 1
@@ -166,25 +226,37 @@ object frmOption: TfrmOption
     OnChange = EditConnctCheckTimeChange
   end
   object GroupBox2: TGroupBox
-    Left = 296
-    Top = 8
-    Width = 137
-    Height = 257
+    Left = 395
+    Top = 11
+    Width = 182
+    Height = 342
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'IP Block List'
     TabOrder = 6
     object LabelIPArray: TLabel
-      Left = 8
-      Top = 24
-      Width = 54
-      Height = 12
+      Left = 11
+      Top = 32
+      Width = 47
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'IPtest15:'
     end
     object ListBoxIPArrayList: TListBox
-      Left = 8
-      Top = 40
-      Width = 121
-      Height = 209
+      Left = 11
+      Top = 53
+      Width = 161
+      Height = 279
       Hint = 'box hint1'
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ItemHeight = 12
       Items.Strings = (
         '*.*.*.*')
@@ -197,11 +269,15 @@ object frmOption: TfrmOption
     end
   end
   object EditMaxOnlineCount: TSpinEdit
-    Left = 520
-    Top = 88
-    Width = 65
+    Left = 693
+    Top = 117
+    Width = 87
     Height = 21
     Hint = 'Max Online Count Edited'
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     EditorEnabled = False
     MaxValue = 10000
     MinValue = 1
@@ -212,42 +288,62 @@ object frmOption: TfrmOption
     OnChange = EditMaxOnlineCountChange
   end
   object GroupBox3: TGroupBox
-    Left = 8
-    Top = 268
-    Width = 425
-    Height = 53
+    Left = 11
+    Top = 357
+    Width = 566
+    Height = 71
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Caption = 'IP List Site'
     TabOrder = 8
     object Label6: TLabel
-      Left = 8
-      Top = 24
-      Width = 42
-      Height = 12
+      Left = 11
+      Top = 32
+      Width = 36
+      Height = 16
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'IP List:'
     end
     object ButtonLoadIpList: TButton
-      Left = 367
-      Top = 20
-      Width = 50
-      Height = 20
+      Left = 489
+      Top = 27
+      Width = 67
+      Height = 26
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Caption = 'Save'
       TabOrder = 0
       OnClick = ButtonLoadIpListClick
     end
     object EditIpList: TEdit
-      Left = 56
-      Top = 20
-      Width = 305
+      Left = 75
+      Top = 27
+      Width = 406
       Height = 20
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       TabOrder = 1
       Text = 'http://www.cqfir.net/IpList.txt'
     end
   end
   object EditRefLoadIpListTime: TSpinEdit
-    Left = 520
-    Top = 112
-    Width = 65
+    Left = 693
+    Top = 149
+    Width = 87
     Height = 21
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     MaxValue = 0
     MinValue = 0
     ParentShowHint = False

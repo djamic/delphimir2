@@ -1,9 +1,9 @@
 object frmMain: TfrmMain
   Left = 381
   Top = 211
-  Width = 433
-  Height = 270
   Caption = 'frmMain'
+  ClientHeight = 224
+  ClientWidth = 425
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -15,12 +15,16 @@ object frmMain: TfrmMain
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object StatusBar: TRzStatusBar
     Left = 0
-    Top = 193
-    Width = 417
+    Top = 205
+    Width = 425
     Height = 19
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     BorderInner = fsNone
     BorderOuter = fsNone
     BorderSides = [sdLeft, sdTop, sdRight, sdBottom]
@@ -30,49 +34,76 @@ object frmMain: TfrmMain
     object StatusPane1: TRzStatusPane
       Left = 0
       Top = 0
-      Width = 49
+      Width = 65
       Height = 19
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alLeft
       Alignment = taCenter
       BlinkIntervalOff = 1
       BlinkIntervalOn = 1
+      ExplicitHeight = 25
     end
     object StatusPane2: TRzStatusPane
-      Left = 49
+      Left = 65
       Top = 0
-      Width = 88
+      Width = 118
       Height = 19
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alLeft
       Alignment = taCenter
       BlinkIntervalOff = 1
       BlinkIntervalOn = 1
+      ExplicitHeight = 25
     end
     object StatusPane3: TRzStatusPane
-      Left = 137
+      Left = 183
       Top = 0
-      Width = 151
+      Width = 70
       Height = 19
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alClient
       Alignment = taCenter
       BlinkIntervalOff = 1
       BlinkIntervalOn = 1
+      ExplicitWidth = 201
+      ExplicitHeight = 25
     end
     object StatusPane4: TRzStatusPane
-      Left = 288
+      Left = 253
       Top = 0
-      Width = 129
+      Width = 172
       Height = 19
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alRight
       Alignment = taCenter
       BlinkIntervalOff = 1
       BlinkIntervalOn = 1
+      ExplicitLeft = 384
+      ExplicitHeight = 25
     end
   end
   object RzToolbar1: TRzToolbar
     Left = 0
     Top = 0
-    Width = 417
-    Height = 29
+    Width = 425
+    Height = 37
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    RowHeight = 33
     BorderInner = fsNone
     BorderOuter = fsGroove
     BorderSides = [sdTop]
@@ -84,8 +115,12 @@ object frmMain: TfrmMain
       ButtonStop)
     object ButtonStart: TRzToolButton
       Left = 4
-      Top = 2
+      Top = 6
       Hint = '????'
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ImageIndex = 98
       Images = imlMain
       ParentShowHint = False
@@ -94,8 +129,12 @@ object frmMain: TfrmMain
     end
     object ButtonStop: TRzToolButton
       Left = 29
-      Top = 2
+      Top = 6
       Hint = '????'
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       ImageIndex = 100
       Images = imlMain
       ParentShowHint = False
@@ -105,30 +144,38 @@ object frmMain: TfrmMain
   end
   object RzPanel: TRzPanel
     Left = 0
-    Top = 29
-    Width = 417
-    Height = 164
+    Top = 37
+    Width = 425
+    Height = 168
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alClient
     BorderOuter = fsNone
     TabOrder = 2
     object ListViewLog: TRzListView
       Left = 0
       Top = 0
-      Width = 417
-      Height = 164
+      Width = 425
+      Height = 168
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alClient
       Columns = <
         item
           Caption = 'Date / Time'
-          Width = 120
+          Width = 160
         end
         item
           Caption = 'Information'
-          Width = 220
+          Width = 293
         end
         item
           Caption = 'Status'
-          Width = 56
+          Width = 75
         end>
       ColumnClick = False
       FrameVisible = True
@@ -3685,16 +3732,5 @@ object frmMain: TfrmMain
     OnClientError = ServerSocketClientError
     Left = 112
     Top = 53
-  end
-  object HTTPGet: THTTPGet
-    AcceptTypes = '*/*'
-    Agent = 'UtilMind HTTPGet'
-    BinaryData = False
-    UseCache = False
-    WaitThread = False
-    OnDoneString = HTTPGetDoneString
-    OnError = HTTPGetError
-    Left = 152
-    Top = 61
   end
 end

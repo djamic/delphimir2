@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, WinSock,
-  Controls, Forms, Dialogs, StdCtrls, ExtCtrls, JSocket, SyncObjs, Grids, Buttons, IniFiles, MudUtil, Parse,
-  Menus, Grobal2, LSShare, SDK, Common, AppEvnts, DateUtils;
+  Controls, Forms, Dialogs, StdCtrls, ExtCtrls, SyncObjs, Grids, Buttons, IniFiles, MudUtil, Parse,
+  Menus, Grobal2, LSShare, SDK, Common, AppEvnts, DateUtils, ScktComp;
 type
   TConnInfo = record //Size
     sAccount: string;
@@ -572,7 +572,7 @@ begin
     Sleep(1);
   end;
   GSocket.Active := False;
-  GSocket.Address := Config.sGateAddr;
+//  GSocket.Address := Config.sGateAddr;
   GSocket.Port := Config.nGatePort;
   GSocket.Active := True;
   Memo1.Lines.Add('3) Configuration Loaded...');
@@ -2043,7 +2043,7 @@ var
 begin
   Config := @g_Config;
   wIdent := HiWord(MsgData.From);
-  sData := StrPas(MsgData.CopyDataStruct^.lpData);
+  sData := StrPas(PAnsiChar(MsgData.CopyDataStruct^.lpData));
   case wIdent of
     GS_QUIT: begin
         Config.boRemoteClose := True;

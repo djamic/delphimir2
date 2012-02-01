@@ -2,7 +2,8 @@ unit SelectClient;
 
 interface
 uses
-  Windows, Classes, SysUtils, StrUtils, SyncObjs, Forms, WinSock, JSocket, IDSocCli, Grobal2, Common;
+  Windows, Classes, SysUtils, StrUtils, SyncObjs, Forms, WinSock, IDSocCli, Grobal2, Common,
+  ScktComp;
 type
   TDisabledChar = record
     sChrName: string[14];

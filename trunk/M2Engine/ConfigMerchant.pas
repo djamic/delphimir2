@@ -175,7 +175,7 @@ begin
         sScriptFile := g_Config.sEnvirDir + Merchant.m_sPath + Merchant.m_sCharName + '.txt';
       end;
     end;
-    WinExec(PChar('Notepad.exe ' + sScriptFile), SW_SHOW);
+    WinExec(PansiChar('Notepad.exe ' + sScriptFile), SW_SHOW);
   end;
 end;
 
@@ -210,7 +210,7 @@ begin
         sScriptFile := g_Config.sEnvirDir + Merchant.m_sPath + Merchant.m_sCharName + '.txt';
       end;
     end;
-    WinExec(PChar('Notepad.exe ' + sScriptFile), SW_SHOW);
+    WinExec(PAnsiChar('Notepad.exe ' + sScriptFile), SW_SHOW);
   end;
 end;
 

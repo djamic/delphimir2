@@ -2,7 +2,8 @@ unit GateShare;
 
 interface
 uses
-  Windows, Messages, SysUtils, Classes, JSocket, WinSock, SyncObjs, IniFiles, Grobal2, Common;
+  Windows, Messages, SysUtils, Classes, WinSock, SyncObjs, IniFiles, Grobal2, Common,
+  ScktComp;
 resourcestring
   g_sVersion = 'Build: LOMCN Mir Heroes';
   g_sUpDateTime = 'Updated: 02/01/2011';
@@ -281,7 +282,7 @@ begin
     for I := 0 to LoadList.Count - 1 do begin
       sIPaddr := Trim(LoadList.Strings[I]);
       if sIPaddr = '' then Continue;
-      nIPaddr := inet_addr(PChar(sIPaddr));
+      nIPaddr := inet_addr(PAnsiChar(sIPaddr));
       if nIPaddr = INADDR_NONE then Continue;
       New(IPaddr);
       FillChar(IPaddr^, SizeOf(TSockaddr), 0);

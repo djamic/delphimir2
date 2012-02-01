@@ -1,9 +1,9 @@
 object frmConfigMerchant: TfrmConfigMerchant
   Left = 458
   Top = 338
-  Width = 680
-  Height = 336
   Caption = 'frmConfigMerchant'
+  ClientHeight = 309
+  ClientWidth = 672
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -12,46 +12,58 @@ object frmConfigMerchant: TfrmConfigMerchant
   Font.Style = []
   OldCreateOrder = False
   PixelsPerInch = 96
-  TextHeight = 12
+  TextHeight = 16
   object PanelStatus: TPanel
     Left = 0
     Top = 0
     Width = 672
-    Height = 302
+    Height = 309
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 896
+    ExplicitHeight = 403
     object ListView: TListView
       Left = 1
       Top = 1
-      Width = 670
-      Height = 300
+      Width = 894
+      Height = 400
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
       Align = alClient
       Columns = <
         item
           Caption = #24207#21495
+          Width = 67
         end
         item
           Caption = #21517#31216
-          Width = 100
+          Width = 133
         end
         item
           Caption = #22352#26631
-          Width = 80
+          Width = 107
         end
         item
           Caption = #20132#26131'NPC'
-          Width = 60
+          Width = 80
         end
         item
           Caption = #31649#29702'NPC'
-          Width = 60
+          Width = 80
         end
         item
           Caption = #38544#34255
+          Width = 67
         end
         item
           Caption = #20449#24687
-          Width = 200
+          Width = 267
         end>
       GridLines = True
       MultiSelect = True

@@ -3,7 +3,7 @@ unit ServerClient;
 interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, WinSock,
-  JSocket, Grobal2, Common, IDSocCli;
+  Grobal2, Common, IDSocCli, ScktComp;
 
 type
   TServerClient = class{$IF DBSUSETHREAD = 1}(TServerClientThread){$ELSE}(TServerClientWinSocket){$IFEND}

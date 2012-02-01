@@ -4,8 +4,8 @@ object FrmMain: TFrmMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'DBServer'
-  ClientHeight = 279
-  ClientWidth = 569
+  ClientHeight = 319
+  ClientWidth = 650
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
@@ -18,12 +18,12 @@ object FrmMain: TFrmMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
-  TextHeight = 14
+  TextHeight = 16
   object MemoLog: TMemo
     Left = 0
     Top = 0
-    Width = 569
-    Height = 95
+    Width = 650
+    Height = 109
     Align = alTop
     ScrollBars = ssVertical
     TabOrder = 0
@@ -32,87 +32,87 @@ object FrmMain: TFrmMain
   end
   object Panel: TPanel
     Left = 0
-    Top = 95
-    Width = 569
-    Height = 66
+    Top = 109
+    Width = 650
+    Height = 75
     Align = alTop
     TabOrder = 1
     object LabelLoadHumRcd: TLabel
-      Left = 215
-      Top = 9
-      Width = 55
-      Height = 14
+      Left = 246
+      Top = 10
+      Width = 58
+      Height = 16
       Caption = 'Load Hum'
     end
     object LabelSaveHumRcd: TLabel
-      Left = 215
-      Top = 37
-      Width = 55
-      Height = 14
+      Left = 246
+      Top = 42
+      Width = 58
+      Height = 16
       BiDiMode = bdLeftToRight
       Caption = 'Save Hum'
       ParentBiDiMode = False
     end
     object LabelLoadHeroRcd: TLabel
-      Left = 345
-      Top = 9
-      Width = 56
-      Height = 14
+      Left = 394
+      Top = 10
+      Width = 58
+      Height = 16
       Caption = 'Load Hero'
     end
     object LabelSaveHeroRcd: TLabel
-      Left = 345
-      Top = 37
-      Width = 56
-      Height = 14
+      Left = 394
+      Top = 42
+      Width = 58
+      Height = 16
       Caption = 'Save Hero'
     end
     object LabelCreateHero: TLabel
-      Left = 112
-      Top = 9
-      Width = 73
-      Height = 14
+      Left = 128
+      Top = 10
+      Width = 74
+      Height = 16
       Caption = 'Created Hero'
     end
     object LabelCreateHum: TLabel
-      Left = 9
-      Top = 9
-      Width = 72
-      Height = 14
+      Left = 10
+      Top = 10
+      Width = 74
+      Height = 16
       Caption = 'Created Hum'
     end
     object LabelDeleteHum: TLabel
-      Left = 9
-      Top = 37
-      Width = 46
-      Height = 14
+      Left = 10
+      Top = 42
+      Width = 49
+      Height = 16
       Caption = 'Del Hum'
     end
     object LabelDeleteHero: TLabel
-      Left = 112
-      Top = 37
-      Width = 51
-      Height = 14
+      Left = 128
+      Top = 42
+      Width = 52
+      Height = 16
       Caption = 'Del Hero:'
     end
     object LabelWorkStatus: TLabel
-      Left = 541
-      Top = 9
+      Left = 618
+      Top = 10
       Width = 5
-      Height = 18
+      Height = 23
       Font.Charset = GB2312_CHARSET
       Font.Color = clGreen
-      Font.Height = -15
+      Font.Height = -17
       Font.Name = '??'
       Font.Style = []
       ParentFont = False
       Visible = False
     end
     object CheckBoxShowMainLogMsg: TCheckBox
-      Left = 485
-      Top = 28
-      Width = 76
-      Height = 20
+      Left = 554
+      Top = 32
+      Width = 87
+      Height = 23
       Caption = 'Show Log'
       TabOrder = 0
       OnClick = CheckBoxShowMainLogMsgClick
@@ -120,9 +120,9 @@ object FrmMain: TFrmMain
   end
   object ModuleGrid: TStringGrid
     Left = 0
-    Top = 161
-    Width = 569
-    Height = 118
+    Top = 184
+    Width = 650
+    Height = 135
     Align = alClient
     ColCount = 3
     DefaultColWidth = 158

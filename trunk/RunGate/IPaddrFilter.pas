@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, JSocket, WinSock, Menus, Spin, IniFiles, ComCtrls;
+  Dialogs, StdCtrls, WinSock, Menus, Spin, IniFiles, ComCtrls;
 
 type
   TfrmIPaddrFilter = class(TForm)
@@ -29,10 +29,8 @@ type
     ListBoxBlockList: TListBox;
     Label2: TLabel;
     EditMaxConnect: TSpinEdit;
-    Label3: TLabel;
     Label9: TLabel;
     EditClientTimeOutTime: TSpinEdit;
-    Label10: TLabel;
     GroupBox4: TGroupBox;
     Label6: TLabel;
     Label8: TLabel;
@@ -170,7 +168,7 @@ begin
   if (ListBoxTempList.ItemIndex >= 0) and (ListBoxTempList.ItemIndex < ListBoxTempList.Items.Count) then begin
     sIPaddr := ListBoxTempList.Items.Strings[ListBoxTempList.ItemIndex];
     ListBoxTempList.Items.Delete(ListBoxTempList.ItemIndex);
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := 0 to TempBlockIPList.Count - 1 do begin
       if pTSockaddr(TempBlockIPList.Items[i]).nIPaddr = nIPaddr then begin
         TempBlockIPList.Delete(i);
@@ -191,7 +189,7 @@ begin
   for I := 0 to ListBoxTempList.Items.Count - 1 do begin
     if ListBoxTempList.Selected[I] then begin
       sIPaddr := ListBoxTempList.Items.Strings[I];
-      nIPaddr := inet_addr(PChar(sIPaddr));
+      nIPaddr := inet_addr(PAnsiChar(sIPaddr));
       for II := TempBlockIPList.Count - 1 downto 0 do begin
         if pTSockaddr(TempBlockIPList.Items[II]).nIPaddr = nIPaddr then begin
           Dispose(pTSockaddr(TempBlockIPList.Items[II]));
@@ -232,7 +230,7 @@ begin
   if (ListBoxBlockList.ItemIndex >= 0) and (ListBoxBlockList.ItemIndex < ListBoxBlockList.Items.Count) then begin
     sIPaddr := ListBoxBlockList.Items.Strings[ListBoxBlockList.ItemIndex];
     ListBoxBlockList.Items.Delete(ListBoxBlockList.ItemIndex);
-    nIPaddr := inet_addr(PChar(sIPaddr));
+    nIPaddr := inet_addr(PAnsiChar(sIPaddr));
     for i := 0 to BlockIPList.Count - 1 do begin
       if pTSockaddr(BlockIPList.Items[i]).nIPaddr = nIPaddr then begin
         BlockIPList.Delete(i);
@@ -253,7 +251,7 @@ begin
   for I := 0 to ListBoxBlockList.Items.Count - 1 do begin
     if ListBoxBlockList.Selected[I] then begin
       sIPaddr := ListBoxBlockList.Items.Strings[I];
-      nIPaddr := inet_addr(PChar(sIPaddr));
+      nIPaddr := inet_addr(PAnsiChar(sIPaddr));
       for II := BlockIPList.Count - 1 downto 0 do begin
         if pTSockaddr(BlockIPList.Items[II]).nIPaddr = nIPaddr then begin
           Dispose(pTSockaddr(BlockIPList.Items[II]));

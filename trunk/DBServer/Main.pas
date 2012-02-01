@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, JSocket, ExtCtrls, StdCtrls, Menus, Grids, WinSock, Common;
+  Dialogs, ExtCtrls, StdCtrls, Menus, Grids, WinSock, Common, ScktComp;
 
 type
   TRankingThread = class(TThread)
@@ -381,8 +381,8 @@ begin
   ServerSocket.OnClientError := SocketClientError;
   SelectSocket.OnClientError := SocketClientError;
 
-  ServerSocket.Address := '0.0.0.0';
-  SelectSocket.Address := '0.0.0.0';
+//  ServerSocket.Address := '0.0.0.0';
+//  SelectSocket.Address := '0.0.0.0';
 
   g_HumRanking := TSortStringList.Create;
   g_WarriorRanking := TSortStringList.Create;
@@ -584,7 +584,7 @@ var
   wIdent: Word;
 begin
   wIdent := HiWord(MsgData.From);
-  sData := StrPas(MsgData.CopyDataStruct^.lpData);
+  sData := StrPas(PansiChar(MsgData.CopyDataStruct^.lpData));
   case wIdent of
     GS_QUIT: begin
         //StopService();

@@ -2,8 +2,8 @@ unit Share;
 
 interface
 uses
-  Windows, Messages, Classes, SysUtils, JSocket, Mudutil, IniFiles, HUtil32, Forms,
-  Grobal2, GateShare, HttpGet;
+  Windows, Messages, Classes, SysUtils, Mudutil, IniFiles, HUtil32, Forms,
+  Grobal2, GateShare, ScktComp;
 resourcestring
   g_sUpDateTime = 'Build: 02/01/2011';
   g_sProductName = 'LOMCN - Mir Heroes';
@@ -1286,16 +1286,16 @@ end;
 
 procedure GetIPListFile();
 var
-  HttpGet: THTTPGet;
+//  HttpGet: THTTPGet;
   StringList: TStringList;
 begin
   //MainOutMessage('正在获取绿色通道列表', nil);
   StringList := TStringList.Create;
-  HttpGet := THTTPGet.Create(nil);
-  HttpGet.URL := g_sIpListUrl;
-  HttpGet.WaitThread := True;
+//  HttpGet := THTTPGet.Create(nil);
+//  HttpGet.URL := g_sIpListUrl;
+//  HttpGet.WaitThread := True;
   try
-    StringList.Text := HttpGet.Get;
+//    StringList.Text := HttpGet.Get;
     //MainOutMessage('绿色通道列表获取成功', nil);
   except
     //MainOutMessage('绿色通道列表获取失败', nil);
@@ -1307,7 +1307,7 @@ begin
 
   end;
   StringList.Free;
-  HttpGet.Free;
+//  HttpGet.Free;
 end;
 
 procedure LoadIPListFile();

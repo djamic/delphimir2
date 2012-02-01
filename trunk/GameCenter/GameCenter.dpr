@@ -10,7 +10,8 @@ uses
   GLoginServerRouteSet in 'GLoginServerRouteSet.pas' {frmLoginServerRouteSet},
   DataBackUp in 'DataBackUp.pas',
   Common in '..\Common\Common.pas',
-  EncryptUnit in '..\Common\EncryptUnit.pas';
+  EncryptUnit in '..\Common\EncryptUnit.pas',
+  UnitZip in '..\Component\VLCZip\UnitZip.pas';
 
 {$R *.res}
 
