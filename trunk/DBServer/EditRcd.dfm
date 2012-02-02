@@ -216,9 +216,9 @@ object frmEditRcd: TfrmEditRcd
         object CheckBoxIsMaster: TCheckBox
           Left = 80
           Top = 200
-          Width = 71
+          Width = 153
           Height = 21
-          Caption = '??'
+          Caption = 'Character is MASTER'
           TabOrder = 12
           OnClick = EditPasswordChange
         end
@@ -665,7 +665,7 @@ object frmEditRcd: TfrmEditRcd
               Width = 75
             end
             item
-              Caption = '???'
+              Caption = 'Key'
               Width = 63
             end>
           GridLines = True
@@ -698,7 +698,7 @@ object frmEditRcd: TfrmEditRcd
               Width = 100
             end
             item
-              Caption = '??'
+              Caption = 'Item IDX'
               Width = 63
             end
             item
@@ -711,7 +711,7 @@ object frmEditRcd: TfrmEditRcd
               Width = 113
             end
             item
-              Caption = '??'
+              Caption = 'Added stats'
               Width = 275
             end>
           GridLines = True
@@ -740,24 +740,24 @@ object frmEditRcd: TfrmEditRcd
               Caption = 'ID'
             end
             item
-              Caption = '????'
+              Caption = 'Item ID'
               Width = 100
             end
             item
-              Caption = '??'
+              Caption = 'Item IDX'
               Width = 63
             end
             item
-              Caption = '????'
+              Caption = 'Name'
               Width = 113
             end
             item
               Alignment = taCenter
-              Caption = '??'
+              Caption = 'Durability'
               Width = 113
             end
             item
-              Caption = '??'
+              Caption = 'Added stats'
               Width = 275
             end>
           GridLines = True
