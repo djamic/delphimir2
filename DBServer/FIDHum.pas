@@ -1,4 +1,4 @@
-unit FIDHum;
+Ôªøunit FIDHum;
 
 interface
 
@@ -63,14 +63,14 @@ uses HUtil32, MudUtil, CreateChr, viewrcd, EditRcd, DBShare;
 
 procedure TFrmIDHum.FormCreate(Sender: TObject);
 begin
-  IdGrid.Cells[0, 0] := 'µ«¬º’ ∫≈';
-  IdGrid.Cells[1, 0] := '√‹¬Î';
-  IdGrid.Cells[2, 0] := '”√ªß√˚≥∆';
+  IdGrid.Cells[0, 0] := 'Login Account';
+  IdGrid.Cells[1, 0] := 'Password';
+  IdGrid.Cells[2, 0] := 'Username';
   IdGrid.Cells[3, 0] := 'ResiRegi';
   IdGrid.Cells[4, 0] := 'Tran';
   IdGrid.Cells[5, 0] := 'Secretwd';
   IdGrid.Cells[6, 0] := 'Adress(cont)';
-  IdGrid.Cells[7, 0] := '±∏◊¢';
+  IdGrid.Cells[7, 0] := 'Memo';
 
   ChrGrid.Cells[0, 0] := 'Index';
   ChrGrid.Cells[1, 0] := 'Character';
@@ -183,7 +183,7 @@ var
 begin
   sChrName := EdChrName.Text;
   if sChrName = '' then Exit;
-  if MessageDlg(' «∑Ò»∑»œ…æ≥˝»ÀŒÔ ' + sChrName + ' £ø', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if MessageDlg('B·∫°n ch·∫Øc ch·∫Øn mu·ªën x√≥a: ' + sChrName + '  kh√¥ng?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     try
       if g_HumCharDB.Open then begin
         g_HumCharDB.Delete(sChrName);
@@ -247,7 +247,7 @@ var
 begin
   sChrName := EdChrName.Text;
   if sChrName = '' then Exit;
-  if MessageDlg(' «∑Ò»∑»œΩ˚”√»ÀŒÔ ' + sChrName + ' £ø', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if MessageDlg('B·∫°n ch·∫Øc ch·∫Øn mu·ªën x√≥a: ' + sChrName + ' kh√¥ng?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     try
       if g_HumCharDB.Open then begin
         nIndex := g_HumCharDB.Index(sChrName);
@@ -271,7 +271,7 @@ var
 begin
   sChrName := EdChrName.Text;
   if sChrName = '' then Exit;
-  if MessageDlg(' «∑Ò»∑»œ∆Ù”√»ÀŒÔ ' + sChrName + ' £ø', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if MessageDlg('B·∫°n ch·∫Øn ch·∫Øn ch·ª©: ' + sChrName + ' kh√¥ng?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     try
       if g_HumCharDB.Open then begin
         nIndex := g_HumCharDB.Index(sChrName);
@@ -319,8 +319,8 @@ begin
   finally
     g_HumCharDB.Close;
   end;
-  if nCheckCode = 0 then ShowMessage('»ÀŒÔ¥¥Ω®≥…π¶...')
-  else ShowMessage('»ÀŒÔ¥¥Ω® ß∞‹£°£°£°')
+  if nCheckCode = 0 then ShowMessage('T·∫°o th√†nh c√¥ng...')
+  else ShowMessage('C√≥ l·ªói, t·∫°o kh√¥ng th√†nh c√¥ng!')
 end;
 
 procedure TFrmIDHum.BtnDeleteChrAllInfoClick(Sender: TObject);
@@ -329,7 +329,7 @@ var
 begin
   sChrName := EdChrName.Text;
   if sChrName = '' then Exit;
-  if MessageDlg(' «∑Ò»∑»œ…æ≥˝»ÀŒÔ ' + sChrName + ' º∞»ÀŒÔ ˝æ›£ø', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if MessageDlg('X√≥a m·ªçi th√¥ng tin v·ªÅ: ' + sChrName + '!. B·∫°n c√≥ ch·∫Øc ch·∫Øn ch·ª©?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     try
       if g_HumCharDB.Open then begin
         g_HumCharDB.Delete(sChrName);
@@ -355,7 +355,7 @@ begin
   if nRow < 1 then Exit;
   if ChrGrid.RowCount - 1 < nRow then Exit;
   nIndex := Str_ToInt(ChrGrid.Cells[0, nRow], 0);
-  if MessageDlg(' «∑Ò»∑»œΩ˚”√º«¬º ' + IntToStr(nIndex) + ' £ø', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if MessageDlg('B·ªï sung th√¥ng tin: ' + IntToStr(nIndex) + ' kh√¥ng?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
     try
       if g_HumCharDB.Open then begin
         if g_HumCharDB.GetBy(nIndex, @HumRecord) then begin

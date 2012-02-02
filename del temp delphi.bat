@@ -6,6 +6,10 @@ Rem ****************************
 //@pause
 @for /r . %%a in (.) do @if exist "%%a\*.~*" del "%%a\*.~*"
 @for /r . %%a in (.) do @if exist "%%a\*.dcu" del "%%a\*.dcu"
+
+@for /r . %%a in (.) do @if exist "%%a\*.cfg" del "%%a\*.cfg"
+@for /r . %%a in (.) do @if exist "%%a\*.dof" del "%%a\*.dof"
+
 rem @for /r . %%a in (.) do @if exist "%%a\*.res" del "%%a\*.res"
 @for /r . %%a in (.) do @if exist "%%a\*.identcache" del "%%a\*.identcache"
 @for /r . %%a in (.) do @if exist "%%a\*.tvsconfig" del "%%a\*.tvsconfig"

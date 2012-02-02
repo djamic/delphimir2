@@ -1,4 +1,4 @@
-unit DBShare;
+锘縰nit DBShare;
 
 interface
 uses
@@ -511,7 +511,7 @@ begin
     try
       g_ServerIPList.LoadFromFile(g_sServerIPConfFileNmae);
     except
-      MainOutMessage('加载IP列表文件 ' + g_sServerIPConfFileNmae + ' 出错！！！');
+      MainOutMessage('L峄梚 x岷 ra khi 膽峄峜 t峄噋: ' + g_sServerIPConfFileNmae + ' . H茫y ki峄僲 tra l岷');
     end;
   end;
 end;
@@ -677,8 +677,8 @@ begin
   for I := 1 to Length(sChrName) do begin
     Chr := (sChrName[I]);
     if boIsTwoByte then begin
-      //if Chr < #$A1 then Result:=False; //如果小于就是非法字符
-//      if Chr < #$81 then Result:=False; //如果小于就是非法字符
+      //if Chr < #$A1 then Result:=False; //脠莽鹿没脨隆脫脷戮脥脢脟路脟路篓脳脰路没
+//      if Chr < #$81 then Result:=False; //脠莽鹿没脨隆脫脷戮脥脢脟路脟路篓脳脰路没
 
       if not ((FirstChr <= #$F7) and (Chr >= #$40) and (Chr <= #$FE)) then
         if not ((FirstChr > #$F7) and (Chr >= #$40) and (Chr <= #$A0)) then Result := False;
