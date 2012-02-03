@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -16,6 +16,15 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed positioning of TRzDBSpinEdit buttons between XP, Vista, and
+      Windows 7 (and when used on a TDBCtrlGrid).
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Changed the TRzDBSpinEdit.IntValue property to be of type Int64.
+    * Fixed issue where setting the TRzDBSpinEdit.Max property to 0 would not
+      get saved to the DFM file even though the default value of Max is 100.0.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Fixed issue where the TRzDBSpinEdit would not perform range checking
@@ -196,15 +205,13 @@ type
     procedure SetMin( const Value: Extended ); virtual;
     procedure SetMax( const Value: Extended ); virtual;
 
-    function GetIntValue: Integer; virtual;
-    procedure SetIntValue( Value: Integer ); virtual;
+    function GetIntValue: Int64; virtual;
+    procedure SetIntValue( Value: Int64 ); virtual;
     function GetValue: Extended; virtual;
     function CheckValue( const Value: Extended ): Extended; virtual;
     procedure SetValue( const Value: Extended); virtual;
 
     function StoreIncrement: Boolean;
-    function StoreMax: Boolean;
-    function StoreMin: Boolean;
     function StorePageSize: Boolean;
   public
     constructor Create( AOwner: TComponent ); override;
@@ -221,7 +228,7 @@ type
       index 2
       read GetButton;
 
-    property IntValue: Integer
+    property IntValue: Int64
       read GetIntValue
       write SetIntValue;
   published
@@ -297,12 +304,12 @@ type
     property Max: Extended
       read FMax
       write SetMax
-      stored StoreMax;
+      stored True;
 
     property Min: Extended
       read FMin
       write SetMin
-      stored StoreMin;
+      stored True;
 
     property Orientation: TOrientation
       read GetOrientation
@@ -890,13 +897,13 @@ begin
 end;
 
 
-function TRzDBSpinEdit.GetIntValue: Integer;
+function TRzDBSpinEdit.GetIntValue: Int64;
 begin
   Result := Round( GetValue );
 end;
 
 
-procedure TRzDBSpinEdit.SetIntValue( Value: Integer );
+procedure TRzDBSpinEdit.SetIntValue( Value: Int64 );
 begin
   SetValue( Value );
 end;
@@ -973,17 +980,6 @@ begin
   Result := FIncrement <> DefaultIncrement;
 end;
 
-
-function TRzDBSpinEdit.StoreMax: Boolean;
-begin
-  Result := FMax <> DefaultMax;
-end;
-
-
-function TRzDBSpinEdit.StoreMin: Boolean;
-begin
-  Result := FMin <> DefaultMin;
-end;
 
 
 function TRzDBSpinEdit.StorePageSize: Boolean;
@@ -1113,7 +1109,12 @@ begin
           if Ctl3D then
           begin
             if ThemeServices.ThemesEnabled then
-              FButtons.SetBounds( Width - W - 3, -1, W, Height - 2 )
+            begin
+              if RunningAtLeast( winVista ) then
+                FButtons.SetBounds( Width - W - 3, 0, W, Height - 3 )
+              else
+                FButtons.SetBounds( Width - W - 3, -1, W, Height - 2 );
+            end
             else
               FButtons.SetBounds( Width - W - 4, 0, W, Height - 4 );
           end
@@ -1123,7 +1124,12 @@ begin
         else
         begin
           if ( Parent <> nil ) and Parent.ClassNameIs( 'TDBCtrlPanel' ) then
-            FButtons.SetBounds( Width - W - 2, 2, W, Height - 4 )
+          begin
+            if RunningAtLeast( winVista ) then
+              FButtons.SetBounds( Width - W - 1, 2, W, Height - 3 )
+            else
+              FButtons.SetBounds( Width - W - 1, 1, W, Height - 2 );
+          end
           else if ThemeServices.ThemesEnabled then
             FButtons.SetBounds( Width - W - 3, -1, W, Height - 2 )
           else

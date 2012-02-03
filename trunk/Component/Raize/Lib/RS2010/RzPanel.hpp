@@ -327,6 +327,9 @@ class PASCALIMPLEMENTATION TRzCustomGroupBox : public TRzCustomPanel
 private:
 	TRzGroupBoxStyle FGroupStyle;
 	int FBannerHeight;
+	Graphics::TFont* FCaptionFont;
+	bool FCaptionFontChanged;
+	void __fastcall CaptionFontChangeHandler(System::TObject* Sender);
 	HIDESBASE MESSAGE void __fastcall CMDialogChar(Messages::TWMKey &Msg);
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Msg);
 	
@@ -334,8 +337,11 @@ protected:
 	virtual void __fastcall CustomFramingChanged(void);
 	virtual void __fastcall Paint(void);
 	virtual void __fastcall AdjustClientRect(Types::TRect &Rect);
+	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	virtual void __fastcall SetBannerHeight(int Value);
 	virtual void __fastcall SetGroupBoxStyle(TRzGroupBoxStyle Value);
+	bool __fastcall IsCaptionFontStored(void);
+	virtual void __fastcall SetCaptionFont(Graphics::TFont* Value);
 	__property Alignment = {default=0};
 	__property AlignmentVertical = {default=0};
 	__property BorderOuter = {default=0};
@@ -344,11 +350,10 @@ protected:
 	
 public:
 	__fastcall virtual TRzCustomGroupBox(Classes::TComponent* AOwner);
+	__fastcall virtual ~TRzCustomGroupBox(void);
 	__property int BannerHeight = {read=FBannerHeight, write=SetBannerHeight, default=0};
 	__property TRzGroupBoxStyle GroupStyle = {read=FGroupStyle, write=SetGroupBoxStyle, default=3};
-public:
-	/* TRzCustomPanel.Destroy */ inline __fastcall virtual ~TRzCustomGroupBox(void) { }
-	
+	__property Graphics::TFont* CaptionFont = {read=FCaptionFont, write=SetCaptionFont, stored=IsCaptionFontStored};
 public:
 	/* TWinControl.CreateParented */ inline __fastcall TRzCustomGroupBox(HWND ParentWindow) : TRzCustomPanel(ParentWindow) { }
 	
@@ -374,6 +379,7 @@ __published:
 	__property BorderSides = {default=15};
 	__property BorderWidth = {default=0};
 	__property Caption;
+	__property CaptionFont;
 	__property Color = {default=-16777201};
 	__property Constraints;
 	__property Ctl3D;
@@ -436,9 +442,7 @@ __published:
 	__property OnUnDock;
 public:
 	/* TRzCustomGroupBox.Create */ inline __fastcall virtual TRzGroupBox(Classes::TComponent* AOwner) : TRzCustomGroupBox(AOwner) { }
-	
-public:
-	/* TRzCustomPanel.Destroy */ inline __fastcall virtual ~TRzGroupBox(void) { }
+	/* TRzCustomGroupBox.Destroy */ inline __fastcall virtual ~TRzGroupBox(void) { }
 	
 public:
 	/* TWinControl.CreateParented */ inline __fastcall TRzGroupBox(HWND ParentWindow) : TRzCustomGroupBox(ParentWindow) { }

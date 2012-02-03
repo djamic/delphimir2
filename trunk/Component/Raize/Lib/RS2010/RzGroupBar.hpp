@@ -855,12 +855,12 @@ __published:
 	__property Graphics::TColor GradientColorStart = {read=FGradientColorStart, write=SetGradientColorStart, default=16777215};
 	__property Graphics::TColor GradientColorStop = {read=FGradientColorStop, write=SetGradientColorStop, default=-16777201};
 	__property Rzcommon::TRzGroupBarGradientPath GradientPath = {read=FGradientPath, write=SetGradientPath, default=0};
-	__property int GroupBorderSize = {read=FGroupBorderSize, write=SetGroupBorderSize, nodefault};
 	__property Graphics::TColor FlatColor = {read=FFlatColor, write=SetFlatColor, default=-16777200};
 	__property int FlatColorAdjustment = {read=FFlatColorAdjustment, write=SetFlatColorAdjustment, default=30};
 	__property Imglist::TCustomImageList* LargeImages = {read=FLargeImages, write=SetLargeImages};
 	__property Imglist::TCustomImageList* SmallImages = {read=FSmallImages, write=SetSmallImages};
 	__property TRzGroupBarStyle Style = {read=FStyle, write=SetStyle, default=0};
+	__property int GroupBorderSize = {read=FGroupBorderSize, write=SetGroupBorderSize, nodefault};
 	__property bool UniqueItemSelection = {read=FUniqueItemSelection, write=SetUniqueItemSelection, default=0};
 	__property Rzcommon::TRzVisualStyle VisualStyle = {read=FVisualStyle, write=SetVisualStyle, default=2};
 	__property Align = {default=3};

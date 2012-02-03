@@ -117,14 +117,12 @@ protected:
 	virtual void __fastcall SetCheckRange(bool Value);
 	virtual void __fastcall SetMin(const System::Extended Value);
 	virtual void __fastcall SetMax(const System::Extended Value);
-	virtual int __fastcall GetIntValue(void);
-	virtual void __fastcall SetIntValue(int Value);
+	virtual __int64 __fastcall GetIntValue(void);
+	virtual void __fastcall SetIntValue(__int64 Value);
 	virtual System::Extended __fastcall GetValue(void);
 	virtual System::Extended __fastcall CheckValue(const System::Extended Value);
 	virtual void __fastcall SetValue(const System::Extended Value);
 	bool __fastcall StoreIncrement(void);
-	bool __fastcall StoreMax(void);
-	bool __fastcall StoreMin(void);
 	bool __fastcall StorePageSize(void);
 	
 public:
@@ -133,7 +131,7 @@ public:
 	__property Rzspnedt::TRzSpinButtons* Buttons = {read=FButtons};
 	__property Rzbutton::TRzControlButton* DownLeftButton = {read=GetButton, index=1};
 	__property Rzbutton::TRzControlButton* UpRightButton = {read=GetButton, index=2};
-	__property int IntValue = {read=GetIntValue, write=SetIntValue, nodefault};
+	__property __int64 IntValue = {read=GetIntValue, write=SetIntValue};
 	
 __published:
 	__property bool AllowBlank = {read=FAllowBlank, write=FAllowBlank, default=1};
@@ -150,8 +148,8 @@ __published:
 	__property Graphics::TColor FlatButtonColor = {read=FFlatButtonColor, write=FFlatButtonColor, default=-16777201};
 	__property System::Extended Increment = {read=FIncrement, write=FIncrement, stored=StoreIncrement};
 	__property bool IntegersOnly = {read=FIntegersOnly, write=SetIntegersOnly, default=1};
-	__property System::Extended Max = {read=FMax, write=SetMax, stored=StoreMax};
-	__property System::Extended Min = {read=FMin, write=SetMin, stored=StoreMin};
+	__property System::Extended Max = {read=FMax, write=SetMax, stored=true};
+	__property System::Extended Min = {read=FMin, write=SetMin, stored=true};
 	__property Rzcommon::TOrientation Orientation = {read=GetOrientation, write=SetOrientation, default=1};
 	__property System::Extended PageSize = {read=FPageSize, write=FPageSize, stored=StorePageSize};
 	__property System::Extended Value = {read=GetValue, write=SetValue};

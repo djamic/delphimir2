@@ -52,7 +52,7 @@
 			<DCCReference Include="RaizeComponentsVclDb.res"/>
 			<DCCReference Include="Vcl.dcp"/>
 			<DCCReference Include="VclDB.dcp"/>
-			<DCCReference Include="RaizeComponentsVcl.dcp"/>
+			<DCCReference Include="RaizeComponentsVcl_Design.dcp"/>
 			<DCCReference Include="RzDBBnEd.pas"/>
 			<DCCReference Include="RzDBChk.pas"/>
 			<DCCReference Include="RzDBCmbo.pas"/>

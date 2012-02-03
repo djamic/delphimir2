@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -28,6 +28,23 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed issue in TRzDBNumericEdit where pressing the keypad decimal key
+      would not insert the DecimalSeparator character (based on user locale
+      settings) if the DecimalSeparator was something other than a period and
+      the calculator was dropped-down.
+    * Fixed issue in TRzDBNumericEdit where setting the Value property to a
+      decimal value at design-time would truncate the decimal portion when the
+      form was loaded if DisplayFormat used a decimal based format such as
+      ',0.0;(,0.0)'.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Changed the TRzDBNumericEdit.IntValue property to be of type Int64.
+    * Fixed issue where TRzDBDateTimeEdit and TRzDBNumericEdit would trap the
+      Alt+F4 key combination and prevent the application from closing.
+    * Fixed issue where TRzDBEdit would allow text modification even if the
+      associated TDataSource had AutoEdit set to False.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Fixed issue in TRzDBNumericEdit where pressing the Del key on the numeric
@@ -371,12 +388,15 @@ uses
 type
   TRzDBEdit = class;
 
-  {---------------------------------------------------------------------------------------------------------------------
-    TRzPaintEdit is a simple panel descendant that knows how to look like a TRzDBEdit component. This is necessary for
-    the TRzDBEdit component to appear correctly when used in a TDBCtrlGrid. The problem is that the TDBCtrlGrid uses a
-    technique that relies on the control being replicated painting itself using a shared device context. Since the
-    standard edit control does not do this, the TRzPaintEdit component is used for replicated instances of a TRzDBEdit.
-  ---------------------------------------------------------------------------------------------------------------------}
+  {-----------------------------------------------------------------------------
+    TRzPaintEdit is a simple panel descendant that knows how to look like a
+    TRzDBEdit component. This is necessary for the TRzDBEdit component to appear
+    correctly when used in a TDBCtrlGrid. The problem is that the TDBCtrlGrid
+    uses a technique that relies on the control being replicated painting itself
+    using a shared device context. Since the standard edit control does not do
+    this, the TRzPaintEdit component is used for replicated instances of a
+    TRzDBEdit.
+  -----------------------------------------------------------------------------}
 
   TRzPaintEdit = class( TCustomPanel )
   private
@@ -411,6 +431,7 @@ type
     procedure CMExit( var Msg: TCMExit ); message cm_Exit;
     procedure WMCut( var Msg: TMessage ); message wm_Cut;
     procedure WMPaste( var Msg: TMessage ); message wm_Paste;
+    procedure WMClear( var Msg: TMessage ); message wm_Clear;
     procedure WMUndo( var Msg: TMessage ); message wm_undo;
     procedure CMGetDataLink( var Msg: TMessage ); message cm_GetDataLink;
   protected
@@ -634,8 +655,8 @@ type
     procedure SetMin( const Value: Extended ); virtual;
     procedure SetMax( const Value: Extended ); virtual;
 
-    function GetIntValue: Integer; virtual;
-    procedure SetIntValue( Value: Integer ); virtual;
+    function GetIntValue: Int64; virtual;
+    procedure SetIntValue( Value: Int64 ); virtual;
     function GetValue: Extended; virtual;
     function CheckValue( const Value: Extended; var KeepFocusOnEdit: Boolean ): Extended; virtual;
     procedure SetValue( const Value: Extended ); virtual;
@@ -645,7 +666,7 @@ type
     constructor Create( AOwner: TComponent ); override;
     destructor Destroy; override;
 
-    property IntValue: Integer
+    property IntValue: Int64
       read GetIntValue
       write SetIntValue;
 
@@ -699,13 +720,13 @@ type
       read FMin
       write SetMin;
 
-    property Value: Extended
-      read GetValue
-      write SetValue;
-
     property DisplayFormat: string
       read FDisplayFormat
       write SetDisplayFormat;
+
+    property Value: Extended
+      read GetValue
+      write SetValue;
 
     property OnRangeError: TRzRangeErrorEvent
       read FOnRangeError
@@ -1594,6 +1615,7 @@ implementation
 uses
   DateUtils,
   Themes,
+  UxTheme,
   Clipbrd,
   TypInfo,
   RzGrafx,
@@ -1622,6 +1644,7 @@ var
   FrameStyle: TFrameStyle;
   FrameVisible: Boolean;
 begin
+  inherited;
   Canvas.Font := FEditControl.Font;
   Canvas.Brush.Color := FEditControl.Color;
   Canvas.FillRect( ClientRect );
@@ -1630,6 +1653,7 @@ begin
   FrameSides := FEditControl.FrameSides;
   FrameStyle := FEditControl.FrameStyle;
   FrameVisible := FEditControl.FrameVisible;
+
 
   { Draw Border }
   if FrameVisible then
@@ -1650,6 +1674,11 @@ begin
         DrawColorBorderSides( Canvas, R, FEditControl.Color, FrameStyle, FrameSides );
     end;
   end;
+
+  // We just check if FrameVisible is True (above) and do not worry about whether Themes are
+  // being used because when replicating the edit control, there is no way to overwrite the
+  // box that gets drawn.
+
 
   { Draw Text }
   R := FEditControl.GetEditRect;
@@ -1679,8 +1708,14 @@ begin
       X := R.Left + ( R.Right - R.Left ) div 2;
   end;
   Y := R.Top + ( R.Bottom - R.Top - Canvas.TextHeight( 'Pp' ) ) div 2 - 1;
+
+  if UseThemes then
+    Canvas.Brush.Style := bsClear;
   Canvas.TextRect( R, X, Y, Caption );
+  if UseThemes then
+  Canvas.Brush.Style := bsSolid;
 end; {= TRzPaintEdit.Paint; =}
+
 
 
 {=======================}
@@ -1692,24 +1727,29 @@ begin
   inherited;
   inherited ReadOnly := True;
 
-  {&RCI}
-  FPaintControl := TRzPaintEdit.Create( Self );
-  FPaintControl.Parent := Self;
-  FPaintControl.Visible := False;
+  //  ControlStyle := ControlStyle + [csReplicatable];
+  ControlStyle := ControlStyle + [ csReplicatable, csSetCaption ];
 
-  ControlStyle := ControlStyle + [csReplicatable];
   FDataLink := TFieldDataLink.Create;
   FDataLink.Control := Self;
   FDataLink.OnDataChange := DataChangeHandler;
   FDataLink.OnEditingChange := EditingChangeHandler;
   FDataLink.OnUpdateData := UpdateDataHandler;
   FDataLink.OnActiveChange := ActiveChangeHandler;
+
+  {&RCI}
+  FPaintControl := TRzPaintEdit.Create( Self );
+  FPaintControl.Parent := Self;
+  FPaintControl.Visible := False;
+
 end;
 
 
 destructor TRzDBEdit.Destroy;
 begin
   FPaintControl.Free;
+  FPaintControl := nil;
+
   FDataLink.Free;
   FDataLink := nil;
   inherited;
@@ -1767,7 +1807,10 @@ begin
 
   case Key of
     ^H, ^V, ^X, #32..High(Char):
-      FDataLink.Edit;
+    begin
+      if not FDataLink.Edit then
+        Key := #0;
+    end;
 
     #27: // Escape Key
     begin
@@ -2030,22 +2073,29 @@ end;
 
 procedure TRzDBEdit.WMUndo( var Msg: TMessage );
 begin
-  FDataLink.Edit;
-  inherited;
+  if FDataLink.Edit then
+    inherited;
 end;
 
 
 procedure TRzDBEdit.WMCut( var Msg: TMessage );
 begin
-  FDataLink.Edit;
-  inherited;
+  if FDataLink.Edit then
+    inherited;
 end;
 
 
 procedure TRzDBEdit.WMPaste( var Msg: TMessage );
 begin
-  FDataLink.Edit;
-  inherited;
+  if FDataLink.Edit then
+    inherited;
+end;
+
+
+procedure TRzDBEdit.WMClear( var Msg: TMessage );
+begin
+  if FDataLink.Edit then
+    inherited;
 end;
 
 
@@ -2116,6 +2166,7 @@ begin
     end;
   end;
 end;
+
 
 
 {==============================}
@@ -2316,13 +2367,13 @@ begin
 end;
 
 
-function TRzDBNumericEdit.GetIntValue: Integer;
+function TRzDBNumericEdit.GetIntValue: Int64;
 begin
   Result := Round( GetValue );
 end;
 
 
-procedure TRzDBNumericEdit.SetIntValue( Value: Integer );
+procedure TRzDBNumericEdit.SetIntValue( Value: Int64 );
 begin
   SetValue( Value );
 end;
@@ -3801,6 +3852,8 @@ end;
 destructor TRzDBMemo.Destroy;
 begin
   FPaintControl.Free;
+  FPaintControl := nil;
+
   if FFrameController <> nil then
     FFrameController.RemoveControl( Self );
   FCanvas.Free;

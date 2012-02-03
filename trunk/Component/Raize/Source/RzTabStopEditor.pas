@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -11,12 +11,15 @@
   TRzTabStopProperty
     Displays special dialog to manage tabstops for the TRzTabbedListBox.
 
-  TRzTabbedListBoxEditor  
-    Adds context menu to edit the tab stops, add items, and set the Align 
+  TRzTabbedListBoxEditor
+    Adds context menu to edit the tab stops, add items, and set the Align
     property.
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Modified the TabStop Editor so that it is resizable.
   ------------------------------------------------------------------------------
   4.2    (29 May 2007)
     * Increased the range of tab stop positions in the Tab Stop Editor from 100
@@ -103,6 +106,7 @@ type
     chkRightAligned: TRzCheckBox;
     trkTabPos: TRzTrackBar;
     grpTabStopsMode: TRzRadioGroup;
+    RzPanel1: TRzPanel;
     procedure btnAddClick(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
     procedure lstTabsClick(Sender: TObject);

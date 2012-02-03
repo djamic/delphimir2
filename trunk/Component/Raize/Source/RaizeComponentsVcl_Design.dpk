@@ -32,8 +32,7 @@ package RaizeComponentsVcl_Design;
 requires
   Vcl,
   DesignIDE,
-  DclStd,
-  RaizeComponentsVcl;
+  DclStd;
 
 contains
   RaizeComponentsVcl_Reg in 'RaizeComponentsVcl_Reg.pas',

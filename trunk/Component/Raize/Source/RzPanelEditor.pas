@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editor
@@ -13,6 +13,9 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Added new "Add Button" menu item to designer context menu for TRzPanel.
   ------------------------------------------------------------------------------
   4.0    (23 Dec 2005)
     * Added VisualStyle and GradientColorStyle menu items to designer context
@@ -148,7 +151,7 @@ end;
 
 function TRzPanelEditor.GetVerbCount: Integer;
 begin
-  Result := 8;
+  Result := 9;
 end;
 
 
@@ -163,6 +166,7 @@ begin
     5: Result := 'Remove Border';
     6: Result := '-';
     7: Result := 'Add a Nested Panel';
+    8: Result := 'Add Button';
   end;
 end;
 
@@ -263,6 +267,12 @@ begin
     begin
       SubPanel := Designer.CreateComponent( TRzPanel, Panel, 10, 10, 50, 10 ) as TRzPanel;
       SubPanel.Align := alLeft;
+      DesignerModified;
+    end;
+
+    8: // Add Button
+    begin
+      Designer.CreateComponent( TRzButton, Panel, 10, 10, 75, 25 );
       DesignerModified;
     end;
   end;

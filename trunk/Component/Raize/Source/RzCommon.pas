@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -308,7 +308,7 @@ uses
   IniFiles;
 
 const
-  RaizeComponents_Version = '5.2';
+  RaizeComponents_Version = '5.4';
 
   cm_GetBlinking                = cm_Base + 1000;
   cm_Blink                      = cm_Base + 1001;
@@ -596,7 +596,8 @@ type
                       xptcGroupBarFill,
                       xptcListGroupFill,
                       xptcListGroupFont,
-                      xptcGroupBoxFont );
+                      xptcGroupBoxFont,
+                      xptcSpinButtonBorder );
 
 function GetXPThemeColor( Element: TRzXPThemeColor ): TColor;
 
@@ -1549,8 +1550,8 @@ const
 {$ENDIF}
 
 type
-  TRzWindowsVersion = ( Win95, WinNT, Win98, WinMe, Win2000, WinXP,
-                        WinServer2003, WinVista );
+  TRzWindowsVersion = ( win95, winNT, win98, winMe, win2000, winXP,
+                        winServer2003, winVista, win7 );
 
 function RunningUnder( ver: TRzWindowsVersion ): Boolean;
 function RunningAtLeast( ver: TRzWindowsVersion ): Boolean;
@@ -2037,6 +2038,13 @@ begin
       ElementDetails := ThemeServices.GetElementDetails( tbGroupBoxNormal );
       GetThemeColor( ThemeServices.Theme[ teButton ], ElementDetails.Part,
                      ElementDetails.State, TMT_TEXTCOLOR, C );
+    end;
+
+    xptcSpinButtonBorder:
+    begin
+      ElementDetails := ThemeServices.GetElementDetails( tsSpinRoot );
+      GetThemeColor( ThemeServices.Theme[ teSpin ], ElementDetails.Part,
+                     ElementDetails.State, TMT_BORDERCOLOR, C );
     end;
 
     else
@@ -2996,12 +3004,14 @@ function DrawFocusBorder( Canvas: TCanvas; Bounds: TRect ): TRect;
   procedure DrawHorzLine( X1, X2, Y: Integer );
   var
     X: Integer;
+    C: TColor;
   begin
     X := X1 + 1;
     Canvas.MoveTo( X, Y );
     while X < X2 do
     begin
-      Canvas.Pixels[ X, Y ] := Canvas.Pixels[ X, Y ] xor Canvas.Pixels[ X, Y ];
+      C := Canvas.Pixels[ X, Y ];
+      Canvas.Pixels[ X, Y ] := C xor C;
       Inc( X, 2 );
     end;
   end;
@@ -3009,12 +3019,14 @@ function DrawFocusBorder( Canvas: TCanvas; Bounds: TRect ): TRect;
   procedure DrawVertLine( X, Y1, Y2: Integer );
   var
     Y: Integer;
+    C: TColor;
   begin
     Y := Y1 + 1;
     Canvas.MoveTo( X, Y );
     while Y < Y2 do
     begin
-      Canvas.Pixels[ X, Y ] := Canvas.Pixels[ X, Y ] xor Canvas.Pixels[ X, Y ];
+      C := Canvas.Pixels[ X, Y ];
+      Canvas.Pixels[ X, Y ] := C xor C;
       Inc( Y, 2 );
     end;
   end;
@@ -3024,6 +3036,7 @@ begin
   DrawVertLine( Bounds.Right - 1, Bounds.Top, Bounds.Bottom );
   DrawHorzLine( Bounds.Left, Bounds.Right, Bounds.Top );
   DrawHorzLine( Bounds.Left, Bounds.Right, Bounds.Bottom - 1 );
+
   Result := Bounds;
   InflateRect( Result, -1, -1 );
 end; {= DrawFocusBorder =}
@@ -3650,72 +3663,68 @@ begin
   OldBrushColor := Canvas.Brush.Color;
   if Enabled then
   begin
-    if UIStyle = uiWindowsXP then
-    begin
-      ElementDetails := ThemeServices.GetElementDetails( tcDropDownButtonNormal );
-      TempBmp := TBitmap.Create;
-      try
-        R := Rect( 0, 0, 16, 20 );
-        TempBmp.Width := 17;
-        TempBmp.Height := 21;
-        ThemeServices.DrawElement( TempBmp.Canvas.Handle, ElementDetails, R );
-        C := TempBmp.Canvas.Pixels[ 8, 10 ];
-        if ColorsTooClose( C, clWindow ) then
-          C := cl3DDkShadow; // This is needed for Olive Windows XP color scheme
-      finally
-        TempBmp.Free;
+    // Get appropriate color of arrow
+    case UIStyle of
+      uiWindows95,
+      uiWindowsVista:
+      begin
+        if ColorsTooClose( Canvas.Brush.Color, clBlack ) then
+          Canvas.Brush.Color := cl3DDkShadow
+        else
+          Canvas.Brush.Color := clBlack;
       end;
-      Canvas.Brush.Color := C;
-    end
-    else
-    begin
-      if ColorsTooClose( Canvas.Brush.Color, clBlack ) then
-        Canvas.Brush.Color := cl3DDkShadow
-      else
-        Canvas.Brush.Color := clBlack;
+
+      uiWindowsXP:
+      begin
+        ElementDetails := ThemeServices.GetElementDetails( tcDropDownButtonNormal );
+        TempBmp := TBitmap.Create;
+        try
+          R := Rect( 0, 0, 16, 20 );
+          TempBmp.Width := 17;
+          TempBmp.Height := 21;
+          ThemeServices.DrawElement( TempBmp.Canvas.Handle, ElementDetails, R );
+          C := TempBmp.Canvas.Pixels[ 8, 10 ];
+          if ColorsTooClose( C, clWindow ) then
+            C := cl3DDkShadow; // This is needed for Olive Windows XP color scheme
+        finally
+          TempBmp.Free;
+        end;
+        Canvas.Brush.Color := C;
+      end;
     end;
   end
   else
     Canvas.Brush.Color := clBtnShadow;
   Canvas.Pen.Style := psClear;
+
   X := Bounds.Left + ( Bounds.Right - Bounds.Left ) div 2;
   Y := Bounds.Top + ( Bounds.Bottom - Bounds.Top ) div 2;
 
   if ( Bounds.Bottom - Bounds.Top ) mod 2 = 0 then
     Dec( Y );
 
-  if UIStyle = uiWindowsXP then
-    Inc( Y, 4 )
-  else
-    Inc( Y, 2 );
 
-  if UIStyle = uiWindowsXP then
-    Canvas.Polygon( [ Point( X, Y ), Point( X - 4, Y - 5 ),
-                      Point( X - 3, Y - 7 ), Point( X, Y - 3 ),
-                      Point( X + 3, Y - 7 ), Point( X + 5, Y - 5 ) ] )
-  else
-  begin
-    // Used to use the following call to Canvas.Polygon, but this did not
-    // provide good results under Windows 98 (i.e. the triangle was distorted).
-    // Canvas.Polygon( [ Point( X, Y ), Point( X - 3, Y - 4 ),
-    //                   Point( X + 4, Y - 4 ) ] );
+  case UIStyle of
+    uiWindows95:
+    begin
+      Inc( Y, 2 );
+      Canvas.Polygon( [ Point( X, Y ), Point( X - 3, Y - 4 ), Point( X + 4, Y - 4 ) ] );
+    end;
 
-    Canvas.Pixels[ X + 0, Y + 0 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X - 1, Y - 1 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 0, Y - 1 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 1, Y - 1 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X - 2, Y - 2 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X - 1, Y - 2 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 0, Y - 2 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 1, Y - 2 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 2, Y - 2 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X - 3, Y - 3 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X - 2, Y - 3 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X - 1, Y - 3 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 0, Y - 3 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 1, Y - 3 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 2, Y - 3 ] := Canvas.Brush.Color;
-    Canvas.Pixels[ X + 3, Y - 3 ] := Canvas.Brush.Color;
+    uiWindowsVista:
+    begin
+      Inc( Y, 3 );
+      Inc( X );
+      Canvas.Polygon( [ Point( X, Y ), Point( X - 3, Y - 4 ), Point( X + 4, Y - 4 ) ] );
+    end;
+
+    uiWindowsXP:
+    begin
+      Inc( Y, 4 );
+      Canvas.Polygon( [ Point( X, Y ), Point( X - 4, Y - 5 ),
+                        Point( X - 3, Y - 7 ), Point( X, Y - 3 ),
+                        Point( X + 3, Y - 7 ), Point( X + 5, Y - 5 ) ] )
+    end;
   end;
 
   Canvas.Pen.Style := psSolid;
@@ -3735,170 +3744,127 @@ begin
   OldBrushColor := Canvas.Brush.Color;
   if Enabled then
   begin
-    if UIStyle = uiWindowsXP then
-    begin
-      ElementDetails := ThemeServices.GetElementDetails( tcDropDownButtonNormal );
-      TempBmp := TBitmap.Create;
-      try
-        R := Rect( 0, 0, 16, 20 );
-        TempBmp.Width := 17;
-        TempBmp.Height := 21;
-        ThemeServices.DrawElement( TempBmp.Canvas.Handle, ElementDetails, R );
-        C := TempBmp.Canvas.Pixels[ 8, 10 ];
-        if ColorsTooClose( C, clWindow ) then
-          C := cl3DDkShadow; // This is needed for Olive Windows XP color scheme
-      finally
-        TempBmp.Free;
+    // Get appropriate color of arrow
+    case UIStyle of
+      uiWindows95:
+      begin
+        if ColorsTooClose( Canvas.Brush.Color, clBlack ) then
+          Canvas.Brush.Color := cl3DDkShadow
+        else
+          Canvas.Brush.Color := clBlack;
       end;
-      Canvas.Brush.Color := C;
-    end
-    else
-    begin
-      if ColorsTooClose( Canvas.Brush.Color, clBlack ) then
-        Canvas.Brush.Color := cl3DDkShadow
-      else
-        Canvas.Brush.Color := clBlack;
+
+      uiWindowsXP:
+      begin
+        ElementDetails := ThemeServices.GetElementDetails( tcDropDownButtonNormal );
+        TempBmp := TBitmap.Create;
+        try
+          R := Rect( 0, 0, 16, 20 );
+          TempBmp.Width := 17;
+          TempBmp.Height := 21;
+          ThemeServices.DrawElement( TempBmp.Canvas.Handle, ElementDetails, R );
+          C := TempBmp.Canvas.Pixels[ 8, 10 ];
+          if ColorsTooClose( C, clWindow ) then
+            C := cl3DDkShadow; // This is needed for Olive Windows XP color scheme
+        finally
+          TempBmp.Free;
+        end;
+        Canvas.Brush.Color := C;
+      end;
+
+      uiWindowsVista:
+      begin
+        ElementDetails := ThemeServices.GetElementDetails( tsDownNormal );
+        TempBmp := TBitmap.Create;
+        try
+          R := Rect( 0, 0, 13, 10 );
+          TempBmp.Width := 13;
+          TempBmp.Height := 10;
+          ThemeServices.DrawElement( TempBmp.Canvas.Handle, ElementDetails, R );
+          C := TempBmp.Canvas.Pixels[ 6, 4 ];
+        finally
+          TempBmp.Free;
+        end;
+        Canvas.Brush.Color := C;
+      end;
     end;
   end
   else
     Canvas.Brush.Color := clBtnShadow;
+
   Canvas.Pen.Style := psClear;
+
   X := Bounds.Left + ( Bounds.Right - Bounds.Left ) div 2;
   Y := Bounds.Top + ( Bounds.Bottom - Bounds.Top ) div 2;
   if ( Bounds.Bottom - Bounds.Top ) mod 2 = 0 then
     Dec( Y );
 
-  if UIStyle = uiWindowsXP then
-  begin
-    case Direction of
-      dirLeft:   Dec( X, 1 );
-      dirUp:     Inc( Y, 4 );
-      dirRight:  Dec( X, 3 );
-      dirDown:   Inc( Y, 2 );
-    end;
-  end
-  else
-  begin
-    case Direction of
-      dirLeft, dirRight:
-        Dec( X, 2 );
-      dirUp, dirDown:
-        Inc( Y, 1 );
-    end;
-  end;
-
-  if UIStyle = uiWindowsXP then
-  begin
-    case Direction of
-      dirLeft:
-        Canvas.Polygon( [ Point( X, Y ), Point( X + 4, Y - 4 ), Point( X + 4, Y - 1 ), Point( X + 3, Y ),
-                          Point( X + 4, Y + 1 ), Point( X + 4, Y + 4 ) ] );
-      dirUp:
-        Canvas.Polygon( [ Point( X, Y - 5 ), Point( X + 4, Y ), Point( X + 1, Y ), Point( X, Y - 2 ), Point( X - 1, Y ),
-                          Point( X - 4, Y ) ] );
-      dirRight:
-        Canvas.Polygon( [ Point( X + 4, Y ), Point( X, Y + 4 ), Point( X, Y + 1 ), Point( X + 1, Y ), Point( X, Y - 1 ),
-                          Point( X, Y - 4 ) ] );
-      dirDown:
-        Canvas.Polygon( [ Point( X, Y ), Point( X - 3, Y - 4 ), Point( X, Y - 4 ), Point( X, Y - 3 ),
-                          Point( X + 1, Y - 4 ), Point( X + 4, Y - 4 ) ] );
-    end;
-  end
-  else
-  begin
-    (* The following is the original approach, but the Polygon function results
-       in distorted triangles under Windows 98.
-    case Direction of
-      dirLeft:
-        Canvas.Polygon( [ Point( X, Y ), Point( X + 4, Y - 4 ), Point( X + 4, Y + 4 ) ] );
-      dirUp:
-        Canvas.Polygon( [ Point( X, Y - 5 ), Point( X + 4, Y ), Point( X - 4, Y ) ] );
-      dirRight:
-        Canvas.Polygon( [ Point( X + 4, Y ), Point( X, Y + 4 ), Point( X, Y - 4 ) ] );
-      dirDown:
-        Canvas.Polygon( [ Point( X, Y + 1 ), Point( X - 3, Y - 3 ), Point( X + 4, Y - 3 ) ] );
-    end;
-    *)
-
-    case Direction of
-      dirUp:
-      begin
-        Canvas.Pixels[ X + 0, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 1, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 2, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 1, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 3, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 2, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 1, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y + 0 ] := Canvas.Brush.Color;
+  case UIStyle of
+    uiWindows95:
+    begin
+      case Direction of
+        dirLeft, dirRight:
+          Dec( X, 2 );
+        dirUp, dirDown:
+          Inc( Y, 1 );
       end;
 
-      dirDown:
-      begin
-        Canvas.Pixels[ X + 0, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 1, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 2, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 1, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 3, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 2, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X - 1, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y - 3 ] := Canvas.Brush.Color;
+      // Bringing back calls to Polygon because Windows 98 is no longer supported.
+      case Direction of
+        dirLeft:
+          Canvas.Polygon( [ Point( X, Y ), Point( X + 4, Y - 4 ), Point( X + 4, Y + 4 ) ] );
+        dirUp:
+          Canvas.Polygon( [ Point( X, Y - 5 ), Point( X + 4, Y ), Point( X - 4, Y ) ] );
+        dirRight:
+          Canvas.Polygon( [ Point( X + 4, Y ), Point( X, Y + 4 ), Point( X, Y - 4 ) ] );
+        dirDown:
+          Canvas.Polygon( [ Point( X, Y + 1 ), Point( X - 3, Y - 3 ), Point( X + 4, Y - 3 ) ] );
+      end;
+    end;
+
+    uiWindowsXP:
+    begin
+      case Direction of
+        dirLeft:   Dec( X, 1 );
+        dirUp:     Inc( Y, 4 );
+        dirRight:  Dec( X, 3 );
+        dirDown:   Inc( Y, 2 );
       end;
 
-      dirLeft:
-      begin
-        Canvas.Pixels[ X + 0, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y + 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y + 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y + 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y + 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y + 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 3, Y + 3 ] := Canvas.Brush.Color;
+      case Direction of
+        dirLeft:
+          Canvas.Polygon( [ Point( X, Y ), Point( X + 4, Y - 4 ), Point( X + 4, Y - 1 ), Point( X + 3, Y ),
+                            Point( X + 4, Y + 1 ), Point( X + 4, Y + 4 ) ] );
+        dirUp:
+          Canvas.Polygon( [ Point( X, Y - 5 ), Point( X + 4, Y ), Point( X + 1, Y ), Point( X, Y - 2 ), Point( X - 1, Y ),
+                            Point( X - 4, Y ) ] );
+        dirRight:
+          Canvas.Polygon( [ Point( X + 4, Y ), Point( X, Y + 4 ), Point( X, Y + 1 ), Point( X + 1, Y ), Point( X, Y - 1 ),
+                            Point( X, Y - 4 ) ] );
+        dirDown:
+          Canvas.Polygon( [ Point( X, Y ), Point( X - 3, Y - 4 ), Point( X, Y - 4 ), Point( X, Y - 3 ),
+                            Point( X + 1, Y - 4 ), Point( X + 4, Y - 4 ) ] );
+      end;
+    end;
+
+    uiWindowsVista:
+    begin
+      case Direction of
+        dirLeft, dirRight:
+          Dec( X, 2 );
+        dirUp, dirDown:
+          Inc( Y, 1 );
       end;
 
-      dirRight:
-      begin
-        Canvas.Pixels[ X + 3, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 2, Y + 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y + 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 1, Y + 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y - 3 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y - 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y - 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y + 0 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y + 1 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y + 2 ] := Canvas.Brush.Color;
-        Canvas.Pixels[ X + 0, Y + 3 ] := Canvas.Brush.Color;
+      case Direction of
+        dirLeft:
+          Canvas.Polygon( [ Point( X + 1, Y ), Point( X + 4, Y - 3 ), Point( X + 4, Y + 3 ) ] );
+        dirUp:
+          Canvas.Polygon( [ Point( X, Y - 3 ), Point( X + 3, Y + 1 ), Point( X - 3, Y + 1 ) ] );
+        dirRight:
+          Canvas.Polygon( [ Point( X + 3, Y ), Point( X, Y + 3 ), Point( X, Y - 3 ) ] );
+        dirDown:
+          Canvas.Polygon( [ Point( X, Y ), Point( X - 2, Y - 3 ), Point( X + 3, Y - 3 ) ] );
       end;
     end;
   end;
@@ -7698,6 +7664,10 @@ begin
     winVista:
       Result := ( Win32Platform = VER_PLATFORM_WIN32_NT ) and
                 ( Win32MajorVersion = 6 ) and ( Win32MinorVersion = 0 );
+
+    win7:
+      Result := ( Win32Platform = VER_PLATFORM_WIN32_NT ) and
+                ( Win32MajorVersion = 6 ) and ( Win32MinorVersion = 1 );
   end;
 
 end;
@@ -7747,6 +7717,10 @@ begin
     winVista:
       Result := ( Win32Platform = VER_PLATFORM_WIN32_NT ) and
                 ( Win32MajorVersion >= 6 );
+
+    win7:
+      Result := ( Win32Platform = VER_PLATFORM_WIN32_NT ) and
+                ( Win32MajorVersion >= 6 ) and ( Win32MinorVersion >= 1 );
   end;
 
 end;

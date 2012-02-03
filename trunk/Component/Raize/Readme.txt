@@ -98,13 +98,14 @@ MINIMUM SYSTEM REQUIREMENTS
   
   At least one of the following compilers:
                  
-    Embarcadero RAD Studio 2010 / Delphi 2010 / C++Builder 2010   
-    CodeGear RAD Studio 2009 / Delphi 2009 / C++Builder 2009
-    CodeGear RAD Studio 2007 / Delphi 2007 / C++Builder 2007                    
-    Borland Developer Studio 2006 - Including Turbo Editions
+    Embarcadero RAD Studio XE      -- Delphi XE,   C++Builder XE
+    Embarcadero RAD Studio 2010    -- Delphi 2010, C++Builder 2010   
+    CodeGear RAD Studio 2009       -- Delphi 2009, C++Builder 2009
+    CodeGear RAD Studio 2007       -- Delphi 2007, C++Builder 2007                    
+    Borland Developer Studio 2006  -- Delphi 2006, C++Builder 2006, Turbo Editions
     Delphi 2005 - Update 3 
-    Delphi 7 _ Update 1
-  
+    Delphi 7 - Update 1
+
   Hard Disk Space Requirements:  
   
     20 MB + 10 MB for each compiler to be supported

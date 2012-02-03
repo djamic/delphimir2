@@ -8553,6 +8553,7 @@ object RzSelectImageEditDlg: TRzSelectImageEditDlg
     State = cbChecked
     TabOrder = 4
     Visible = False
+    WordWrap = True
   end
   object GrpImageList: TRzGroupBox
     Left = 8

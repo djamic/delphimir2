@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -42,6 +42,15 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Several new properties have been added to the TRzVersionInfo component.
+      Specifically, the individual elements that make up the module's version
+      number are accessible with MajorVersion, MinorVersion, Release, and Build
+      properties. Each value is a Word value.  The module attributes are also
+      accessible in the new DebugBuild, PreRelease, PrivateBuild, and
+      SpecialBuild Boolean proeprties.  And finally, the new FileDateTime
+      property can be used to quickly access the module's file date/time stamp.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Added OnScrollDisplay event to TRzMarqueeDisplay. This event is fired each
@@ -1093,11 +1102,16 @@ type
     FVersionInfo: TStringList;
     FVersionInfoAvailable: Boolean;
     FStatusList: TList;
+    FVersionNumbers: array[ 1..4 ] of Word;
+    FModuleAttributes: array[ 1..4 ] of Boolean;
   protected
     procedure Loaded; override;
     procedure GetVersionInfo;
     function GetField( Index: Integer ): string;
     function GetVerField( Index: TRzVersionInfoField ): string;
+    function GetVersionNumber( Index: Integer ): Word;
+    function GetModuleAttribute( Index: Integer ): Boolean;
+    function GetFileDateTime: TDateTime;
 
     procedure UpdateStatusControls;
 
@@ -1156,6 +1170,45 @@ type
     property Comments: string
       index 9 // vifComments
       read GetField;
+
+    // Version Numbers
+
+    property MajorVersion: Word
+      index 1
+      read GetVersionNumber;
+
+    property MinorVersion: Word
+      index 2
+      read GetVersionNumber;
+
+    property Release: Word
+      index 3
+      read GetVersionNumber;
+
+    property Build: Word
+      index 4
+      read GetVersionNumber;
+
+    // Module Attributes
+
+    property DebugBuild: Boolean
+      index 1
+      read GetModuleAttribute;
+
+    property PreRelease: Boolean
+      index 2
+      read GetModuleAttribute;
+
+    property PrivateBuild: Boolean
+      index 3
+      read GetModuleAttribute;
+
+    property SpecialBuild: Boolean
+      index 4
+      read GetModuleAttribute;
+
+    property FileDateTime: TDateTime
+      read GetFileDateTime;
   published
     property About: TRzAboutInfo
       read FAboutInfo
@@ -3579,7 +3632,10 @@ var
   InfoBuf: Pointer;
   CompanyName, FileDescription, FileVersion, InternalName, LegalCopyright: string;
   LegalTradeMarks, OriginalFilename, ProductName, ProductVersion, Comments: string;
+  MajorVersion, MinorVersion, Release, Build: Word;
+  DebugBuild, PreRelease, PrivateBuild, SpecialBuild: Boolean;
   Value: PChar;
+  FileInfo: PVSFixedFileInfo;
   LookupString: string;
   PathStz: array[ 0..MAX_PATH ] of Char;
 begin
@@ -3590,6 +3646,17 @@ begin
     GetModuleFileName( HInstance, PathStz, SizeOf( PathStz ) );
     FFilePath := PathStz;
   end;
+
+  MajorVersion := 0;
+  MinorVersion := 0;
+  Release := 0;
+  Build := 0;
+
+  DebugBuild := False;
+  PreRelease := False;
+  PrivateBuild := False;
+  SpecialBuild := False;
+  
   InfoSize := GetFileVersionInfoSize( PChar( FFilePath ), Temp );
   FVersionInfoAvailable := InfoSize > 0;
   if FVersionInfoAvailable then
@@ -3627,6 +3694,21 @@ begin
         ProductVersion := Value;
       if VerQueryValue( InfoBuf, PChar( LookupString + 'Comments' ), Pointer( Value ), Len ) then
         Comments := Value;
+
+      // Get File Info: Version Numbers and Module Attributes
+      if VerQueryValue( InfoBuf, '\', Pointer( FileInfo ), Len ) then
+      begin
+        MajorVersion := FileInfo^.dwFileVersionMS shr 16;
+        MinorVersion := FileInfo^.dwFileVersionMS and $FFFF;
+        Release      := FileInfo^.dwFileVersionLS shr 16;
+        Build        := FileInfo^.dwFileVersionLS and $FFFF;
+
+        DebugBuild   := (FileInfo^.dwFileFlags and VS_FF_DEBUG) <> 0;
+        PreRelease   := (FileInfo^.dwFileFlags and VS_FF_PRERELEASE) <> 0;
+        PrivateBuild := (FileInfo^.dwFileFlags and VS_FF_PRIVATEBUILD) <> 0;
+        SpecialBuild := (FileInfo^.dwFileFlags and VS_FF_SPECIALBUILD) <> 0;
+      end;
+
     finally
       FreeMem( InfoBuf, InfoSize );
     end;
@@ -3656,6 +3738,16 @@ begin
   FVersionInfo.Add( ProductName );
   FVersionInfo.Add( ProductVersion );
   FVersionInfo.Add( Comments );
+
+  FVersionNumbers[ 1 ] := MajorVersion;
+  FVersionNumbers[ 2 ] := MinorVersion;
+  FVersionNumbers[ 3 ] := Release;
+  FVersionNumbers[ 4 ] := Build;
+
+  FModuleAttributes[ 1 ] := DebugBuild;
+  FModuleAttributes[ 2 ] := PreRelease;
+  FModuleAttributes[ 3 ] := PrivateBuild;
+  FModuleAttributes[ 4 ] := SpecialBuild;
 end;
 
 
@@ -3717,6 +3809,41 @@ end;
 function TRzVersionInfo.GetVerField( Index: TRzVersionInfoField ): string;
 begin
   Result := GetField( Ord( Index ) );
+end;
+
+
+function TRzVersionInfo.GetVersionNumber( Index: Integer ): Word;
+begin
+  Result := FVersionNumbers[ Index ];
+end;
+
+
+function TRzVersionInfo.GetModuleAttribute( Index: Integer ): Boolean;
+begin
+  Result := FModuleAttributes[ Index ];
+end;
+
+
+function TRzVersionInfo.GetFileDateTime: TDateTime;
+var
+  {$IFDEF VCL100_OR_HIGHER}
+  DT: TDateTime;
+  {$ELSE}
+  Age: Integer;
+  {$ENDIF}
+begin
+  {$IFDEF VCL100_OR_HIGHER}
+  if FileAge( ParamStr( 0 ), DT ) then
+    Result := DT
+  else
+    Result := 0;
+  {$ELSE}
+  Age := FileAge( ParamStr( 0 ) );
+  if Age <> -1 then
+    Result := FileDateToDateTime( Age )
+  else
+    Result := 0;
+  {$ENDIF}
 end;
 
 

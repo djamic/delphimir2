@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -17,6 +17,16 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Surfaced the HotSpotRect as a public property for both TRzSplitter and
+      TRzSizePanel.
+    * Fixed issue where the TRzSizePanel.MarginMin property would get reset to
+      0 if the sum of the MarginMin and MarginMax were greater than 302, which
+      is the default client width of a TForm. The true client size of the form
+      is not established until after the child controls are read from the DFM
+      file. As a result, the TRzSizePanel now delays setting the MarginMin
+      property until the true size of the form has been established.
   ------------------------------------------------------------------------------
   5.0    (30 Sep 2008)
     * Fixed issue where a closed hot spot in a TRzSizePanel would not appear
@@ -505,6 +515,9 @@ type
     property HotSpotPosition: Integer
       read FHotSpotPosition;
 
+    property HotSpotRect: TRect
+      read FHotSpotRect;
+
     property LockedPosition: Integer
       read FPosition
       write SetLockedPosition;
@@ -825,7 +838,7 @@ type
 
     procedure AllocateMaskDC;
     procedure ReleaseMaskDC;
-    
+
     { Message Handling Methods }
     procedure WMWindowPosChanged( var Msg: TWMWindowPosChanged ); message wm_WindowPosChanged;
     procedure WMSetCursor( var Msg: TWMSetCursor ); message wm_SetCursor;
@@ -834,6 +847,7 @@ type
     procedure WMPaint( var Msg: TWMPaint ); message wm_Paint;
   protected
     procedure DefineProperties( Filer: TFiler ); override;
+    procedure Loaded; override;
 
     procedure FixClientRect( var Rect: TRect; ShrinkByBorder: Boolean ); override;
     function GetClientRect: TRect; override;
@@ -900,7 +914,7 @@ type
 
     property SizeBarWidth: TSizeBarWidth
       read FSizeBarWidth
-      write SeTSizeBarWidth
+      write SetSizeBarWidth
       default 4;
 
     property SizeBarStyle: TSplitterStyle
@@ -928,6 +942,9 @@ type
 
     property HotSpotPosition: Integer
       read FHotSpotPosition;
+
+    property HotSpotRect: TRect
+      read FHotSpotRect;
 
     property HotSpotVisible: Boolean
       read FHotSpotVisible
@@ -992,6 +1009,7 @@ type
   public
     property HotSpotClosed;
     property HotSpotPosition;
+    property HotSpotRect;
     property DockManager;
   published
     { Property Declarations }
@@ -3592,6 +3610,12 @@ begin
 end;
 
 
+procedure TRzCustomSizePanel.Loaded;
+begin
+  inherited;
+  SetMarginMin( FMarginMin );
+end;
+
 
 procedure TRzCustomSizePanel.DefineProperties( Filer: TFiler );
 begin
@@ -3599,6 +3623,7 @@ begin
   Filer.DefineProperty( 'HotSpotClosed', ReadHotSpotClosed, WriteHotSpotClosed, FHotSpotClosed );
   Filer.DefineProperty( 'HotSpotPosition', ReadHotSpotPosition, WriteHotSpotPosition, FHotSpotClosed );
 end;
+
 
 procedure TRzCustomSizePanel.ReadHotSpotClosed( Reader: TReader );
 begin
@@ -4732,10 +4757,13 @@ begin
   if FMarginMax < 0 then
     FMarginMax := 0;
 
-  Size := GetMarginExtent;
+  if not ( csReading in ComponentState ) then
+  begin
+    Size := GetMarginExtent;
 
-  if ( FMarginMax + FMarginMin ) > Size then
-    FMarginMax := Size - FMarginMin;
+    if ( FMarginMax + FMarginMin ) > Size then
+      FMarginMax := Size - FMarginMin;
+  end;
 end;
 
 
@@ -4748,10 +4776,13 @@ begin
   if FMarginMin < 0 then
     FMarginMin := 0;
 
-  Size := GetMarginExtent;
+  if not ( csReading in ComponentState ) then
+  begin
+    Size := GetMarginExtent;
 
-  if ( FMarginMin + FMarginMax ) > Size then
-    FMarginMin := Size - FMarginMax;
+    if ( FMarginMin + FMarginMax ) > Size then
+      FMarginMin := Size - FMarginMax;
+  end;
 end;
 
 

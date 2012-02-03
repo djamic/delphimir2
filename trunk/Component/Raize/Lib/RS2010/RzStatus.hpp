@@ -678,12 +678,17 @@ private:
 	Classes::TStringList* FVersionInfo;
 	bool FVersionInfoAvailable;
 	Classes::TList* FStatusList;
+	StaticArray<System::Word, 4> FVersionNumbers;
+	StaticArray<bool, 4> FModuleAttributes;
 	
 protected:
 	virtual void __fastcall Loaded(void);
 	void __fastcall GetVersionInfo(void);
 	System::UnicodeString __fastcall GetField(int Index);
 	System::UnicodeString __fastcall GetVerField(TRzVersionInfoField Index);
+	System::Word __fastcall GetVersionNumber(int Index);
+	bool __fastcall GetModuleAttribute(int Index);
+	System::TDateTime __fastcall GetFileDateTime(void);
 	void __fastcall UpdateStatusControls(void);
 	virtual void __fastcall SetFilePath(const System::UnicodeString Value);
 	__property System::UnicodeString Fields[TRzVersionInfoField Index] = {read=GetVerField/*, default*/};
@@ -705,6 +710,15 @@ public:
 	__property System::UnicodeString ProductName = {read=GetField, index=7};
 	__property System::UnicodeString ProductVersion = {read=GetField, index=8};
 	__property System::UnicodeString Comments = {read=GetField, index=9};
+	__property System::Word MajorVersion = {read=GetVersionNumber, index=1, nodefault};
+	__property System::Word MinorVersion = {read=GetVersionNumber, index=2, nodefault};
+	__property System::Word Release = {read=GetVersionNumber, index=3, nodefault};
+	__property System::Word Build = {read=GetVersionNumber, index=4, nodefault};
+	__property bool DebugBuild = {read=GetModuleAttribute, index=1, nodefault};
+	__property bool PreRelease = {read=GetModuleAttribute, index=2, nodefault};
+	__property bool PrivateBuild = {read=GetModuleAttribute, index=3, nodefault};
+	__property bool SpecialBuild = {read=GetModuleAttribute, index=4, nodefault};
+	__property System::TDateTime FileDateTime = {read=GetFileDateTime};
 	
 __published:
 	__property Rzcommon::TRzAboutInfo About = {read=FAboutInfo, write=FAboutInfo, stored=false, nodefault};

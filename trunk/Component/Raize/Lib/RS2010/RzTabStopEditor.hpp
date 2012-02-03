@@ -103,6 +103,7 @@ __published:
 	Rzradchk::TRzCheckBox* chkRightAligned;
 	Rztrkbar::TRzTrackBar* trkTabPos;
 	Rzradgrp::TRzRadioGroup* grpTabStopsMode;
+	Rzpanel::TRzPanel* RzPanel1;
 	void __fastcall btnAddClick(System::TObject* Sender);
 	void __fastcall btnDeleteClick(System::TObject* Sender);
 	void __fastcall lstTabsClick(System::TObject* Sender);

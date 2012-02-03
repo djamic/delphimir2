@@ -149,6 +149,7 @@ object RzSplitterEditDlg: TRzSplitterEditDlg
     Top = 8
     Width = 325
     Height = 117
+    ParentColor = False
     TabIndex = 0
     TabOrder = 0
     Tabs = <

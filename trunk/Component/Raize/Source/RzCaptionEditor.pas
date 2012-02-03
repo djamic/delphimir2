@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -92,6 +92,7 @@ type
     RzDialogButtons1: TRzDialogButtons;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure EdtCaptionKeyPress(Sender: TObject; var Key: Char);
   private
   public
   end;
@@ -372,5 +373,11 @@ begin
 end;
 
 
+
+procedure TRzCaptionEditDlg.EdtCaptionKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #27 then
+    ModalResult := mrCancel;
+end;
 
 end.

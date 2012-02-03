@@ -3978,6 +3978,7 @@ object FmeDisplay: TFmeDisplay
         Top = 20
         Width = 47
         Height = 21
+        Max = 100.000000000000000000
         FlatButtons = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -3995,6 +3996,7 @@ object FmeDisplay: TFmeDisplay
         Top = 20
         Width = 47
         Height = 21
+        Max = 100.000000000000000000
         OnChanging = SpnPartsCompChanging
         FlatButtons = True
         Font.Charset = DEFAULT_CHARSET
@@ -4449,7 +4451,7 @@ object FmeDisplay: TFmeDisplay
         Height = 32
         Delay = 200
         DelayUntilRepeat = 3000
-        ImageIndex = 3
+        ImageIndex = 17
         ImageList = ImageList1
         Transparent = True
       end

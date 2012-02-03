@@ -108,6 +108,7 @@ __published:
 	Rzdlgbtn::TRzDialogButtons* RzDialogButtons1;
 	void __fastcall FormClose(System::TObject* Sender, Forms::TCloseAction &Action);
 	void __fastcall FormCreate(System::TObject* Sender);
+	void __fastcall EdtCaptionKeyPress(System::TObject* Sender, System::WideChar &Key);
 public:
 	/* TCustomForm.Create */ inline __fastcall virtual TRzCaptionEditDlg(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	/* TCustomForm.CreateNew */ inline __fastcall virtual TRzCaptionEditDlg(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }

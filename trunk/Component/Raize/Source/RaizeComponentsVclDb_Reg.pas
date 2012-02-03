@@ -3,7 +3,7 @@
 
   Raize Components - Registration Unit (Data-Aware Components)
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Modification History

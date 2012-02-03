@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -18,6 +18,18 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * The TRzRadioButton and TRzCheckBox now scale the glyph image when using
+      themes and the system is running at a higher DPI settings.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Added new WordWrap property to TRzRadioButton and TRzCheckBox. As a result
+      the controls no longer resize themselves and wrap the caption if the
+      caption changes to be longer than 100 pixels. Instead, the Caption will
+      only wrap when the WordWrap property is set to True.  This makes the
+      behavior of the TRzRadioButton and TRzCheckBox to be consistent with
+      the TRzLabel with respect to auto-sizing and word wrapping.
   ------------------------------------------------------------------------------
   5.0    (30 Sep 2008)
     * Added new AutoSize property to TRzRadioButton and TRzCheckBox. When this
@@ -236,6 +248,7 @@ type
   private
     FAlignment: TLeftRight;
     FAutoSize: Boolean;
+    FWordWrap: Boolean;
     FFrameColor: TColor;
     FNumGlyphs: Integer;
     FCustomGlyphs: TBitmap;
@@ -252,6 +265,8 @@ type
     FReadOnlyColor: TColor;
     FGlyphWidth: Integer;
     FGlyphHeight: Integer;
+    FThemedGlyphWidth: Integer;
+    FThemedGlyphHeight: Integer;
     FTabOnEnter: Boolean;
     FHotTrackStyle: TRzButtonHotTrackStyle;
 
@@ -285,6 +300,7 @@ type
     procedure Notification( AComponent: TComponent; Operation: TOperation ); override;
     procedure Loaded; override;
     procedure AdjustBounds; dynamic;
+    procedure ChangeScale( M, D: Integer ); override;
 
     procedure ActionChange( Sender: TObject; CheckDefaults: Boolean ); override;
     function GetActionLinkClass: TControlActionLinkClass; override;
@@ -332,6 +348,7 @@ type
     procedure SetTransparent( Value: Boolean ); override;
     procedure SetTransparentColor( Value: TColor ); virtual;
     procedure SetWinMaskColor( Value: TColor ); virtual;
+    procedure SetWordWrap( Value: Boolean ); virtual;
 
     { Property Declarations }
     property Alignment: TLeftRight
@@ -426,6 +443,12 @@ type
       read FWinMaskColor
       write SetWinMaskColor
       default clLime;
+
+    property WordWrap: Boolean
+      read FWordWrap
+      write SetWordWrap
+      default False;
+
   public
     constructor Create( AOwner: TComponent ); override;
     destructor Destroy; override;
@@ -530,6 +553,7 @@ type
     property Visible;
     property Width;
     property WinMaskColor;
+    property WordWrap;
 
     property OnClick;
     property OnContextPopup;
@@ -677,6 +701,7 @@ type
     property Visible;
     property Width;
     property WinMaskColor;
+    property WordWrap;
 
     property OnClick;
     property OnContextPopup;
@@ -750,9 +775,12 @@ begin
   FNumGlyphs := 2;
 
   FAutoSize := True;
+  WordWrap := False;
 
   FGlyphWidth := DefaultGlyphWidth;
   FGlyphHeight := DefaultGlyphHeight;
+  FThemedGlyphWidth := FGlyphWidth;
+  FThemedGlyphHeight := FGlyphHeight;
 
   FCustomGlyphs := TBitmap.Create;
   FCustomGlyphs.OnChange := CustomGlyphsChanged;
@@ -831,8 +859,13 @@ end;
 
 
 procedure TRzCustomGlyphButton.Loaded;
+var
+  H: Integer;
 begin
   inherited;
+  H := GetMinFontHeight( Font );
+  if Height > H then
+    WordWrap := True;
   AdjustBounds;
 end;
 
@@ -852,24 +885,14 @@ begin
     if R.Right - R.Left < 2 then
       R.Right := R.Left + 2;
 
-    // If adjusting at design-time, make the default rect a little wider so that
-    // it can handle more than just one word before wrapping.  This will provide
-    // essentially the same behavior as AutoSize = False at design-time.
-    // However, with the AutoSize option set to True, if the Caption does wrap
-    // to another line, the control will adjust to show the full caption, which
-    // does NOT happen with AutoSize set to False.
-
-    if csDesigning in ComponentState then
-    begin
-      if R.Right - R.Left < 100 then
-        R.Right := R.Left + 100;
-    end;
-
     DC := GetDC( 0 );
     try
       Canvas.Handle := DC;
       Canvas.Font := Self.Font;
-      DrawString( Canvas, Caption, R, dt_CalcRect or dt_WordBreak or dt_ExpandTabs );
+      if FWordWrap then
+        DrawString( Canvas, Caption, R, dt_CalcRect or dt_WordBreak or dt_ExpandTabs )
+      else
+        DrawString( Canvas, Caption, R, dt_CalcRect or dt_ExpandTabs );
       Canvas.Handle := 0;
     finally
       ReleaseDC( 0, DC );
@@ -883,6 +906,19 @@ begin
       X := BoundsRect.Right - W - FGlyphWidth - 4;
 
     SetBounds( X, Top, W + FGlyphWidth + 4, H );
+  end;
+end;
+
+
+procedure TRzCustomGlyphButton.ChangeScale( M, D: Integer );
+begin
+  inherited;
+  if UseThemes and ( M <> D ) then
+  begin
+    FGlyphWidth := MulDiv( FGlyphWidth, M, D ) - 1;
+    FGlyphHeight := MulDiv( FGlyphHeight, M, D ) - 1;
+    FThemedGlyphWidth := FGlyphWidth;
+    FThemedGlyphHeight := FGlyphHeight;
   end;
 end;
 
@@ -1129,11 +1165,22 @@ begin
   end
   else
   begin
-    FGlyphWidth := DefaultGlyphWidth;
-    FGlyphHeight := DefaultGlyphHeight;
+    if UseThemes then
+    begin
+      FGlyphWidth := FThemedGlyphWidth;
+      FGlyphHeight := FThemedGlyphHeight;
+    end
+    else
+    begin
+      FGlyphWidth := DefaultGlyphWidth;
+      FGlyphHeight := DefaultGlyphHeight;
+    end;
   end;
-  AutoSize := not AutoSize;
-  AutoSize := not AutoSize;
+  if not ( csLoading in ComponentState ) then
+  begin
+    AutoSize := not AutoSize;
+    AutoSize := not AutoSize;
+  end;
   Invalidate;
 end;
 
@@ -1191,6 +1238,16 @@ begin
   begin
     FWinMaskColor := Value;
     Invalidate;
+  end;
+end;
+
+
+procedure TRzCustomGlyphButton.SetWordWrap( Value: Boolean );
+begin
+  if FWordWrap <> Value then
+  begin
+    FWordWrap := Value;
+    AdjustBounds;
   end;
 end;
 
@@ -1392,7 +1449,10 @@ begin
       Flags := 0;
 
     { Draw Caption }
-    Draw3DText( MemImage.Canvas, R, dt_WordBreak or dt_ExpandTabs or Flags );
+    if FWordWrap then
+      Draw3DText( MemImage.Canvas, R, dt_WordBreak or dt_ExpandTabs or Flags )
+    else
+      Draw3DText( MemImage.Canvas, R, dt_ExpandTabs or Flags );
 
     InflateRect( R, 1, 1 );
     if Focused and ( Caption <> '' ) then

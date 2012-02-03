@@ -1,9 +1,9 @@
 object RzSelDirForm: TRzSelDirForm
   Left = 247
   Top = 117
+  Width = 416
+  Height = 408
   Caption = 'Select a Directory'
-  ClientHeight = 374
-  ClientWidth = 408
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

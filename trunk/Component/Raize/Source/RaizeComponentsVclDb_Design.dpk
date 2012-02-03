@@ -32,8 +32,7 @@ requires
   VCL,
   DesignIDE,
   DclDB,
-  RaizeComponentsVcl_Design,
-  RaizeComponentsVclDb;
+  RaizeComponentsVcl_Design;
 
 contains
   RaizeComponentsVclDb_Reg in 'RaizeComponentsVclDb_Reg.pas',

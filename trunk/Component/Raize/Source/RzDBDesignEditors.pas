@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -68,6 +68,13 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Fixed issue where the component editor for a data-aware control would
+      raise an exception if connected to a DataSource that was connected to a
+      ClientDataSet that did not have any Fields or FieldDefs at design-time.
+    * Added WordWrap menu item to the design-time context menu displayed for
+      the TRzDBCheckBox control.
   ------------------------------------------------------------------------------
   3.0.8  (29 Aug 2003)
     * Added TRzDBGridEditor.
@@ -527,14 +534,17 @@ begin
     DataSource := GetObjectProp( Component, 'DataSource' ) as TDataSource;
     if ( DataSource <> nil ) and ( DataSource.DataSet <> nil ) then
     begin
-      FieldList := TStringList.Create;
-      try
-        DataSource.DataSet.GetFieldNames( FieldList );
-        DataFieldCount := FieldList.Count;
-        for I := 0 to FieldList.Count - 1 do
-          CreateDataFieldMenu( FieldList[ I ] );
-      finally
-        FieldList.Free;
+      if DataSource.DataSet.Fields.Count > 0 then
+      begin
+        FieldList := TStringList.Create;
+        try
+          DataSource.DataSet.GetFieldNames( FieldList );
+          DataFieldCount := FieldList.Count;
+          for I := 0 to FieldList.Count - 1 do
+            CreateDataFieldMenu( FieldList[ I ] );
+        finally
+          FieldList.Free;
+        end;
       end;
     end;
     Item.Enabled := DataFieldCount > 0;
@@ -1890,7 +1900,7 @@ end;
 
 function TRzDBCheckBoxEditor.GetVerbCount: Integer;
 begin
-  Result := 8;
+  Result := 9;
 end;
 
 
@@ -1902,9 +1912,10 @@ begin
     2: Result := '-';
     3: Result := 'Optimize Size';
     4: Result := 'AutoSize';
-    5: Result := '-';
-    6: Result := 'HotTrack';
-    7: Result := 'XP Colors';
+    5: Result := 'WordWrap';
+    6: Result := '-';
+    7: Result := 'HotTrack';
+    8: Result := 'XP Colors';
   end;
 end;
 
@@ -1915,7 +1926,8 @@ begin
 
   case Index of
     4: Item.Checked := CheckBox.AutoSize;
-    6: Item.Checked := CheckBox.HotTrack;
+    5: Item.Checked := CheckBox.WordWrap;
+    7: Item.Checked := CheckBox.HotTrack;
   end;
 end;
 
@@ -1936,13 +1948,19 @@ begin
       DesignerModified;
     end;
 
-    6: // Hot Track
+    5: // WordWrap
+    begin
+      CheckBox.WordWrap := not CheckBox.WordWrap;
+      DesignerModified;
+    end;
+
+    7: // Hot Track
     begin
       CheckBox.HotTrack := not CheckBox.HotTrack;
       DesignerModified;
     end;
 
-    7:
+    8:
     begin
       CheckBox.HotTrackColorType := htctActual;
       CheckBox.HotTrack := True;

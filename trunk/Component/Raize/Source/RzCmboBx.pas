@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -30,6 +30,10 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed performance issue with TRzComboBox controls and descendants that set
+      the Style property to csOwnerDrawFixed.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -2853,12 +2857,12 @@ begin
     begin
       DrawItem( itemID, rcItem, State );
       if ( odSelected in State ) and FShowFocus then
-        DrawFocusBorder( Canvas, rcItem );
+        DrawFocusRect( Canvas.Handle, rcItem );
     end
     else
     begin
       if odSelected in State then
-        DrawFocusBorder( Canvas, rcItem )
+        DrawFocusRect( Canvas.Handle, rcItem )
       else
         Canvas.FillRect( rcItem );
     end;

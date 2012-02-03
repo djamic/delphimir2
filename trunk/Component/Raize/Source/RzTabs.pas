@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -16,6 +16,28 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed issue where ParentColor was getting reset to False in the
+      TRzPageControl and TRzTabControl even though the property was specifically
+      set to True.
+    * Added new OnAlignControls event to the TRzPageControl, which is generated
+      after the page control aligns its child controls namely the tab sheets.
+      In particular, this event occurs after the tab sheets have been realigned
+      to accomodate multi-line tab arrangement.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Fixed issue where Color setting of TRzPageControl or TRzTabControl would
+      not get honored if ParentColor was False and Color was clBtnFace.
+    * Modified the tab dragging process in TRzPageControl and TRzTabControl such
+      that if an OnDragOver event handler is written for the control and the
+      handler sets the Accept parameter to False, the internal tab dragging
+      process will not be allowed.
+    * Added new OnTabDragging event to TRzPageControl and TRzTabControl. This
+      event is raised whenever the user is about to drag a tab to a new
+      position. The event handler allows the application to prevent certain
+      tabs from being dragged.  This event is only generated if the
+      AllowTabDragging property is set to True.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -682,6 +704,7 @@ type
 
 
   TRzTabOrderChangeEvent = procedure( Sender: TObject; OldIndex, NewIndex: Integer ) of object;
+  TRzTabDraggingEvent = procedure( Sender: TObject; TabIndex: Integer; var AllowDrag: Boolean ) of object;
 
   // A TabCloseEvent event is generated when the CloseButton is clicked.
 
@@ -882,6 +905,7 @@ type
     FMoveTabIndicatorVisible: Boolean;
     FDragIndicatorColor: TColor;
 
+    FOnAlignControls: TNotifyEvent;
     FOnPageChange: TNotifyEvent;
     FOnChange: TNotifyEvent;
     FOnChanging: TRzTabChangingEvent;
@@ -892,6 +916,7 @@ type
     FOnPaintTabBackground: TRzPaintTabBackgroundEvent;
     FOnTabClick: TNotifyEvent;
     FOnTabOrderChange: TRzTabOrderChangeEvent;
+    FOnTabDragging: TRzTabDraggingEvent;
     FOnScrolledTabs: TNotifyEvent;
 
     procedure AddCommand( const Command: Integer );
@@ -1031,6 +1056,7 @@ type
     procedure MouseMove( Shift: TShiftState; X, Y: Integer ); override;
     procedure DragOver( Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean ); override;
     procedure TabOrderChange( OldIndex, NewIndex: Integer ); dynamic;
+    function CanDragTab( TabIndex: Integer ): Boolean; dynamic;
 
     procedure PageChange; dynamic;
     function CanClose: Boolean; dynamic;
@@ -1372,6 +1398,10 @@ type
       write SetUseGradients
       default True;
 
+    property OnAlignControls: TNotifyEvent
+      read FOnAlignControls
+      write FOnAlignControls;
+
     property OnPageChange: TNotifyEvent
       read FOnPageChange
       write FOnPageChange;
@@ -1407,6 +1437,10 @@ type
     property OnTabClick: TNotifyEvent
       read FOnTabClick
       write FOnTabClick;
+
+    property OnTabDragging: TRzTabDraggingEvent
+      read FOnTabDragging
+      write FOnTabDragging;
 
     property OnTabOrderChange: TRzTabOrderChangeEvent
       read FOnTabOrderChange
@@ -1893,6 +1927,7 @@ type
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
+    property OnAlignControls;
     property OnPageChange;
     property OnPaintBackground;             // background behind tabs
 
@@ -1904,6 +1939,7 @@ type
     property OnStartDock;
     property OnStartDrag;
     property OnTabClick;
+    property OnTabDragging;
     property OnTabOrderChange;
     property OnScrolledTabs;
     property OnUnDock;
@@ -2157,6 +2193,7 @@ type
     property OnStartDock;
     property OnStartDrag;
     property OnTabClick;
+    property OnTabDragging;
     property OnTabOrderChange;
     property OnScrolledTabs;
     property OnUnDock;
@@ -3704,6 +3741,8 @@ begin
   // first enumerated value) but are included for clarity
   FAlignTabs := False;
   FBackgroundColor := clBtnFace;
+  Color := clBtnFace;
+  ParentColor := True;
   FBoldCurrentTab := False;
   FButtonColor := clBtnFace;
   FShowCard := True;
@@ -4413,6 +4452,8 @@ begin
   Rect := DisplayRect;
   FPrevDisplayRect := Rect;
   inherited;
+  if Assigned( FOnAlignControls ) then
+    FOnAlignControls( Self );
 end;
 
 
@@ -6474,7 +6515,7 @@ begin
   if FAllowTabDragging and ( ssLeft in Shift ) then
   begin
     if ( FRawDragTabIndex <> -1 ) and ( FRawDragTabIndex < FTabDataList.Count ) and
-       FTabDataList[ FRawDragTabIndex ].Enabled then
+       FTabDataList[ FRawDragTabIndex ].Enabled and CanDragTab( FRawDragTabIndex ) then
     begin
       BeginDrag( False );
     end;
@@ -6491,7 +6532,13 @@ var
 begin
   inherited;
 
-  if FAllowTabDragging and ( Source = Self ) then
+  if not Assigned( OnDragOver ) then
+  begin
+    // No event handler assigned, then automatically allow the drag
+    Accept := True;
+  end;
+
+  if FAllowTabDragging and ( Source = Self ) and Accept then
   begin
     Idx := TabAtPos( X, Y );
 
@@ -8829,6 +8876,13 @@ begin
 end;
 
 
+function TRzCustomTabControl.CanDragTab( TabIndex: Integer ): Boolean;
+begin
+  Result := True;
+  if Assigned( FOnTabDragging ) then
+    FOnTabDragging( Self, TabIndex, Result );
+end;
+
 function TRzCustomTabControl.CanClose: Boolean;
 begin
   Result := False;
@@ -10747,7 +10801,7 @@ procedure TRzPageControl.CMColorChanged( var Msg: TMessage );
 var
   I: Integer;
 begin
-  if not UseColoredTabs then
+  if not UseColoredTabs and ( FPages <> nil ) then
   begin
     for I := 0 to FPages.Count - 1 do
       TRzTabSheet( FPages[ I ] ).Color := Color;

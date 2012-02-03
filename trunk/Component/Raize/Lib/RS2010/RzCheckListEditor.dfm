@@ -16,26 +16,26 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
   Position = poScreenCenter
   OnCreate = FormCreate
   DesignSize = (
-    542
-    406)
+    534
+    402)
   PixelsPerInch = 96
   TextHeight = 13
   object grpPreview: TRzGroupBox
     Left = 8
     Top = 39
-    Width = 525
-    Height = 328
+    Width = 518
+    Height = 322
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'Preview'
     TabOrder = 0
     DesignSize = (
-      525
-      328)
+      518
+      322)
     object lstPreview: TRzCheckList
       Left = 8
       Top = 16
-      Width = 409
-      Height = 247
+      Width = 402
+      Height = 241
       Anchors = [akLeft, akTop, akRight, akBottom]
       FrameVisible = True
       ItemHeight = 15
@@ -43,7 +43,7 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
       OnClick = lstPreviewClick
     end
     object btnAdd: TRzButton
-      Left = 428
+      Left = 421
       Top = 16
       Width = 85
       Anchors = [akTop, akRight]
@@ -54,7 +54,7 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
       OnClick = btnAddClick
     end
     object btnEdit: TRzButton
-      Left = 428
+      Left = 421
       Top = 47
       Width = 85
       Anchors = [akTop, akRight]
@@ -65,7 +65,7 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
       OnClick = btnEditClick
     end
     object btnDelete: TRzButton
-      Left = 428
+      Left = 421
       Top = 78
       Width = 85
       Anchors = [akTop, akRight]
@@ -76,7 +76,7 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
       OnClick = btnDeleteClick
     end
     object btnMoveUp: TRzButton
-      Left = 428
+      Left = 421
       Top = 123
       Width = 85
       Anchors = [akTop, akRight]
@@ -87,7 +87,7 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
       OnClick = btnMoveUpClick
     end
     object btnMoveDown: TRzButton
-      Left = 428
+      Left = 421
       Top = 154
       Width = 85
       Anchors = [akTop, akRight]
@@ -99,7 +99,7 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
     end
     object RzPanel1: TRzPanel
       Left = 8
-      Top = 269
+      Top = 263
       Width = 421
       Height = 54
       Anchors = [akLeft, akBottom]
@@ -191,8 +191,8 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
     end
   end
   object btnOK: TRzButton
-    Left = 377
-    Top = 373
+    Left = 370
+    Top = 369
     Default = True
     ModalResult = 1
     Anchors = [akRight, akBottom]
@@ -202,8 +202,8 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
     TabOrder = 1
   end
   object btnCancel: TRzButton
-    Left = 459
-    Top = 373
+    Left = 451
+    Top = 369
     Cancel = True
     ModalResult = 2
     Anchors = [akRight, akBottom]
@@ -215,10 +215,11 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
   object RzToolbar1: TRzToolbar
     Left = 0
     Top = 0
-    Width = 542
-    Height = 29
+    Width = 534
+    Height = 34
     AutoStyle = False
     Images = ImageList1
+    RowHeight = 30
     ButtonWidth = 70
     ShowButtonCaptions = True
     ShowDivider = False
@@ -231,53 +232,56 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
     VisualStyle = vsClassic
     ToolbarControls = (
       btnLoad
+      RzSpacer3
       btnSave
       RzSpacer1
       btnClear
       RzSpacer2
       chkAllowGrayed)
-    object btnLoad: TRzToolButton
-      Left = 4
-      Top = 2
-      GradientColorStyle = gcsSystem
-      ImageIndex = 0
-      UseToolbarVisualStyle = False
-      VisualStyle = vsGradient
-      Caption = 'Load'
-      OnClick = btnLoadClick
-    end
-    object btnSave: TRzToolButton
-      Left = 74
-      Top = 2
-      GradientColorStyle = gcsSystem
-      ImageIndex = 1
-      UseToolbarVisualStyle = False
-      VisualStyle = vsGradient
-      Caption = 'Save'
-      OnClick = btnSaveClick
-    end
-    object btnClear: TRzToolButton
-      Left = 152
-      Top = 2
-      GradientColorStyle = gcsSystem
-      ImageIndex = 2
-      UseToolbarVisualStyle = False
-      VisualStyle = vsGradient
-      Caption = 'Clear'
-      OnClick = btnClearClick
-    end
     object RzSpacer1: TRzSpacer
-      Left = 144
-      Top = 2
+      Left = 162
+      Top = 5
+      Width = 16
     end
     object RzSpacer2: TRzSpacer
-      Left = 222
-      Top = 2
+      Left = 253
+      Top = 5
       Width = 24
     end
+    object RzSpacer3: TRzSpacer
+      Left = 79
+      Top = 5
+    end
+    object btnLoad: TRzButton
+      Left = 4
+      Top = 5
+      Caption = 'Load...'
+      Color = 15791348
+      HotTrack = True
+      TabOrder = 1
+      OnClick = btnLoadClick
+    end
+    object btnSave: TRzButton
+      Left = 87
+      Top = 5
+      Caption = 'Save...'
+      Color = 15791348
+      HotTrack = True
+      TabOrder = 2
+      OnClick = btnSaveClick
+    end
+    object btnClear: TRzButton
+      Left = 178
+      Top = 5
+      Caption = 'Clear'
+      Color = 15791348
+      HotTrack = True
+      TabOrder = 3
+      OnClick = btnClearClick
+    end
     object chkAllowGrayed: TRzCheckBox
-      Left = 246
-      Top = 7
+      Left = 277
+      Top = 10
       Width = 135
       Height = 15
       Caption = 'Allow Grayed States'
@@ -287,13 +291,13 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
       OnClick = chkAllowGrayedClick
     end
   end
-  object dlgOpen: TRzOpenDialog
-    Options = [osoFileMustExist, osoHideReadOnly, osoPathMustExist, osoAllowTree, osoShowHints, osoOleDrag, osoOleDrop, osoShowHidden]
+  object dlgOpen: TOpenDialog
     Filter = 'Text Files|*.txt|All Files|*.*'
+    Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 396
     Top = 236
   end
-  object dlgSave: TRzSaveDialog
+  object dlgSave: TSaveDialog
     Filter = 'Text Files|*.txt|All Files|*.*'
     Left = 448
     Top = 236
@@ -302,7 +306,7 @@ object RzCheckListEditDlg: TRzCheckListEditDlg
     Left = 200
     Top = 48
     Bitmap = {
-      494C010103000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101030009001C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

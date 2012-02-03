@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -14,6 +14,10 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Fixed issue where highlighted cells in the TRzDBGrid would not appear
+      correctly in RAD Studio 2010.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Fixed issue where setting the TRzDBGrid.QuickCompare.FieldValue to a non
@@ -1677,9 +1681,14 @@ begin
   if ( not FLocalDefaultDrawing ) and Assigned( OnDrawColumnCell ) then
     OnDrawColumnCell( Self, Rect, DataCol, Column, State )
   else
+  begin
+    {$IFDEF VCL140_OR_HIGHER}
+    if HighlightCell( DataCol, DataLink.ActiveRecord, Column.Field.DisplayText, State ) and FLocalDefaultDrawing then
+      DrawCellHighlight( Rect, State, DataCol, DataLink.ActiveRecord );
+    {$ENDIF}
     DefaultDrawColumnCell( Rect, DataCol, Column, State );
+  end;
 end;
-
 
 
 type  // Provides access to protected MoveBy method

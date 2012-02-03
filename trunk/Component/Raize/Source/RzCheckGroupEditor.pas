@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -241,6 +241,7 @@ var
     Dest.ItemHighlightColor := Source.ItemHighlightColor;
     Dest.ItemHotTrackColor := Source.ItemHotTrackColor;
     Dest.ItemHotTrackColorType := Source.ItemHotTrackColorType;
+    Dest.ItemFont := Source.ItemFont;
     for I := 0 to Dest.Items.Count - 1 do
       Dest.ItemChecked[ I ] := Source.ItemChecked[ I ];
   end;

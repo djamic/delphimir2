@@ -101,7 +101,6 @@ __published:
 	__property GroupColor = {default=-16777197};
 	__property GroupFont;
 	__property GroupPrefix;
-	__property HorzExtent = {default=0};
 	__property HorzScrollBar = {default=0};
 	__property ImeMode = {default=3};
 	__property ImeName;

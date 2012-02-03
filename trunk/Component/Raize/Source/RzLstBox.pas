@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -26,6 +26,17 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Removed the HorzExtent property of the TRzListBox and descendant controls.
+      This property has been obsolete for quite some time, ever since the 
+      AdjustHorzExtent was introduced to automatically adjust the horizontal
+      extent based on the text displayed in the list.
+    * The removal of the HorzExtent property (described above) also faciliated
+      the resolution of an issue where the horizontal scroll bar would be
+      displayed even though there is plenty of room to display all of the text.
+      A new method is used to update the horizontal scroll bar, which eliminates
+      the visibility problem.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -328,6 +339,7 @@ type
 
     function OwnerDrawItemIndent: Integer; virtual;
     procedure UpdateItemHeight; virtual;
+    function HorzExtentPrefix: string; virtual;
 
     procedure WndProc( var Msg: TMessage ); override;
     procedure GroupFontChanged; virtual;
@@ -481,11 +493,6 @@ type
       write SetGroupPrefix
       stored StoreGroupPrefix;
 
-    property HorzExtent: Word
-      read FHorzExtent
-      write SetHorzExtent
-      default 0;
-
     property HorzScrollBar: Boolean
       read FHorzScrollBar
       write SetHorzScrollBar
@@ -634,7 +641,6 @@ type
     property GroupColorFromTheme;
     property GroupFont;
     property GroupPrefix;
-    property HorzExtent;
     property HorzScrollBar;
     property ImeMode;
     property ImeName;
@@ -831,7 +837,6 @@ type
     property GroupColorFromTheme;
     property GroupFont;
     property GroupPrefix;
-    property HorzExtent;
     property HorzScrollBar;
     property ImeMode;
     property ImeName;
@@ -1416,15 +1421,20 @@ begin
   inherited;
 
   // Initializing the scroll bar must occur after the Window Handle for the list
-  // box has been created }
-  SendMessage( Handle, lb_SetHorizontalExtent, FHorzExtent, 0 );
+  // box has been created
+
   ShowScrollBar( Handle, sb_Horz, FHorzScrollBar );
+  if FHorzScrollBar then
+    SendMessage( Handle, lb_SetHorizontalExtent, ClientWidth, 0 );
 end;
 
 
 procedure TRzCustomListBox.DefineProperties( Filer: TFiler );
 begin
   inherited;
+  // Handle the fact that the HorzExtent was published in version 5.x and earlier
+  Filer.DefineProperty( 'HorzExtent', TRzOldPropReader.ReadOldIntegerProp, nil, False );
+
   // Handle the fact that the FrameFlat and FrameFocusStyle properties were renamed to
   // FrameHotStyle and FrameHotStyle respectively in version 3.
   Filer.DefineProperty( 'FrameFlat', ReadOldFrameFlatProp, nil, False );
@@ -1463,9 +1473,13 @@ type
 procedure TRzCustomListBox.Loaded;
 begin
   inherited;
-  if HorzScrollBar and ( TRzStringsAccess( GetItems ).UpdateCount = 0 ) then
+  if HorzScrollBar then
   begin
-    AdjustHorzExtent;
+    // Reset extent back to 0 to "undo" the inherited ScrollWidth processing
+    SendMessage( Handle, lb_SetHorizontalExtent, 0, 0 );
+
+    if TRzStringsAccess( GetItems ).UpdateCount = 0 then
+      AdjustHorzExtent;
   end;
   UpdateColors;
   UpdateFrame( False, False );
@@ -1483,6 +1497,9 @@ end;
 procedure TRzCustomListBox.Resize;
 begin
   inherited;
+  if HorzScrollBar then
+    AdjustHorzExtent;
+  
   if FUseGradients then
     Invalidate;
 end;
@@ -2050,6 +2067,8 @@ begin
   begin
     FHorzScrollBar := Value;
     RecreateWnd;
+    if FHorzScrollBar then
+      AdjustHorzExtent;
   end;
 end;
 
@@ -2071,7 +2090,7 @@ begin
 
     for I := 0 to Items.Count - 1 do
     begin
-      ItemStr := Items[ I ] + 'x';
+      ItemStr := HorzExtentPrefix + Items[ I ] + 'x';
       GetTextExtentPoint32( DC, PChar( ItemStr ), Length( ItemStr ), SizeRec );
       if SizeRec.CX > MaxExtent then
         MaxExtent := SizeRec.CX;
@@ -2081,10 +2100,8 @@ begin
   finally
     ReleaseDC( 0, DC );
   end;
-  if MaxExtent < 2 then
-    HorzExtent := 2
-  else
-    HorzExtent := MaxExtent + 1;
+
+  SetHorzExtent( Max( ClientWidth, MaxExtent + 1 ) );
 end; {= TRzCustomListBox.AdjustHorzExtent =}
 
 
@@ -2121,7 +2138,9 @@ begin
     lb_AddString, lb_InsertString, lb_DeleteString, lb_ResetContent:
     begin
       if HorzScrollBar and ( TRzStringsAccess( GetItems ).UpdateCount = 0 ) then
+      begin
         AdjustHorzExtent;
+      end;
     end;
   end;
 end;
@@ -2366,13 +2385,25 @@ begin
 end;
 
 
+function TRzCustomListBox.HorzExtentPrefix: string;
+begin
+  Result := '';
+end;
+
+
 procedure TRzCustomListBox.CNDrawItem( var Msg: TWMDrawItem );
 var
   IsGroup: Boolean;
   State: TOwnerDrawState;
   ItemDetails: TDrawItemStruct;
+  R: TRect;
 begin
   ItemDetails := Msg.DrawItemStruct^;
+
+  State := TOwnerDrawState( LongRec( ItemDetails.itemState ).Lo );
+  Canvas.Handle := ItemDetails.hDC;
+  Canvas.Font := Font;
+  Canvas.Brush := Brush;
 
   if FShowGroups and ( Integer( ItemDetails.itemID ) >= 0 ) and ItemIsGroup[ Integer( ItemDetails.itemID ) ] then
     IsGroup := True
@@ -2380,16 +2411,21 @@ begin
   begin
     IsGroup := False;
     // Indent owner-draw rectangle so focus rect doesn't cover glyph
+    R := ItemDetails.rcItem;
     if not UseRightToLeftAlignment then
-      ItemDetails.rcItem.Left := ItemDetails.rcItem.Left + OwnerDrawItemIndent
+    begin
+      ItemDetails.rcItem.Left := ItemDetails.rcItem.Left + OwnerDrawItemIndent;
+      R.Right := R.Left + OwnerDrawItemIndent;
+    end
     else
+    begin
       ItemDetails.rcItem.Right := ItemDetails.rcItem.Right - OwnerDrawItemIndent;
+      R.Left := R.Right - OwnerDrawItemIndent;
+    end;
+    Canvas.FillRect( R );
   end;
 
-  State := TOwnerDrawState( LongRec( ItemDetails.itemState ).Lo );
-  Canvas.Handle := ItemDetails.hDC;
-  Canvas.Font := Font;
-  Canvas.Brush := Brush;
+
   if ( Integer( ItemDetails.itemID ) >= 0 ) and ( odSelected in State ) then
   begin
     Canvas.Brush.Color := clHighlight;
@@ -3235,7 +3271,8 @@ begin
 
     for I := 0 to Items.Count - 1 do
     begin
-      ItemStr := Items[ I ] + 'x';
+      ItemStr := HorzExtentPrefix + Items[ I ] + 'x';
+
       Extent := LoWord( GetTabbedTextExtent( DC, PChar( ItemStr ), Length( ItemStr ), TabCount, TabArray ) );
       if Extent > MaxExtent then
         MaxExtent := Extent;
@@ -3245,10 +3282,8 @@ begin
   finally
     ReleaseDC( 0, DC );
   end;
-  if MaxExtent < 2 then
-    HorzExtent := 2
-  else
-    HorzExtent := MaxExtent + OwnerDrawItemIndent + 1;
+
+  SetHorzExtent( Max( ClientWidth, MaxExtent + 1 ) );
 end; {= TRzCustomTabbedListBox.AdjustHorzExtent =}
 
 

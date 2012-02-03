@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -13,6 +13,13 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed issue where CustomGlyphImages would not appear on replicated
+      TRzDBCheckBox controls on a TDBCtrlGrid.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Added new WordWrap property to TRzDBCheckBox.
   ------------------------------------------------------------------------------
   5.0    (30 Sep 2008)
     * Added new AutoSize property to TRzDBCheckBox. When this property is True
@@ -228,6 +235,7 @@ type
     property UseCustomGlyphs;
     property Visible;
     property WinMaskColor;
+    property WordWrap;
 
     property OnClick;
     property OnContextPopup;
@@ -484,6 +492,7 @@ begin
     FPaintControl.Caption := Caption;
     if UseCustomGlyphs then
     begin
+      FPaintControl.CustomGlyphImages := CustomGlyphImages;
       FPaintControl.CustomGlyphs := CustomGlyphs;
       FPaintControl.CustomGlyphs := CustomGlyphs;
       FPaintControl.WinMaskColor := WinMaskColor;

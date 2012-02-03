@@ -9182,6 +9182,7 @@ object RzToolbarEditDlg: TRzToolbarEditDlg
       HotTrack = True
       State = cbChecked
       TabOrder = 2
+      WordWrap = True
     end
   end
   object MnuStock: TPopupMenu

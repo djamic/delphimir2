@@ -53,7 +53,6 @@
 			<DCCReference Include="Vcl.dcp"/>
 			<DCCReference Include="DesignIDE.dcp"/>
 			<DCCReference Include="DclStd.dcp"/>
-			<DCCReference Include="RaizeComponentsVcl.dcp"/>
 			<DCCReference Include="RaizeComponentsVcl_Reg.pas"/>
 			<DCCReference Include="RzDesignEditors.pas"/>
 			<DCCReference Include="RzAboutEditor.pas"/>

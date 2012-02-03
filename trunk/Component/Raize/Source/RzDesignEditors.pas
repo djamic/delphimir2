@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -224,6 +224,12 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Added WordWrap menu item to design-time context menu displayed for the
+      TRzCheckBox and TRzRadioButton controls.
+    * Added new "Add Button" menu item to designer context menus for TForm
+      and TFrame.
   ------------------------------------------------------------------------------
   5.1    (16 Mar 2009)
     * Fixed problem where property editor for TRzPropertyStore items would not
@@ -3352,7 +3358,7 @@ end;
 
 function TRzCheckBoxEditor.GetVerbCount: Integer;
 begin
-  Result := 6;
+  Result := 7;
 end;
 
 
@@ -3369,9 +3375,10 @@ begin
 
     1: Result := 'Optimize Size';
     2: Result := 'AutoSize';
-    3: Result := '-';
-    4: Result := 'HotTrack';
-    5: Result := 'XP Colors';
+    3: Result := 'WordWrap';
+    4: Result := '-';
+    5: Result := 'HotTrack';
+    6: Result := 'XP Colors';
   end;
 end;
 
@@ -3382,7 +3389,8 @@ begin
 
   case Index of
     2: Item.Checked := CheckBox.AutoSize;
-    4: Item.Checked := CheckBox.HotTrack;
+    3: Item.Checked := CheckBox.WordWrap;
+    5: Item.Checked := CheckBox.HotTrack;
   end;
 end;
 
@@ -3399,10 +3407,11 @@ begin
     end;
 
     2: CheckBox.AutoSize := not CheckBox.AutoSize;
+    3: CheckBox.WordWrap := not CheckBox.WordWrap;
 
-    4: CheckBox.HotTrack := not CheckBox.HotTrack;
+    5: CheckBox.HotTrack := not CheckBox.HotTrack;
 
-    5: // XP Colors
+    6: // XP Colors
     begin
       CheckBox.HotTrackColorType := htctActual;
       CheckBox.HotTrack := True;
@@ -3411,7 +3420,7 @@ begin
       CheckBox.FrameColor := xpRadChkFrameColor;
     end;
   end;
-  if Index in [ 0, 1, 2, 4, 5 ] then
+  if Index in [ 0, 1, 2, 3, 5, 6 ] then
     DesignerModified;
 end;
 
@@ -3428,7 +3437,7 @@ end;
 
 function TRzRadioButtonEditor.GetVerbCount: Integer;
 begin
-  Result := 6;
+  Result := 7;
 end;
 
 
@@ -3438,9 +3447,10 @@ begin
     0: Result := 'Check';
     1: Result := 'Optimize Size';
     2: Result := 'AutoSize';
-    3: Result := '-';
-    4: Result := 'HotTrack';
-    5: Result := 'XP Colors';
+    3: Result := 'WordWrap';
+    4: Result := '-';
+    5: Result := 'HotTrack';
+    6: Result := 'XP Colors';
   end;
 end;
 
@@ -3451,7 +3461,8 @@ begin
 
   case Index of
     2: Item.Checked := RadioButton.AutoSize;
-    4: Item.Checked := RadioButton.HotTrack;
+    3: Item.Checked := RadioButton.WordWrap;
+    5: Item.Checked := RadioButton.HotTrack;
   end;
 end;
 
@@ -3468,10 +3479,11 @@ begin
     end;
 
     2: RadioButton.AutoSize := not RadioButton.AutoSize;
+    3: RadioButton.WordWrap := not RadioButton.WordWrap;
 
-    4: RadioButton.HotTrack := not RadioButton.HotTrack;
+    5: RadioButton.HotTrack := not RadioButton.HotTrack;
 
-    5: // XP Colors
+    6: // XP Colors
     begin
       RadioButton.HotTrackColorType := htctActual;
       RadioButton.HotTrack := True;
@@ -3481,7 +3493,7 @@ begin
     end;
 
   end;
-  if Index in [ 0, 1, 2 ] then
+  if Index in [ 0, 1, 2, 3, 5, 6 ] then
     DesignerModified;
 end;
 
@@ -3514,7 +3526,7 @@ begin
     0: Result := 'Edit Lines...';
     1: Result := 'Align';
     2: Result := '-';
-    3: Result := 'Word Wrap';
+    3: Result := 'WordWrap';
   end;
 end;
 
@@ -5537,6 +5549,7 @@ begin
       CreateAddControlMenu( 3, 'Splitter' );
       CreateAddControlMenu( 4, 'Size Panel' );
       CreateAddControlMenu( 5, 'Panel' );
+      CreateAddControlMenu( 6, 'Button' );
     end;
 
     3: // Add Component
@@ -5630,11 +5643,13 @@ begin
                                                  Form.ClientHeight - 8 - DlgButtons.Height ) as TRzPageControl;
         PageControl.Anchors := [ akLeft, akTop, akRight, akBottom ];
 
-        TabSheet := Designer.CreateComponent( TRzTabSheet, PageControl, 10, 10, 0, 0 ) as TRzTabSheet;
+        TabSheet := TRzTabSheet.Create( Designer.Root );
+        TabSheet.Name := UniqueName( TabSheet );
         TabSheet.PageControl := PageControl;
         TabSheet.Caption := 'Page One';
 
-        TabSheet := Designer.CreateComponent( TRzTabSheet, PageControl, 10, 10, 0, 0 ) as TRzTabSheet;
+        TabSheet := TRzTabSheet.Create( Designer.Root );
+        TabSheet.Name := UniqueName( TabSheet );
         TabSheet.PageControl := PageControl;
         TabSheet.Caption := 'Page Two';
 
@@ -5665,6 +5680,7 @@ begin
 
     4: Designer.CreateComponent( TRzSizePanel, Form, 10, 10, 168, 100 );
     5: Designer.CreateComponent( TRzPanel, Form, 200, 128, 100, 100 );
+    6: Designer.CreateComponent( TRzButton, Form, 200, 100, 75, 25 );
   end;
   if Designer <> nil then
     DesignerModified;
@@ -5718,7 +5734,7 @@ end;
 
 function TRzFrameEditor.GetVerbCount: Integer;
 begin
-  Result := 11;
+  Result := 12;
 end;
 
 
@@ -5733,9 +5749,10 @@ begin
     5: Result := 'Add a Splitter';
     6: Result := 'Add a Size Panel';
     7: Result := 'Add a Panel';
-    8: Result := '-';
-    9: Result := 'Add an Image List';
-    10: Result := 'Add a Frame Controller';
+    8: Result := 'Add a Button';
+    9: Result := '-';
+    10: Result := 'Add an Image List';
+    11: Result := 'Add a Frame Controller';
   end;
 end;
 
@@ -5784,8 +5801,9 @@ begin
 
     6: Designer.CreateComponent( TRzSizePanel, Frame, 10, 10, 168, 100 );
     7: Designer.CreateComponent( TRzPanel, Frame, 200, 128, 100, 100 );
+    8: Designer.CreateComponent( TRzButton, Frame, 200, 100, 75, 25 );
 
-    9: // ImageList
+    10: // ImageList
     begin
       Designer.CreateComponent( TImageList, Frame, 200 + ( ImgListOffset * 40 ),
                                 40, 24, 24 );
@@ -5794,9 +5812,9 @@ begin
         ImgListOffset := 0;
     end;
 
-    10: Designer.CreateComponent( TRzFrameController, Frame, 200, 160, 24, 24 );
+    11: Designer.CreateComponent( TRzFrameController, Frame, 200, 160, 24, 24 );
   end;
-  if Index in [ 2..7, 9, 10 ] then
+  if Index in [ 2..8, 10, 11 ] then
     DesignerModified;
 end; {= TRzFrameEditor.ExecuteVerb =}
 
@@ -8422,12 +8440,21 @@ end;
 
 
 procedure TRzFrameStyleProperty.PropDrawValue( ACanvas: TCanvas; const ARect: TRect; ASelected: Boolean );
+{$IFNDEF VCL90_OR_HIGHER}
+var
+  ValueRect: TRect;
+{$ENDIF}
 begin
   if GetVisualValue <> '' then
   begin
     FDrawingPropertyValue := True;
     try
+      {$IFDEF VCL90_OR_HIGHER}
       PaintFrameStyleGlyph( GetVisualValue, ACanvas, ARect, ASelected );
+      {$ELSE}
+      ValueRect := PaintFrameStyleGlyph( GetVisualValue, ACanvas, ARect, ASelected );
+      DefaultPropertyListDrawValue( Value, ACanvas, ValueRect, ASelected );
+      {$ENDIF}
     finally
       FDrawingPropertyValue := False;
     end;
@@ -8740,12 +8767,21 @@ end;
 
 
 procedure TRzAlignProperty.PropDrawValue( ACanvas: TCanvas; const ARect: TRect; ASelected: Boolean );
+{$IFNDEF VCL90_OR_HIGHER}
+var
+  ValueRect: TRect;
+{$ENDIF}
 begin
   if GetVisualValue <> '' then
   begin
     FDrawingPropertyValue := True;
     try
+      {$IFDEF VCL90_OR_HIGHER}
       PaintAlignGlyph( GetVisualValue, ACanvas, ARect, ASelected );
+      {$ELSE}
+      ValueRect := PaintAlignGlyph( Value, ACanvas, ARect, ASelected );
+      DefaultPropertyListDrawValue( Value, ACanvas, ValueRect, ASelected );
+      {$ENDIF}   
     finally 
       FDrawingPropertyValue := False;
     end;

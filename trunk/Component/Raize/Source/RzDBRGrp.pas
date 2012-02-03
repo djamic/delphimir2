@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -13,6 +13,11 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Added new CaptionFont property to TRzDBRadioGroup.
+    * Added ReadOnlyColor, and ReadOnlyColorOnFocus properties to the
+      TRzDBRadioGroup.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -129,7 +134,7 @@ type
     function GetDataSource: TDataSource; virtual;
     procedure SetDataSource( Value: TDataSource ); virtual;
     function GetReadOnly: Boolean; virtual;
-    procedure SetReadOnly( Value: Boolean ); virtual;
+    procedure SetReadOnly( Value: Boolean ); override;
     function GetButtonValue( Index: Integer ): string; virtual;
     procedure SetValue( const Value: string ); virtual;
     procedure SetItems( Value: TStrings ); override;
@@ -200,6 +205,7 @@ type
     property BorderSides;
     property BorderWidth;
     property Caption;
+    property CaptionFont;
     property Color;
     property Columns;
     property Constraints;
@@ -237,6 +243,8 @@ type
     property TextHighlightColor;
     property TextShadowColor;
     property TextShadowDepth;
+    property ReadOnlyColor;
+    property ReadOnlyColorOnFocus;
     property ShowHint;
     property SpaceEvenly;
     property StartXPos;
@@ -391,6 +399,7 @@ end;
 
 procedure TRzDBRadioGroup.SetReadOnly( Value: Boolean );
 begin
+  inherited SetReadOnly( Value );
   FDataLink.ReadOnly := Value;
 end;
 

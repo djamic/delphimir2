@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -105,7 +105,7 @@ type
 
 
 resourcestring
-  sCopyrightDate = '1995-2009';
+  sCopyrightDate = '1995-2010';
   sCompanyName = 'Raize Software, Inc.';
   sProductVersion  = 'Version ' + RaizeComponents_Version;
   {$IFDEF RAIZETRIAL}

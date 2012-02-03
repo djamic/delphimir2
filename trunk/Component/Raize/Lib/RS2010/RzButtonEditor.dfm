@@ -185,6 +185,7 @@ object RzButtonEditDlg: TRzButtonEditDlg
         0055555588855500000055550555555558555500000055555555555555555500
         0000}
       ButtonUpNumGlyphs = 2
+      Max = 100.000000000000000000
       Value = 4.000000000000000000
       Enabled = False
       FlatButtons = True
@@ -352,6 +353,7 @@ object RzButtonEditDlg: TRzButtonEditDlg
       0055555588855500000055550555555558555500000055555555555555555500
       0000}
     ButtonUpNumGlyphs = 2
+    Max = 100.000000000000000000
     Enabled = False
     FlatButtons = True
     FrameVisible = True

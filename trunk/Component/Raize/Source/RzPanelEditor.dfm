@@ -257,8 +257,8 @@ object RzPanelEditDlg: TRzPanelEditDlg
     object OptBorderWidth: TRzRadioButton
       Left = 8
       Top = 16
-      Width = 57
-      Height = 17
+      Width = 58
+      Height = 15
       Caption = 'Border'
       Checked = True
       HotTrack = True
@@ -269,8 +269,8 @@ object RzPanelEditDlg: TRzPanelEditDlg
     object OptBevelWidth: TRzRadioButton
       Left = 84
       Top = 16
-      Width = 53
-      Height = 17
+      Width = 51
+      Height = 15
       Caption = 'Bevel'
       HotTrack = True
       TabOrder = 1

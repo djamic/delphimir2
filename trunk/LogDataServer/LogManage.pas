@@ -1,17 +1,19 @@
-unit LogManage;
+ï»¿unit LogManage;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, StrUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, StdCtrls, Mask, RzEdit, ExtCtrls, CheckLst, Menus, LDShare, Clipbrd;
+  Windows, Messages, SysUtils, StrUtils, Variants, Classes, Graphics, Controls,
+  Forms,
+  Dialogs, ComCtrls, StdCtrls, Mask, RzEdit, ExtCtrls, CheckLst, Menus,
+  LDShare, Clipbrd;
 
 type
   TLogDataManage = class
 
   private
-    {procedure Initialize();
-    procedure Finalize();}
+    { procedure Initialize();
+      procedure Finalize(); }
   public
 
   end;
@@ -61,45 +63,40 @@ var
   LogFileList: TStringList;
   QuitFlag: Boolean = False;
   SearchStatus: Boolean = False;
-  CmdArray: array[0..35 - 1] of TCmd = (
-    (Cmd: - 1; Check: True; Text: 'È«²¿¶¯×÷'),
-    (Cmd: 0; Check: True; Text: 'È¡»ØÎïÆ·'),
-    (Cmd: 1; Check: True; Text: '´æ·ÅÎïÆ·'),
-    (Cmd: 2; Check: True; Text: 'Á¶ÖÆÎïÆ·'),
-    (Cmd: 3; Check: True; Text: '³Ö¾ÃÏûÊ§'),
-    (Cmd: 4; Check: True; Text: '¼ñÈ¡ÎïÆ·'),
-    (Cmd: 5; Check: True; Text: 'ÖÆÔìÎïÆ·'),
-    (Cmd: 6; Check: True; Text: 'Ïú»ÙÎïÆ·'),
-    (Cmd: 7; Check: True; Text: 'ÈÓµôÎïÆ·'),
-    (Cmd: 8; Check: True; Text: '½»Ò×ÎïÆ·'),
-    (Cmd: 9; Check: True; Text: '¹ºÂòÎïÆ·'),
-    (Cmd: 10; Check: True; Text: '³öÊÛÎïÆ·'),
-    (Cmd: 11; Check: True; Text: 'Ê¹ÓÃÎïÆ·'),
-    (Cmd: 12; Check: True; Text: 'ÈËÎïÉı¼¶'),
-    (Cmd: 13; Check: True; Text: '¼õÉÙ½ğ±Ò'),
-    (Cmd: 14; Check: True; Text: 'Ôö¼Ó½ğ±Ò'),
-    (Cmd: 15; Check: True; Text: 'ËÀÍöµôÂä'),
-    (Cmd: 16; Check: True; Text: 'µôÂäÎïÆ·'),
-    (Cmd: 19; Check: True; Text: 'ÈËÎïËÀÍö'),
-    (Cmd: 20; Check: True; Text: 'Éı¼¶³É¹¦'),
-    (Cmd: 21; Check: True; Text: 'Éı¼¶Ê§°Ü'),
-    (Cmd: 22; Check: True; Text: '³Ç±¤È¡Ç®'),
-    (Cmd: 23; Check: True; Text: '³Ç±¤´æÇ®'),
-    (Cmd: 24; Check: True; Text: 'Éı¼¶È¡»Ø'),
-    (Cmd: 25; Check: True; Text: 'ÎäÆ÷Éı¼¶'),
-    (Cmd: 26; Check: True; Text: '±³°ü¼õÉÙ'),
-    (Cmd: 27; Check: True; Text: '¸Ä±ä³ÇÖ÷'),
-    (Cmd: 111; Check: True; Text: 'Ôª±¦¸Ä±ä'),
-    (Cmd: 112; Check: True; Text: 'ÄÜÁ¿¸Ä±ä'),
-    (Cmd: 30; Check: True; Text: 'ÉÌÆÌ¹ºÂò'),
-    (Cmd: 31; Check: True; Text: '×°±¸Éı¼¶'),
-    (Cmd: 32; Check: True; Text: '¼ÄÊÛÎïÆ·'),
-    (Cmd: 33; Check: True; Text: '¼ÄÊÛ¹ºÂò'),
-    (Cmd: 34; Check: True; Text: 'ÌôÕ½ÎïÆ·'),
-    (Cmd: 35; Check: True; Text: '°ÚÌ¯ÎïÆ·')
-    ); //26 ²âÊÔÎäÆ÷Éı¼¶
+  CmdArray: array [0 .. 35 - 1] of TCmd = (
+    (
+      Cmd: - 1; Check: True; Text: 'Má»i tháº¯c máº¯c'), (Cmd: 0; Check: True;
+      Text: 'láº¥y láº¡i cÃ¡c má»¥c'), (Cmd: 1; Check: True; Text: 'Äá»ƒ lÆ°u trá»¯'),
+    (Cmd: 2; Check: True; Text: 'Tinh chá»‰nh thuá»‘c'), (Cmd: 3; Check: True;
+      Text: 'lÃ¢u dÃ i biáº¿n máº¥t'), (Cmd: 4; Check: True; Text: 'Giá»¯ hÃ ng hoÃ¡'),
+    (Cmd: 5; Check: True; Text: 'Sáº£n xuáº¥t cÃ¡c bÃ i bÃ¡o'), (Cmd: 6; Check: True;
+      Text: 'tiÃªu há»§y hÃ ng hÃ³a'), (Cmd: 7; Check: True;
+      Text: 'Vá»©t bá» cÃ¡c má»¥c'), (Cmd: 8; Check: True;
+      Text: 'ThÆ°Æ¡ng máº¡i máº·t hÃ ng'), (Cmd: 9; Check: True;
+      Text: 'cÃ¡c má»¥c Ä‘á»ƒ bÃ¡n'), (Cmd: 10; Check: True;
+      Text: 'Sá»­ dá»¥ng cÃ¡c má»¥c'), (Cmd: 11; Check: True; Text: 'HÃ¬nh nÃ¢ng cáº¥p'),
+    (Cmd: 12; Check: True; Text: 'giáº£m vÃ ng'), (Cmd: 13; Check: True;
+      Text: 'tÄƒng vÃ ng'), (Cmd: 14; Check: True;
+      Text: 'trÆ°á»ng há»£p tá»­ vong giáº£m'), (Cmd: 15; Check: True;
+      Text: 'cÆ°á»›p bÃ³c'), (Cmd: 16; Check: True;
+      Text: 'nhÃ¢n váº­t cháº¿t'), (Cmd: 19; Check: True;
+      Text: 'nÃ¢ng cáº¥p Ä‘Ã£ thÃ nh cÃ´ng'), (Cmd: 20; Check: True;
+      Text: 'NÃ¢ng cáº¥p tháº¥t báº¡i'), (Cmd: 21; Check: True;
+      Text: 'Castle rÃºt tiá»n'), (Cmd: 22; Check: True;
+      Text: 'Castle Ä‘á»ƒ tiáº¿t kiá»‡m tiá»n'), (Cmd: 23; Check: True;
+      Text: 'NÃ¢ng cáº¥p Ä‘á»ƒ láº¥y'), (Cmd: 24; Check: True;
+      Text: 'vÅ© khÃ­ nÃ¢ng cáº¥p'), (Cmd: 25; Check: True; Text: 'ba lÃ´ Ä‘á»ƒ giáº£m'),
+    (Cmd: 26; Check: True; Text: 'Thay Ä‘á»•i cÃ¡c Santo'), (Cmd: 27; Check: True;
+      Text: 'phÃ´i thay Ä‘á»•i'), (Cmd: 111; Check: True;
+      Text: 'nÄƒng lÆ°á»£ng thay Ä‘á»•i'), (Cmd: 112; Check: True;
+      Text: 'cÃ¡c cá»­a hÃ ng Ä‘á»ƒ mua'), (Cmd: 30; Check: True;
+      Text: 'Thiáº¿t bá»‹ nÃ¢ng cáº¥p'), (Cmd: 31; Check: True; Text: 'lÃ´ hÃ ng má»¥c'),
+    (Cmd: 32; Check: True; Text: 'lÃ´ hÃ ng mua'), (Cmd: 33; Check: True;
+      Text: 'ThÃ¡ch thá»©c má»¥c'), (Cmd: 34; Check: True; Text: 'stall má»¥c'),
+    (Cmd: 35; Check: True; Text: 'háº¿t')); // 26 Â²Ã¢ÃŠÃ”ÃÃ¤Ã†Ã·Ã‰Ã½Â¼Â¶
 
 implementation
+
 uses HUtil32;
 {$R *.dfm}
 
@@ -107,10 +104,12 @@ function GetActString(nAct: Integer): string;
 var
   I: Integer;
 begin
-  Result := 'ÎŞ·¨·ÖÎö';
-  if nAct >= 0 then begin
+  Result := 'ÃÃÂ·Â¨Â·Ã–ÃÃ¶';
+  if nAct >= 0 then
+  begin
     for I := 0 to Length(CmdArray) - 1 do
-      if CmdArray[I].Cmd = nAct then begin
+      if CmdArray[I].Cmd = nAct then
+      begin
         Result := CmdArray[I].Text;
         Exit;
       end;
@@ -122,26 +121,34 @@ var
   I: Integer;
 begin
   Result := False;
-  if nAct >= 0 then begin
+  if nAct >= 0 then
+  begin
     for I := 0 to Length(CmdArray) - 1 do
-      if (CmdArray[I].Cmd = nAct) and CmdArray[I].Check then begin
+      if (CmdArray[I].Cmd = nAct) and CmdArray[I].Check then
+      begin
         Result := True;
         Exit;
       end;
   end;
 end;
 
-function GetSearch(ItemIndex: Integer; sSearch: string; LogData: pTLogData): Boolean;
+function GetSearch(ItemIndex: Integer; sSearch: string;
+  LogData: pTLogData): Boolean;
 var
   I: Integer;
 begin
   Result := True;
-  if ItemIndex <= 0 then Exit;
+  if ItemIndex <= 0 then
+    Exit;
   case ItemIndex of
-    1: Result := AnsiContainsText(LogData.sObjectName, sSearch);
-    2: Result := AnsiContainsText(LogData.sItemName, sSearch);
-    3: Result := LogData.nCount = Str_ToInt(sSearch, -1);
-    4: Result := AnsiContainsText(LogData.sActObjectName, sSearch);
+    1:
+      Result := AnsiContainsText(LogData.sObjectName, sSearch);
+    2:
+      Result := AnsiContainsText(LogData.sItemName, sSearch);
+    3:
+      Result := LogData.nCount = Str_ToInt(sSearch, -1);
+    4:
+      Result := AnsiContainsText(LogData.sActObjectName, sSearch);
   end;
 end;
 
@@ -153,7 +160,8 @@ begin
   if Directory[Length(Directory)] = '\' then
     Directory := Copy(Directory, 1, Length(Directory) - 1);
   for I := Length(Directory) downto 1 do
-    if Directory[I] = '\' then begin
+    if Directory[I] = '\' then
+    begin
       Result := Copy(Directory, I + 1, Length(Directory) - I + 1);
       break;
     end;
@@ -163,7 +171,8 @@ procedure TFrmLogManage.UnLoadLogFileList;
 var
   I: Integer;
 begin
-  for I := 0 to LogFileList.Count - 1 do begin
+  for I := 0 to LogFileList.Count - 1 do
+  begin
     TStringList(LogFileList.Objects[I]).Free;
   end;
   LogFileList.Clear;
@@ -174,9 +183,11 @@ var
   I, II: Integer;
   List: TList;
 begin
-  for I := 0 to LogDataList.Count - 1 do begin
+  for I := 0 to LogDataList.Count - 1 do
+  begin
     List := TList(LogDataList.Objects[I]);
-    for II := 0 to List.Count - 1 do begin
+    for II := 0 to List.Count - 1 do
+    begin
       Dispose(pTLogData(List.Items[II]));
     end;
     List.Free;
@@ -192,21 +203,26 @@ var
   boFound: Boolean;
 begin
   sFileDir := LastDirectoryName(FileDir);
-  if sFileDir <> '' then begin
+  if sFileDir <> '' then
+  begin
     boFound := False;
     List := nil;
-    for I := 0 to LogFileList.Count - 1 do begin
-      if CompareText(LogFileList.Strings[I], sFileDir) = 0 then begin
+    for I := 0 to LogFileList.Count - 1 do
+    begin
+      if CompareText(LogFileList.Strings[I], sFileDir) = 0 then
+      begin
         List := TStringList(LogFileList.Objects[I]);
         boFound := True;
-        Break;
+        break;
       end;
     end;
-    if not boFound then begin
+    if not boFound then
+    begin
       List := TStringList.Create;
       LogFileList.AddObject(sFileDir, List);
     end;
-    if List <> nil then begin
+    if List <> nil then
+    begin
       List.Add(FileDir + FileName);
     end;
   end;
@@ -215,13 +231,15 @@ end;
 procedure TFrmLogManage.DateTimeEditBeginDateTimeChange(Sender: TObject;
   DateTime: TDateTime);
 begin
-  if DateTime > DateTimeEditEnd.Date then DateTimeEditEnd.Date := DateTime;
+  if DateTime > DateTimeEditEnd.Date then
+    DateTimeEditEnd.Date := DateTime;
 end;
 
 procedure TFrmLogManage.DateTimeEditEndDateTimeChange(Sender: TObject;
   DateTime: TDateTime);
 begin
-  if DateTime < DateTimeEditBegin.Date then DateTimeEditEnd.Date := DateTimeEditBegin.Date;
+  if DateTime < DateTimeEditBegin.Date then
+    DateTimeEditEnd.Date := DateTimeEditBegin.Date;
 end;
 
 procedure TFrmLogManage.DoSearchFile(Path: string);
@@ -240,9 +258,10 @@ var
     S, s01: string;
   begin
     s01 := '.txt';
-    if IsFileExtractName(s01) then begin
+    if IsFileExtractName(s01) then
+    begin
       S := FileDir + FileName;
-      StatusBar.Panels[2].Text := 'ÕıÔÚËÑË÷£º' + S;
+      StatusBar.Panels[2].Text := 'Ã•Ã½Ã”ÃšÃ‹Ã‘Ã‹Ã·Â£Âº' + S;
       AddSearchFile(FileDir, FileName);
     end;
   end;
@@ -250,12 +269,13 @@ var
   function IsDir: Boolean;
   begin
     with Info do
-      Result := (Name <> '.') and (Name <> '..') and ((Attr and faDirectory) = faDirectory);
+      Result := (Name <> '.') and (Name <> '..') and
+        ((Attr and faDirectory) = faDirectory);
   end;
 
   function IsFile: Boolean;
   begin
-    Result := (not ((Info.Attr and faDirectory) = faDirectory));
+    Result := (not((Info.Attr and faDirectory) = faDirectory));
   end;
 
   function IsLogFile: Boolean;
@@ -269,12 +289,14 @@ begin
     if FindFirst(Path + '*.*', faAnyFile, Info) = 0 then
       if IsFile and IsLogFile then
         ProcessAFile(Path, Info.Name);
-      //else if IsDir then DoSearchFile(Path + Info.Name);
-    while FindNext(Info) = 0 do begin
+    // else if IsDir then DoSearchFile(Path + Info.Name);
+    while FindNext(Info) = 0 do
+    begin
       if IsFile and IsLogFile then
         ProcessAFile(Path, Info.Name);
       Application.ProcessMessages;
-      if QuitFlag then Break;
+      if QuitFlag then
+        break;
     end;
   finally
     FindClose(Info);
@@ -290,43 +312,62 @@ var
   FileList: TStringList;
   LoadList: TStringList;
   DataList: TList;
-  sText, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13: string;
+  sText, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12,
+    s13: string;
   LogData: pTLogData;
   ListItem: TListItem;
   ItemIndex: Integer;
   sSearch: string;
   boCheck: Boolean;
 begin
-  if not SearchStatus then begin
+  if not SearchStatus then
+  begin
     sSearch := Trim(EditSearch.Text);
     ItemIndex := ComboBoxCondition.ItemIndex;
-    if (ItemIndex > 0) and (sSearch = '') then begin
+    if (ItemIndex > 0) and (sSearch = '') then
+    begin
       case ItemIndex of
-        1: Application.MessageBox('ÇëÊäÈë²éÑ¯µÄÈËÎïÃû³Æ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
-        2: Application.MessageBox('ÇëÊäÈë²éÑ¯µÄÎïÆ·Ãû³Æ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
-        3: Application.MessageBox('ÇëÊäÈë²éÑ¯µÄÎïÆ·ID £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
-        4: Application.MessageBox('ÇëÊäÈë²éÑ¯µÄ½»Ò×¶ÔÏó £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
-      else Application.MessageBox('ÇëÊäÈë²éÑ¯Ìõ¼ş £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+        1:
+          Application.MessageBox('Ã‡Ã«ÃŠÃ¤ÃˆÃ«Â²Ã©Ã‘Â¯ÂµÃ„ÃˆÃ‹ÃÃ¯ÃƒÃ»Â³Ã† Â£Â¡Â£Â¡Â£Â¡', 'ÃŒÃ¡ÃŠÂ¾ÃÃ…ÃÂ¢',
+            MB_ICONQUESTION);
+        2:
+          Application.MessageBox('Ã‡Ã«ÃŠÃ¤ÃˆÃ«Â²Ã©Ã‘Â¯ÂµÃ„ÃÃ¯Ã†Â·ÃƒÃ»Â³Ã† Â£Â¡Â£Â¡Â£Â¡', 'ÃŒÃ¡ÃŠÂ¾ÃÃ…ÃÂ¢',
+            MB_ICONQUESTION);
+        3:
+          Application.MessageBox('Ã‡Ã«ÃŠÃ¤ÃˆÃ«Â²Ã©Ã‘Â¯ÂµÃ„ÃÃ¯Ã†Â·ID Â£Â¡Â£Â¡Â£Â¡', 'ÃŒÃ¡ÃŠÂ¾ÃÃ…ÃÂ¢',
+            MB_ICONQUESTION);
+        4:
+          Application.MessageBox('Ã‡Ã«ÃŠÃ¤ÃˆÃ«Â²Ã©Ã‘Â¯ÂµÃ„Â½Â»Ã’Ã—Â¶Ã”ÃÃ³ Â£Â¡Â£Â¡Â£Â¡', 'ÃŒÃ¡ÃŠÂ¾ÃÃ…ÃÂ¢',
+            MB_ICONQUESTION);
+      else
+        Application.MessageBox('Ã‡Ã«ÃŠÃ¤ÃˆÃ«Â²Ã©Ã‘Â¯ÃŒÃµÂ¼Ã¾ Â£Â¡Â£Â¡Â£Â¡', 'ÃŒÃ¡ÃŠÂ¾ÃÃ…ÃÂ¢',
+          MB_ICONQUESTION);
       end;
       EditSearch.SetFocus;
       Exit;
     end;
 
-    for I := 0 to Length(CmdArray) - 1 do begin
+    for I := 0 to Length(CmdArray) - 1 do
+    begin
       CmdArray[I].Check := CheckListBox.Checked[I];
     end;
 
-    if not CmdArray[0].Check then begin
+    if not CmdArray[0].Check then
+    begin
       boCheck := False;
-      for I := 1 to Length(CmdArray) - 1 do begin
-        if CmdArray[I].Check then begin
+      for I := 1 to Length(CmdArray) - 1 do
+      begin
+        if CmdArray[I].Check then
+        begin
           boCheck := True;
           break;
         end;
       end;
 
-      if not boCheck then begin
-        Application.MessageBox('ÇëÑ¡Ôñ²éÑ¯¶¯×÷ £¡£¡£¡', 'ÌáÊ¾ĞÅÏ¢', MB_ICONQUESTION);
+      if not boCheck then
+      begin
+        Application.MessageBox('Ã‡Ã«Ã‘Â¡Ã”Ã±Â²Ã©Ã‘Â¯Â¶Â¯Ã—Ã· Â£Â¡Â£Â¡Â£Â¡', 'ÃŒÃ¡ÃŠÂ¾ÃÃ…ÃÂ¢',
+          MB_ICONQUESTION);
         CheckListBox.SetFocus;
         Exit;
       end;
@@ -334,41 +375,53 @@ begin
     QuitFlag := False;
     SearchStatus := True;
 
-    ButtonStart.Caption := 'Í£Ö¹²éÑ¯';
+    ButtonStart.Caption := 'ÃÂ£Ã–Â¹Â²Ã©Ã‘Â¯';
     StatusBar.Panels[3].Text := '';
-    //ButtonStart.Enabled := False;
+    // ButtonStart.Enabled := False;
     ListView.Clear;
     UnLoadLogDataList;
     LoadList := TStringList.Create;
     nDay := GetDayCount(DateTimeEditEnd.Date, DateTimeEditBegin.Date);
-    for I := 0 to nDay do begin
-      if QuitFlag then Break;
+    for I := 0 to nDay do
+    begin
+      if QuitFlag then
+        break;
       Application.ProcessMessages;
       SearchDay := DateTimeEditBegin.Date + I;
       DecodeDate(SearchDay, Year, Month, Day);
-      sLogDir := {ExtractFilePath(ParamStr(0)) + } IncludeTrailingBackslash(sBaseDir) + IntToStr(Year) + '-' + IntToString(Month) + '-' + IntToString(Day);
-      if DirectoryExists(sLogDir) then begin
+      sLogDir :=
+      { ExtractFilePath(ParamStr(0)) + } IncludeTrailingBackslash(sBaseDir)
+        + IntToStr(Year) + '-' + IntToString(Month) + '-' + IntToString(Day);
+      if DirectoryExists(sLogDir) then
+      begin
         UnLoadLogFileList;
         DoSearchFile(sLogDir);
-        StatusBar.Panels[2].Text := 'ËÑË÷Íê³É';
-        for II := 0 to LogFileList.Count - 1 do begin
+        StatusBar.Panels[2].Text := 'Ã‹Ã‘Ã‹Ã·ÃÃªÂ³Ã‰';
+        for II := 0 to LogFileList.Count - 1 do
+        begin
           Application.ProcessMessages;
-          if QuitFlag then Break;
+          if QuitFlag then
+            break;
           sLogDir := LogFileList.Strings[II];
           FileList := TStringList(LogFileList.Objects[II]);
 
-          for III := 0 to FileList.Count - 1 do begin
-            if QuitFlag then Break;
+          for III := 0 to FileList.Count - 1 do
+          begin
+            if QuitFlag then
+              break;
             Application.ProcessMessages;
             sLogFile := FileList.Strings[III];
-            if FileExists(sLogFile) then begin
+            if FileExists(sLogFile) then
+            begin
               LoadList.Clear;
               DataList := TList.Create;
               LogDataList.AddObject(sLogDir, DataList);
-              StatusBar.Panels[2].Text := 'ÕıÔÚ²éÑ¯:' + sLogFile;
+              StatusBar.Panels[2].Text := 'Ã•Ã½Ã”ÃšÂ²Ã©Ã‘Â¯:' + sLogFile;
               LoadList.LoadFromFile(sLogFile);
-              for IIII := 0 to LoadList.Count - 1 do begin
-                if QuitFlag then Break;
+              for IIII := 0 to LoadList.Count - 1 do
+              begin
+                if QuitFlag then
+                  break;
                 Application.ProcessMessages;
                 sText := Trim(LoadList.Strings[IIII]);
                 sText := GetValidStr3(sText, s01, [#9]);
@@ -384,7 +437,8 @@ begin
                 sText := GetValidStr3(sText, s11, [#9]);
                 sText := GetValidStr3(sText, s12, [#9]);
                 sText := GetValidStr3(sText, s13, [#9]);
-                if IsStringNumber(s04) then begin
+                if IsStringNumber(s04) then
+                begin
                   New(LogData);
                   DataList.Add(LogData);
                   LogData.nAct := Str_ToInt(s04, 0);
@@ -406,22 +460,29 @@ begin
     end;
     LoadList.Free;
     nIdx := 0;
-    for I := 0 to LogDataList.Count - 1 do begin
-      if QuitFlag then Break;
+    for I := 0 to LogDataList.Count - 1 do
+    begin
+      if QuitFlag then
+        break;
       Application.ProcessMessages;
       DataList := TList(LogDataList.Objects[I]);
-      //StatusBar.Panels[2].Text := 'ÕıÔÚÔö¼Ó:' + LogDataList.Strings[I];
-      for II := 0 to DataList.Count - 1 do begin
-        if QuitFlag then Break;
+      // StatusBar.Panels[2].Text := 'Ã•Ã½Ã”ÃšÃ”Ã¶Â¼Ã“:' + LogDataList.Strings[I];
+      for II := 0 to DataList.Count - 1 do
+      begin
+        if QuitFlag then
+          break;
         Application.ProcessMessages;
         LogData := DataList.Items[II];
-        if CmdArray[0].Check or GetActChecked(LogData.nAct) then begin
-          if GetSearch(ItemIndex, sSearch, LogData) then begin
+        if CmdArray[0].Check or GetActChecked(LogData.nAct) then
+        begin
+          if GetSearch(ItemIndex, sSearch, LogData) then
+          begin
 
             Inc(nIdx);
             ListItem := ListView.Items.Add;
             ListItem.Caption := IntToStr(nIdx);
-            ListItem.SubItems.AddObject(GetActString(LogData.nAct), TObject(LogData));
+            ListItem.SubItems.AddObject(GetActString(LogData.nAct),
+              TObject(LogData));
             ListItem.SubItems.Add(LogData.sMapName);
             ListItem.SubItems.Add(IntToStr(LogData.nX));
             ListItem.SubItems.Add(IntToStr(LogData.nY));
@@ -430,20 +491,23 @@ begin
             ListItem.SubItems.Add(IntToStr(LogData.nCount));
             ListItem.SubItems.Add(LogData.sActObjectName);
             ListItem.SubItems.Add(LogData.sDate);
-            StatusBar.Panels[2].Text := 'ÕıÔÚÔö¼Ó:' + LogDataList.Strings[I] + ' ' + LogData.sObjectName + ' ' + LogData.sItemName;
+            StatusBar.Panels[2].Text := 'Ã•Ã½Ã”ÃšÃ”Ã¶Â¼Ã“:' + LogDataList.Strings[I]
+              + ' ' + LogData.sObjectName + ' ' + LogData.sItemName;
           end;
         end;
       end;
     end;
     StatusBar.Panels[3].Text := '';
-    StatusBar.Panels[2].Text := '²éÑ¯ÒÑÍê³É';
-    //ButtonStart.Enabled := True;
+    StatusBar.Panels[2].Text := 'Â²Ã©Ã‘Â¯Ã’Ã‘ÃÃªÂ³Ã‰';
+    // ButtonStart.Enabled := True;
     SearchStatus := False;
-    ButtonStart.Caption := '¿ªÊ¼²éÑ¯';
-  end else begin
+    ButtonStart.Caption := 'Â¿ÂªÃŠÂ¼Â²Ã©Ã‘Â¯';
+  end
+  else
+  begin
     QuitFlag := True;
     SearchStatus := False;
-    //ButtonStart.Caption:='Í£Ö¹²éÑ¯';
+    // ButtonStart.Caption:='ÃÂ£Ã–Â¹Â²Ã©Ã‘Â¯';
   end;
 end;
 
@@ -451,7 +515,8 @@ procedure TFrmLogManage.CheckListBoxClickCheck(Sender: TObject);
 var
   I: Integer;
 begin
-  if CheckListBox.Selected[0] { and CheckListBox.Checked[0] } then begin
+  if CheckListBox.Selected[0] { and CheckListBox.Checked[0] } then
+  begin
     for I := 1 to CheckListBox.Count - 1 do
       CheckListBox.Checked[I] := CheckListBox.Checked[0];
   end;
@@ -466,9 +531,9 @@ begin
   DateTimeEditBegin.Date := Date;
   DateTimeEditEnd.Date := Date;
   ComboBoxCondition.ItemIndex := 0;
-  CheckListBox.Clear;
-  for I := 0 to Length(CmdArray) - 1 do
-    CheckListBox.Items.Add(CmdArray[I].Text);
+  // CheckListBox.Clear;
+  // for I := 0 to Length(CmdArray) - 1 do
+  // CheckListBox.Items.Add(CmdArray[I].Text);
 
   CheckListBox.Selected[0] := True;
   CheckListBox.Checked[0] := True;
@@ -492,10 +557,13 @@ var
   sText: string;
 begin
   sText := '';
-  for I := 0 to ListView.Items.Count - 1 do begin
+  for I := 0 to ListView.Items.Count - 1 do
+  begin
     ListItem := ListView.Items.Item[I];
-    if ListItem.Selected then begin
-      for II := 0 to ListItem.SubItems.Count - 1 do begin
+    if ListItem.Selected then
+    begin
+      for II := 0 to ListItem.SubItems.Count - 1 do
+      begin
         sText := sText + ListItem.SubItems.Strings[II] + #9;
       end;
       sText := Trim(sText) + #13#10;
@@ -518,4 +586,3 @@ begin
 end;
 
 end.
-

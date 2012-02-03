@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -92,21 +92,19 @@ type
   TRzDBRadioGroupEditDlg = class(TForm)
     pnlButtons: TRzPanel;
     PnlOptions: TRzPanel;
-    edtCaption: TRzEdit;
-    Label1: TRzLabel;
-    Label2: TRzLabel;
     btnLoad: TRzButton;
     btnClear: TRzButton;
     dlgOpen: TOpenDialog;
-    trkColumns: TRzTrackBar;
     pnlPreview: TRzPanel;
     grpPreview: TRzDBRadioGroup;
     RzPanel1: TRzPanel;
     btnOk: TRzButton;
     btnCancel: TRzButton;
-    pnlClientArea: TRzPanel;
     grdItemsValues: TRzStringGrid;
-    RzPanel2: TRzPanel;
+    Label1: TRzLabel;
+    edtCaption: TRzEdit;
+    Label2: TRzLabel;
+    trkColumns: TRzTrackBar;
     procedure edtCaptionChange(Sender: TObject);
     procedure trkColumnsChange(Sender: TObject);
     procedure btnLoadClick(Sender: TObject);

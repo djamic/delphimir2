@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -96,8 +96,8 @@ type
     btnDelete: TRzButton;
     btnMoveUp: TRzButton;
     btnMoveDown: TRzButton;
-    dlgOpen: TRzOpenDialog;
-    dlgSave: TRzSaveDialog;
+    dlgOpen: TOpenDialog;
+    dlgSave: TSaveDialog;
     btnOK: TRzButton;
     btnCancel: TRzButton;
     RzPanel1: TRzPanel;
@@ -108,14 +108,15 @@ type
     optGroup: TRzRadioButton;
     RzToolbar1: TRzToolbar;
     ImageList1: TImageList;
-    btnLoad: TRzToolButton;
-    btnSave: TRzToolButton;
-    btnClear: TRzToolButton;
+    btnLoad: TRzButton;
+    btnSave: TRzButton;
+    btnClear: TRzButton;
     RzSpacer1: TRzSpacer;
     RzSpacer2: TRzSpacer;
     chkAllowGrayed: TRzCheckBox;
     spnImageIndex: TRzSpinEdit;
     spnDisabledIndex: TRzSpinEdit;
+    RzSpacer3: TRzSpacer;
     procedure lstPreviewClick(Sender: TObject);
     procedure chkItemEnabledClick(Sender: TObject);
     procedure chkAllowGrayedClick(Sender: TObject);

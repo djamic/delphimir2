@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -139,7 +139,6 @@ type
     property GroupColor;
     property GroupFont;
     property GroupPrefix;
-    property HorzExtent;
     property HorzScrollBar;
     property ImeMode;
     property ImeName;

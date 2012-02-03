@@ -1,8 +1,8 @@
 object RzCheckGroupEditDlg: TRzCheckGroupEditDlg
   Left = 185
   Top = 115
-  Width = 566
-  Height = 303
+  Width = 576
+  Height = 308
   Caption = '- CheckGroup Editor'
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -17,8 +17,8 @@ object RzCheckGroupEditDlg: TRzCheckGroupEditDlg
   TextHeight = 13
   object PnlButtons: TRzPanel
     Left = 0
-    Top = 237
-    Width = 558
+    Top = 238
+    Width = 560
     Height = 32
     Align = alBottom
     BorderOuter = fsNone
@@ -42,7 +42,7 @@ object RzCheckGroupEditDlg: TRzCheckGroupEditDlg
       OnClick = BtnClearClick
     end
     object RzPanel1: TRzPanel
-      Left = 390
+      Left = 392
       Top = 0
       Width = 168
       Height = 32
@@ -75,10 +75,13 @@ object RzCheckGroupEditDlg: TRzCheckGroupEditDlg
     Left = 0
     Top = 0
     Width = 293
-    Height = 237
+    Height = 238
     Align = alLeft
     BorderOuter = fsNone
     TabOrder = 0
+    DesignSize = (
+      293
+      238)
     object Label1: TRzLabel
       Left = 8
       Top = 16
@@ -116,7 +119,8 @@ object RzCheckGroupEditDlg: TRzCheckGroupEditDlg
       Left = 8
       Top = 88
       Width = 277
-      Height = 141
+      Height = 142
+      Anchors = [akLeft, akTop, akBottom]
       ScrollBars = ssBoth
       TabOrder = 0
       WordWrap = False
@@ -138,8 +142,8 @@ object RzCheckGroupEditDlg: TRzCheckGroupEditDlg
   object PnlPreview: TRzPanel
     Left = 293
     Top = 0
-    Width = 265
-    Height = 237
+    Width = 267
+    Height = 238
     Align = alClient
     BorderOuter = fsNone
     BorderWidth = 8
@@ -149,8 +153,8 @@ object RzCheckGroupEditDlg: TRzCheckGroupEditDlg
     object GrpPreview: TRzCheckGroup
       Left = 8
       Top = 8
-      Width = 249
-      Height = 221
+      Width = 251
+      Height = 222
       Align = alClient
       TabOrder = 0
     end

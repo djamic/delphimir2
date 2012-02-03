@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -13,6 +13,10 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Updated the display of embedded buttons in TRzButtonEdit when running
+      under Windows Vista and Windows 7.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -966,16 +970,10 @@ begin
     if FAltBtnKind <> Value then
     begin
       FAltBtnKind := Value;
-      if FAltBtnKind = bkDropDown then
-      begin
-        AltBtn.Glyph := nil;
-        AltBtn.Style := cbsDropDown;
-      end
-      else if ( FAltBtnKind <> bkCustom ) and not ( csLoading in ComponentState ) then
+      if ( FAltBtnKind <> bkCustom ) and not ( csLoading in ComponentState ) then
       begin
         AltBtn.Glyph.Assign( GetBtnEdtGlyph( FAltBtnKind ) );
         AltBtn.NumGlyphs := 2;
-        AltBtn.Style := cbsNone;
       end;
     end;
   end
@@ -984,16 +982,10 @@ begin
     if FButtonKind <> Value then
     begin
       FButtonKind := Value;
-      if FButtonKind = bkDropDown then
-      begin
-        Button.Glyph := nil;
-        Button.Style := cbsDropDown;
-      end
-      else if ( FButtonKind <> bkCustom ) and not ( csLoading in ComponentState ) then
+      if ( FButtonKind <> bkCustom ) and not ( csLoading in ComponentState ) then
       begin
         Button.Glyph.Assign( GetBtnEdtGlyph( FButtonKind ) );
         Button.NumGlyphs := 2;
-        Button.Style := cbsNone;
       end;
     end;
   end;

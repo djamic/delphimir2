@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -38,6 +38,10 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Fixed issue where calling Free on a TRzButton while it has the focus would
+      result in an access violation.
   ------------------------------------------------------------------------------
   5.1.2  (11 Jun 2009)
     * The TRzToolButton now takes into account the Alignment property of a
@@ -2836,20 +2840,23 @@ procedure TRzButton.CMFocusChanged( var Msg: TCMFocusChanged );
 var
   MakeActive: Boolean;
 begin
-  with Msg do
+  if not ( csDestroying in ComponentState ) then
   begin
-    if ( Sender is TRzButton ) or ( Sender is TButton ) then
-      MakeActive := Sender = Self
-    else
-      MakeActive := FDefault;
-  end;
+    with Msg do
+    begin
+      if ( Sender is TRzButton ) or ( Sender is TButton ) then
+        MakeActive := Sender = Self
+      else
+        MakeActive := FDefault;
+    end;
 
-  if MakeActive <> FActive then
-  begin
-    FActive := MakeActive;
-    Repaint;
+    if MakeActive <> FActive then
+    begin
+      FActive := MakeActive;
+      Repaint;
+    end;
+    inherited;
   end;
-  inherited;
 end;
 
 
@@ -2877,10 +2884,13 @@ end;
 
 procedure TRzButton.WMKillFocus( var Msg: TMessage );
 begin
-  inherited;
-  FKeyToggle := False;
-  FShowDownVersion := False;
-  UpdateDisplay;
+  if not ( csDestroying in ComponentState ) then
+  begin
+    inherited;
+    FKeyToggle := False;
+    FShowDownVersion := False;
+    UpdateDisplay;
+  end;
 end;
 
 
@@ -6028,7 +6038,7 @@ var
   ThemeRect, DestRect: TRect;
   MemImage: TBitmap;
 
-  procedure DrawThemeButton( R: TRect; Style: TThemedScrollBar );
+  procedure DrawXPThemeButton( R: TRect; Style: TThemedScrollBar );
   begin
     ThemeRect := R;
     InflateRect( ThemeRect, 2, 2 );
@@ -6051,17 +6061,47 @@ var
     end;
   end;
 
+  procedure DrawVistaThemeButton( R: TRect; Style: TThemedButton );
+  begin
+    ThemeRect := R;
+    InflateRect( ThemeRect, 1, 1 );
+
+    ElementDetails := ThemeServices.GetElementDetails( Style );
+
+    MemImage := TBitmap.Create;
+    try
+      MemImage.Width := ThemeRect.Right - ThemeRect.Left;
+      MemImage.Height := ThemeRect.Bottom - ThemeRect.Top;
+
+      ThemeServices.DrawElement( MemImage.Canvas.Handle, ElementDetails, ThemeRect );
+
+      Canvas.Draw( 0, 0, MemImage );
+    finally
+      MemImage.Free;
+    end;
+  end;
+
 begin
   if ThemeServices.ThemesEnabled then
   begin
     if FFlat then
     begin
-      if FDown or ( FMouseOverButton and Enabled ) or ( csDesigning in ComponentState ) then
+      if FDown or ( FMouseOverButton and Enabled ) then
       begin
         if FDown then
-          DrawThemeButton( R, tsThumbBtnHorzPressed )
-        else
-          DrawThemeButton( R, tsThumbBtnHorzHot );
+        begin
+          if RunningAtLeast( winVista ) then
+            DrawVistaThemeButton( R, tbPushButtonPressed )
+          else
+            DrawXPThemeButton( R, tsThumbBtnHorzPressed );
+        end
+        else if FMouseOverButton and not ( csDesigning in ComponentState ) then
+        begin
+          if RunningAtLeast( winVista ) then
+            DrawVistaThemeButton( R, tbPushButtonHot )
+          else
+            DrawXPThemeButton( R, tsThumbBtnHorzHot );
+        end;
       end
       else
       begin
@@ -6069,19 +6109,36 @@ begin
         Canvas.FillRect( R );
       end;
     end
-    else
+    else // not Flat
     begin
-      if FDown or ( FMouseOverButton and Enabled ) or ( csDesigning in ComponentState ) then
+      if not Enabled then
       begin
-        if FDown then
-          DrawThemeButton( R, tsThumbBtnHorzPressed )
+        if RunningAtLeast( winVista ) then
+          DrawVistaThemeButton( R, tbPushButtonDisabled )
         else
-          DrawThemeButton( R, tsThumbBtnHorzHot );
+          DrawXPThemeButton( R, tsThumbBtnHorzDisabled )
       end
-      else if not Enabled then
-        DrawThemeButton( R, tsThumbBtnHorzDisabled )
+      else if FDown then
+      begin
+        if RunningAtLeast( winVista ) then
+          DrawVistaThemeButton( R, tbPushButtonPressed )
+        else
+          DrawXPThemeButton( R, tsThumbBtnHorzPressed );
+      end
+      else if FMouseOverButton and not ( csDesigning in ComponentState ) then
+      begin
+        if RunningAtLeast( winVista ) then
+          DrawVistaThemeButton( R, tbPushButtonHot )
+        else
+          DrawXPThemeButton( R, tsThumbBtnHorzHot );
+      end
       else
-        DrawThemeButton( R, tsThumbBtnHorzNormal );
+      begin
+        if RunningAtLeast( winVista ) then
+          DrawVistaThemeButton( R, tbPushButtonNormal )
+        else
+          DrawXPThemeButton( R, tsThumbBtnHorzNormal );
+      end;
     end;
 
     InflateRect( R, -2, -2 );
@@ -6181,11 +6238,11 @@ begin {= TRzControlButton.DrawSpinButton =}
   begin
     if FFlat then
     begin
-      if FDown or ( FMouseOverButton and Enabled ) or ( csDesigning in ComponentState ) then
+      if FDown or ( FMouseOverButton and Enabled ) then
       begin
         if FDown then
           DrawThemeSpinButton( R, sbsPressed )
-        else
+        else if FMouseOverButton and not ( csDesigning in ComponentState ) then
           DrawThemeSpinButton( R, sbsHot );
       end
       else
@@ -6193,22 +6250,29 @@ begin {= TRzControlButton.DrawSpinButton =}
         Canvas.Brush.Color := Color;
         Canvas.FillRect( R );
 
-        DrawSpinArrow( Canvas, R, uiWindowsXP, StyleToDirection( FStyle ), FDown, Enabled );
+        if RunningAtLeast( winVista ) then
+          DrawSpinArrow( Canvas, R, uiWindowsVista, StyleToDirection( FStyle ), FDown, Enabled )
+        else
+          DrawSpinArrow( Canvas, R, uiWindowsXP, StyleToDirection( FStyle ), FDown, Enabled );
       end;
     end
     else // Not Flat
     begin
-      if FDown or ( FMouseOverButton and Enabled ) or ( csDesigning in ComponentState ) then
-      begin
-        if FDown then
-          DrawThemeSpinButton( R, sbsPressed )
-        else
-          DrawThemeSpinButton( R, sbsHot );
-      end
-      else if not Enabled then
+      if not Enabled then
         DrawThemeSpinButton( R, sbsDisabled )
+      else if FDown then
+        DrawThemeSpinButton( R, sbsPressed )
+      else if FMouseOverButton and not ( csDesigning in ComponentState ) then
+        DrawThemeSpinButton( R, sbsHot )
       else
         DrawThemeSpinButton( R, sbsNormal );
+
+      if RunningAtLeast( winVista ) and ( R.Bottom - R.Top < 10 ) then
+      begin
+        Canvas.Pen.Color := GetXPThemeColor( xptcSpinButtonBorder );
+        Canvas.MoveTo( R.Left + 1, R.Top );
+        Canvas.LineTo( R.Right - 1, R.Top );
+      end;
     end;
 
     InflateRect( R, -2, -2 );
@@ -6379,6 +6443,7 @@ begin
         InflateRect( R, -1, -1 );
         GlyphSize := GetImageSize;
         R := CenterRect( R, GlyphSize.X, GlyphSize.Y );
+        OffsetRect( R, 1, 1 );
         if FDown then
         begin
           if ThemeServices.ThemesEnabled then

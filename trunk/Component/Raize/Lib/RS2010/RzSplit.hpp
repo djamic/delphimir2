@@ -322,6 +322,7 @@ public:
 	__property bool HotSpotClosedToMin = {read=FHotSpotClosedToMin, nodefault};
 	__property bool HotSpotClosedToMax = {read=FHotSpotClosedToMax, nodefault};
 	__property int HotSpotPosition = {read=FHotSpotPosition, nodefault};
+	__property Types::TRect HotSpotRect = {read=FHotSpotRect};
 	__property int LockedPosition = {read=FPosition, write=SetLockedPosition, nodefault};
 	__property TRzSplitterPane* SelectedPaneControl = {read=GetSelectedPaneControl};
 	
@@ -492,6 +493,7 @@ private:
 	
 protected:
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
+	virtual void __fastcall Loaded(void);
 	virtual void __fastcall FixClientRect(Types::TRect &Rect, bool ShrinkByBorder);
 	virtual Types::TRect __fastcall GetClientRect(void);
 	virtual Types::TRect __fastcall GetControlRect(void);
@@ -538,6 +540,7 @@ protected:
 	__property bool LockBar = {read=FLockBar, write=FLockBar, default=0};
 	__property bool HotSpotClosed = {read=FHotSpotClosed, nodefault};
 	__property int HotSpotPosition = {read=FHotSpotPosition, nodefault};
+	__property Types::TRect HotSpotRect = {read=FHotSpotRect};
 	__property bool HotSpotVisible = {read=FHotSpotVisible, write=SetHotSpotVisible, default=0};
 	__property Graphics::TColor HotSpotColor = {read=FHotSpotColor, write=SetHotSpotColor, default=-16777201};
 	__property Graphics::TColor HotSpotDotColor = {read=FHotSpotDotColor, write=SetHotSpotDotColor, default=-16777203};
@@ -569,6 +572,7 @@ class PASCALIMPLEMENTATION TRzSizePanel : public TRzCustomSizePanel
 public:
 	__property HotSpotClosed;
 	__property HotSpotPosition;
+	__property HotSpotRect;
 	__property DockManager;
 	
 __published:

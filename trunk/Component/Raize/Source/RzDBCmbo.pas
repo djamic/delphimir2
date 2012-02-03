@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -17,6 +17,11 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed flickering issue in TRzDBComboBox, which was caused by how the
+      FPaintControl was parented.
+    * Updated the drawing code for the TRzDBComboBox when used in a TDBCtrlGrid.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -704,9 +709,15 @@ begin
   BevelOuter := bvNone;
 end;
 
+
 procedure TRzPaintComboBox.Paint;
+{$IFNDEF VCL105_OR_HIGHER}
+const
+  CP_BORDER    = 4;
+  CBTBS_NORMAL = 1;
+{$ENDIF}
 var
-  EditRect, BtnRect: TRect;
+  EditRect, BtnRect, R: TRect;
   X, Y, LeftOffset, TopOffset: Integer;
   FrameColor: TColor;
   FrameSides: TSides;
@@ -729,6 +740,8 @@ begin
   Dec( EditRect.Right, GetSystemMetrics( sm_CxVScroll ) );
 
   BtnRect := Rect( Width - GetSystemMetrics( sm_CxVScroll ) - 2, 2, Width - 2, Height - 2 );
+  if RunningAtLeast( WinVista ) then
+    Inc( BtnRect.Left, 3 );
 
   Canvas.Brush.Color := FComboBox.Color;
   Canvas.FillRect( BtnRect );
@@ -764,6 +777,21 @@ begin
     if FComboBox.FlatButtons then
       DrawBevel( Canvas, BtnRect, FComboBox.Color, FComboBox.Color, 2, sdAllSides );
   end
+  else if UseThemes then
+  begin
+    if ( FComboBox.Style = csDropDownList ) and RunningAtLeast( winVista ) then
+    begin
+      R := ClientRect;
+      InflateRect( R, 1, 1 );
+      DrawThemeBackground( ThemeServices.Theme[ teButton ], Canvas.Handle, BP_PUSHBUTTON, PBS_NORMAL, R, nil );
+      DrawDropDownArrow( Canvas, BtnRect, uiWindowsXP, False );
+    end
+    else
+    begin
+      DrawThemeBackground( ThemeServices.Theme[ teComboBox ], Canvas.Handle, CP_BORDER, CBTBS_NORMAL, ClientRect, nil );
+      DrawDropDownArrow( Canvas, BtnRect, uiWindowsXP, False );
+    end;
+  end
   else
     DrawCtl3DBorder( Canvas, ClientRect, True );
 
@@ -778,7 +806,12 @@ begin
     LeftOffset := 4;
     TopOffset := ( Height - Canvas.TextHeight( 'Yy' ) ) div 2;
   end;
+
+  if UseThemes then
+    Canvas.Brush.Style := bsClear;
   Canvas.TextRect( EditRect, LeftOffset, TopOffset, Caption );
+  if UseThemes then
+    Canvas.Brush.Style := bsSolid;
 end; {= TRzPaintComboBox.Paint; =}
 
 
@@ -790,7 +823,9 @@ end; {= TRzPaintComboBox.Paint; =}
 constructor TRzDBComboBox.Create( AOwner: TComponent );
 begin
   inherited;
+
   ControlStyle := ControlStyle + [ csReplicatable, csSetCaption ];
+
   FDataLink := TFieldDataLink.Create;
   FDataLink.Control := Self;
   FDataLink.OnDataChange := DataChange;
@@ -798,7 +833,7 @@ begin
   FDataLink.OnEditingChange := EditingChange;
 
   FPaintControl := TRzPaintComboBox.Create( Self );
-  FPaintControl.Parent := Self;
+  FPaintControl.ParentWindow := Application.Handle;
   FPaintControl.Visible := False;
 
   FValues := TStringList.Create;
@@ -810,7 +845,8 @@ end;
 destructor TRzDBComboBox.Destroy;
 begin
   FPaintControl.Free;
-  FPaintControl := nil;  
+  FPaintControl := nil;
+
   FDataLink.Free;
   FDataLink := nil;
   FValues.Free;
@@ -1212,8 +1248,10 @@ begin
       end;
 
       wm_Create, wm_WindowPosChanged, cm_FontChanged:
+      begin
         if FPaintControl <> nil then
           FPaintControl.DestroyHandle;
+      end;
 
       wm_Char:
       begin
@@ -1314,6 +1352,7 @@ begin
     FPaintControl.SetBounds( BoundsRect.Left, BoundsRect.Top,
                              BoundsRect.Right - BoundsRect.Left,
                              BoundsRect.Bottom - BoundsRect.Top );
+
     if Field <> nil then
       FPaintControl.Alignment := Field.Alignment;
 

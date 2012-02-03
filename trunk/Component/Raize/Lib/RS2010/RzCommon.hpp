@@ -178,7 +178,7 @@ enum TRzVisualStyle { vsClassic, vsWinXP, vsGradient };
 #pragma option pop
 
 #pragma option push -b-
-enum TRzXPThemeColor { xptcEditBorder, xptcNormalGroupFont, xptcSpecialGroupFont, xptcGroupBarFill, xptcListGroupFill, xptcListGroupFont, xptcGroupBoxFont };
+enum TRzXPThemeColor { xptcEditBorder, xptcNormalGroupFont, xptcSpecialGroupFont, xptcGroupBarFill, xptcListGroupFill, xptcListGroupFont, xptcGroupBoxFont, xptcSpinButtonBorder };
 #pragma option pop
 
 #pragma option push -b-
@@ -659,11 +659,11 @@ __published:
 
 
 #pragma option push -b-
-enum TRzWindowsVersion { Win95, WinNT, Win98, WinMe, Win2000, WinXP, WinServer2003, WinVista };
+enum TRzWindowsVersion { win95, winNT, win98, winMe, win2000, winXP, winServer2003, winVista, win7 };
 #pragma option pop
 
 //-- var, const, procedure ---------------------------------------------------
-#define RaizeComponents_Version L"5.2"
+#define RaizeComponents_Version L"5.4"
 static const Word cm_GetBlinking = 0xb3e8;
 static const Word cm_Blink = 0xb3e9;
 static const Word cm_ToolbarShowCaptionChanged = 0xb3ea;

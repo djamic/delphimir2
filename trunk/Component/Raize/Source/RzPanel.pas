@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -25,6 +25,26 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed issue where the TRzToolbar would display the popup button (to access
+      additional buttons displayed outside the bounds of the toolbar) even
+      though all remaining buttons on the toolbar had their Visible property set
+      to False.
+    * Fixed issue where TRzGroupBox caption would not get scaled appropriately
+      when running on a system using a higher DPI setting.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Fixed issue in TRzGroupBox where captions that included accelerator
+      characters (&) would get truncated when the application was compiled with
+      XP/Vista themes.
+    * Added new CaptionFont property to TRzGroupBox and descendants. This
+      property allows the font used to display the group box's Caption to be
+      different from the component's Font property, which controls the font
+      used by any controls placed on the group box. The CaptionFont property
+      only takes effect when the VisualStyle of the group box is vsClassic or
+      vsGradient. When the VisualStyle is set to vwWinXP, the caption is
+      displayed using the current XP/Vista Theme settings.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Fixed display issue in TRzToolbar when running on Windows XP with Themes
@@ -709,8 +729,13 @@ type
   private
     FGroupStyle: TRzGroupBoxStyle;
     FBannerHeight: Integer;
+    FCaptionFont: TFont;
+    FCaptionFontChanged: Boolean;
 
-    { Message Handling Methods }
+    // Internal Event Handlers
+    procedure CaptionFontChangeHandler( Sender: TObject );
+
+    // Message Handling Methods
     procedure CMDialogChar( var Msg: TCMDialogChar ); message cm_DialogChar;
     procedure CMFontChanged( var Msg: TMessage ); message cm_FontChanged;
   protected
@@ -718,12 +743,16 @@ type
 
     procedure Paint; override;
     procedure AdjustClientRect( var Rect: TRect ); override;
+    procedure ChangeScale( M, D: Integer ); override;
 
-    { Property Access Methods }
+    // Property Access Methods
     procedure SetBannerHeight( Value: Integer ); virtual;
     procedure SetGroupBoxStyle( Value: TRzGroupBoxStyle ); virtual;
+    function IsCaptionFontStored: Boolean;
+    procedure SetCaptionFont( Value: TFont ); virtual;
 
-    { Inherited Properties & Events }
+
+    // Inherited Properties & Events
     property Alignment default taLeftJustify;
     property AlignmentVertical default avTop;
     property BorderOuter default fsNone;
@@ -731,6 +760,7 @@ type
     property Height default 105;
   public
     constructor Create( AOwner: TComponent ); override;
+    destructor Destroy; override;
 
     { Property Declarations }
     property BannerHeight: Integer
@@ -742,6 +772,11 @@ type
       read FGroupStyle
       write SetGroupBoxStyle
       default gsFlat;
+
+    property CaptionFont: TFont
+      read FCaptionFont
+      write SetCaptionFont
+      stored IsCaptionFontStored;
   end;
 
 
@@ -769,6 +804,7 @@ type
     property BorderSides;
     property BorderWidth;
     property Caption;
+    property CaptionFont;
     property Color;
     property Constraints;
     property Ctl3D;
@@ -3054,11 +3090,24 @@ begin
   AlignmentVertical := avTop;
   Height := 105;
 
+  FCaptionFont := TFont.Create;
+  FCaptionFont.Assign( Self.Font );
+  FCaptionFontChanged := False;
+  FCaptionFont.OnChange := CaptionFontChangeHandler;
+
+
   { Initializing GroupStyle must occur after BorderOuter/BorderInner settings
     b/c SetBorderOuter/SetBorderInner change GroupStyle to gsCustom }
   FGroupStyle := gsFlat;
   FBannerHeight := 0;
   {&RCI}
+end;
+
+
+destructor TRzCustomGroupBox.Destroy;
+begin
+  FCaptionFont.Free;
+  inherited;
 end;
 
 
@@ -3112,6 +3161,14 @@ begin
 end;
 
 
+procedure TRzCustomGroupBox.ChangeScale( M, D: Integer );
+begin
+  inherited;
+  if FCaptionFontChanged and ( FCaptionFont <> nil ) then
+    FCaptionFont.Size := MulDiv( FCaptionFont.Size, M, D );
+end;
+
+
 procedure TRzCustomGroupBox.CMDialogChar( var Msg: TCMDialogChar );
 begin
   with Msg do
@@ -3128,8 +3185,14 @@ end;
 
 
 procedure TRzCustomGroupBox.CMFontChanged( var Msg: TMessage );
+
 begin
   inherited;
+  if not FCaptionFontChanged and ( FCaptionFont <> nil ) then
+  begin
+    FCaptionFont.Assign( Self.Font );
+    FCaptionFontChanged := False;
+  end;
   Invalidate;
 end;
 
@@ -3163,26 +3226,27 @@ var
 
 
 begin
-  Canvas.Font := Self.Font;
+//  Canvas.Font := Self.Font;
+  Canvas.Font := FCaptionFont;
   H := Canvas.TextHeight( 'Pp' );
 
 
   // Calculate CaptionRect
   if ( Caption <> '' ) and ( FGroupStyle <> gsCustom ) then
   begin
-    S := RemoveAccelerators( Caption );
 
     if ( FVisualStyle = vsWinXP ) and ThemeServices.ThemesEnabled and
        ( FGroupStyle in [ gsStandard, gsFlat ] ) then
     begin
       ElementDetails := ThemeServices.GetElementDetails( tbGroupBoxNormal );
 
-      ExtentRect := GetTextExtent( Canvas.Handle, ElementDetails, S, 0 );
+      ExtentRect := GetTextExtent( Canvas.Handle, ElementDetails, Caption, 0 );
       CaptionSize.CX := ExtentRect.Right - ExtentRect.Left;
       CaptionSize.CY := ExtentRect.Bottom - ExtentRect.Top;
     end
     else
     begin
+      S := RemoveAccelerators( Caption );
       GetTextExtentPoint32( Canvas.Handle, PChar( S ), Length( S ), CaptionSize );
     end;
 
@@ -3406,6 +3470,8 @@ begin
                                                 dt_VCenter or dt_SingleLine );
     end;
   end;
+
+  Canvas.Font := Self.Font;
 end; {= TRzCustomGroupBox.Paint =}
 
 
@@ -3430,6 +3496,26 @@ begin
     Invalidate;
   end;
 end;
+
+
+function TRzCustomGroupBox.IsCaptionFontStored: Boolean;
+begin
+  Result := FCaptionFontChanged;
+end;
+
+
+procedure TRzCustomGroupBox.SetCaptionFont( Value: TFont );
+begin
+  FCaptionFont.Assign( Value );
+end;
+
+
+procedure TRzCustomGroupBox.CaptionFontChangeHandler( Sender: TObject );
+begin
+  FCaptionFontChanged := True;
+  Invalidate;
+end;
+
 
 
 
@@ -4598,8 +4684,17 @@ begin
   begin
     if ( not FWrapControls ) and ( FToolbarControls.Count > 0 ) then
     begin
-      Control := FToolbarControls.Items[ FToolbarControls.Count - 1 ].Control;
-      SetShowToolbarPopupButton( Control.Left + Control.Width > Width - FMargin );
+      I := FToolbarControls.Count - 1;
+      Control := FToolbarControls.Items[ I ].Control;
+      while not Control.Visible and ( I > 0 ) do
+      begin
+        Dec( I );
+        Control := FToolbarControls.Items[ I ].Control;
+      end;
+      if Control.Visible then
+        SetShowToolbarPopupButton( Control.Left + Control.Width > Width - FMargin )
+      else
+        SetShowToolbarPopupButton( False );
     end;
 
     XOffset := FMargin;
