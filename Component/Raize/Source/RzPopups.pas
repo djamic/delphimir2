@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -17,6 +17,15 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed issue where pressing the keypad decimal key would not insert the
+      DecimalSeparator character (based on user locale settings) in the
+      TRzCalculator if the DecimalSeparator was something other than a period.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Fixed border display problem in TRzCalendar, TRzTimePicker, and
+      TRzCalculator when running under older versions of Delphi.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Fixed border display problem in TRzCalendar, TRzTimePicker, and
@@ -2107,7 +2116,9 @@ begin
   BorderOuter := fsLowered;
   TabStop := True;
   AutoSize := True;
+  {$IFDEF VCL100_OR_HIGHER}
   DoubleBuffered := True;
+  {$ENDIF}
   AdjustForFont;
 
   CreateMonthPopupMenu;
@@ -3693,7 +3704,9 @@ begin
   BorderOuter := fsLowered;
   TabStop := True;
   AutoSize := True;
+  {$IFDEF VCL100_OR_HIGHER}
   DoubleBuffered := True;
+  {$ENDIF}
   AdjustForFont;
   {&RCI}
 
@@ -4808,7 +4821,9 @@ begin
   BorderOuter := fsLowered;
   TabStop := True;
   AutoSize := True;
+  {$IFDEF VCL100_OR_HIGHER}
   DoubleBuffered := True;
+  {$ENDIF}
   AdjustForFont;
 
   Clear;
@@ -5330,6 +5345,10 @@ begin
     end
     else
       EqualPressed;
+  end
+  else if Key = vk_Decimal then
+  begin
+    DecimalPressed;
   end
   else
   begin

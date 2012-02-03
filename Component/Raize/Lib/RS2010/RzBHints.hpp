@@ -114,6 +114,7 @@ protected:
 	void __fastcall DrawHint(Graphics::TCanvas* Canvas, const Types::TRect &Bounds);
 	void __fastcall DrawBitmapBalloon(Graphics::TCanvas* Canvas);
 	virtual void __fastcall WndProc(Messages::TMessage &msg);
+	HIDESBASE void __fastcall SetColor(Graphics::TColor Value);
 	HIDESBASE void __fastcall SetFont(Graphics::TFont* Value);
 	
 public:
@@ -125,7 +126,7 @@ public:
 	__property PRzBalloonBitmaps Bitmaps = {read=FBitmaps, write=FBitmaps};
 	
 __published:
-	__property Graphics::TColor Color = {read=FColor, write=FColor, nodefault};
+	__property Graphics::TColor Color = {read=FColor, write=SetColor, nodefault};
 	__property int CaptionWidth = {read=FCaptionWidth, write=FCaptionWidth, nodefault};
 	__property System::UnicodeString Caption = {read=FCaption, write=FCaption};
 	__property int CenterThreshold = {read=FCenterThreshold, write=FCenterThreshold, default=80};

@@ -1,6 +1,6 @@
 object RzCaptionEditDlg: TRzCaptionEditDlg
-  Left = 204
-  Top = 113
+  Left = 236
+  Top = 115
   Width = 350
   Height = 250
   Caption = 'Caption/Hint Editor'
@@ -34,6 +34,7 @@ object RzCaptionEditDlg: TRzCaptionEditDlg
       Align = alClient
       ScrollBars = ssVertical
       TabOrder = 0
+      OnKeyPress = EdtCaptionKeyPress
       FrameVisible = True
     end
   end

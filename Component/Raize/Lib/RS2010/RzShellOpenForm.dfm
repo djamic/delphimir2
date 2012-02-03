@@ -1,10 +1,10 @@
 object RzShellOpenSaveForm: TRzShellOpenSaveForm
   Left = 387
   Top = 116
+  Width = 560
+  Height = 420
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Open'
-  ClientHeight = 386
-  ClientWidth = 552
   Color = clBtnFace
   Constraints.MinHeight = 420
   Constraints.MinWidth = 560
@@ -299,7 +299,7 @@ object RzShellOpenSaveForm: TRzShellOpenSaveForm
         Top = 6
         Width = 277
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 5
         TabStop = False
         Visible = False
@@ -310,7 +310,7 @@ object RzShellOpenSaveForm: TRzShellOpenSaveForm
         Width = 277
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 1
         OnSelEndOk = cbxFileTypesSelEndOk
       end

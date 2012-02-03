@@ -66,21 +66,22 @@ class PASCALIMPLEMENTATION TRzCheckListTabStopEditDlg : public Forms::TForm
 	typedef Forms::TForm inherited;
 	
 __published:
-	Rzbutton::TRzButton* btnOK;
-	Rzbutton::TRzButton* btnCancel;
 	Rzpanel::TRzGroupBox* grpPreview;
+	Rzchklst::TRzCheckList* LstPreview;
+	Rzpanel::TRzPanel* RzPanel1;
+	Rzradgrp::TRzRadioGroup* grpTabStopsMode;
 	Rzpanel::TRzGroupBox* grpTabStops;
-	Rzlstbox::TRzListBox* lstTabs;
 	Rzlabel::TRzLabel* lblMin;
 	Rzlabel::TRzLabel* lblMax;
 	Rzlabel::TRzLabel* Label3;
 	Rzlabel::TRzLabel* lblTabNum;
-	Rzchklst::TRzCheckList* LstPreview;
+	Rzlstbox::TRzListBox* lstTabs;
 	Rzbutton::TRzButton* btnAdd;
 	Rzbutton::TRzButton* btnDelete;
 	Rzradchk::TRzCheckBox* chkRightAligned;
 	Rztrkbar::TRzTrackBar* trkTabPos;
-	Rzradgrp::TRzRadioGroup* grpTabStopsMode;
+	Rzbutton::TRzButton* btnOK;
+	Rzbutton::TRzButton* btnCancel;
 	void __fastcall btnAddClick(System::TObject* Sender);
 	void __fastcall btnDeleteClick(System::TObject* Sender);
 	void __fastcall lstTabsClick(System::TObject* Sender);

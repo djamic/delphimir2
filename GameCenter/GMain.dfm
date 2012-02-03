@@ -303,10 +303,6 @@ object frmMain: TfrmMain
       Margins.Bottom = 4
       Caption = 'Account'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GroupBox25: TGroupBox
         Left = 10
         Top = 10
@@ -333,7 +329,7 @@ object frmMain: TfrmMain
           Left = 90
           Top = 25
           Width = 131
-          Height = 23
+          Height = 25
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
@@ -377,166 +373,166 @@ object frmMain: TfrmMain
             Caption = 'ID:'
           end
           object Label32: TLabel
-            Left = 302
+            Left = 266
             Top = 20
-            Width = 26
+            Width = 62
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #23494#30721':'
+            Caption = 'M'#7853't kh'#7849'u:'
           end
           object Label33: TLabel
-            Left = 40
+            Left = -13
             Top = 50
-            Width = 48
+            Width = 101
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #29992#25143#21517#31216':'
+            Caption = 'T'#234'n '#273#259'ng nh'#7853'p:'
           end
           object Label34: TLabel
-            Left = 280
+            Left = 290
             Top = 50
-            Width = 48
+            Width = 38
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #36523#20221#35777#21495':'
+            Caption = 'ID s'#7889':'
           end
           object Label35: TLabel
-            Left = 62
+            Left = 22
             Top = 80
-            Width = 26
+            Width = 66
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #29983#26085':'
+            Caption = 'ng'#224'y sinh:'
           end
           object Label36: TLabel
-            Left = 51
+            Left = 14
             Top = 170
-            Width = 37
+            Width = 74
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #38382#39064#19968':'
+            Caption = 'M'#7897't v'#7845'n '#273#7873':'
           end
           object Label37: TLabel
-            Left = 51
+            Left = 1
             Top = 200
-            Width = 37
+            Width = 87
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #31572#26696#19968':'
+            Caption = 'C'#226'u tr'#7843' l'#7901'i l'#224':'
           end
           object Label38: TLabel
-            Left = 51
+            Left = 12
             Top = 230
-            Width = 37
+            Width = 76
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #38382#39064#20108':'
+            Caption = 'Hai c'#226'u h'#7887'i:'
           end
           object Label39: TLabel
-            Left = 51
+            Left = 19
             Top = 260
-            Width = 37
+            Width = 69
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #31572#26696#20108':'
+            Caption = 'Tr'#7843' l'#7901'i hai:'
           end
           object Label40: TLabel
-            Left = 40
+            Left = -32
             Top = 140
-            Width = 48
+            Width = 120
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #31227#21160#30005#35805':'
+            Caption = #272'i'#7879'n tho'#7841'i di '#273#7897'ng:'
           end
           object Label41: TLabel
-            Left = 291
+            Left = 275
             Top = 80
-            Width = 37
+            Width = 53
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #22791#27880#19968':'
+            Caption = 'L'#432'u '#253' 1:'
           end
           object Label42: TLabel
-            Left = 291
+            Left = 259
             Top = 110
-            Width = 37
+            Width = 69
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #22791#27880#20108':'
+            Caption = 'Ch'#250' gi'#7843'i 2:'
           end
           object Label43: TLabel
-            Left = 50
+            Left = 52
             Top = 293
-            Width = 48
+            Width = 46
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #30005#23376#37038#31665':'
+            Caption = 'E-mail:'
           end
           object Label44: TLabel
-            Left = 62
+            Left = 19
             Top = 110
-            Width = 26
+            Width = 69
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
             Alignment = taRightJustify
-            Caption = #30005#35805':'
+            Caption = #272'i'#7879'n tho'#7841'i:'
           end
           object EditLoginAccount: TEdit
             Left = 100
             Top = 20
             Width = 151
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -550,7 +546,7 @@ object frmMain: TfrmMain
             Left = 340
             Top = 20
             Width = 121
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -563,7 +559,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 50
             Width = 151
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -576,7 +572,7 @@ object frmMain: TfrmMain
             Left = 340
             Top = 50
             Width = 151
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -589,7 +585,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 80
             Width = 151
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -602,7 +598,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 170
             Width = 261
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -615,7 +611,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 200
             Width = 261
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -628,7 +624,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 230
             Width = 261
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -641,7 +637,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 260
             Width = 261
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -654,7 +650,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 140
             Width = 151
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -667,7 +663,7 @@ object frmMain: TfrmMain
             Left = 340
             Top = 80
             Width = 251
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -680,7 +676,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 290
             Width = 261
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -693,7 +689,7 @@ object frmMain: TfrmMain
             Left = 340
             Top = 110
             Width = 251
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -711,7 +707,7 @@ object frmMain: TfrmMain
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #20462#25913#24080#21495#20449#24687
+            Caption = 'S'#7917'a '#273#7893'i c'#225'c th'#244'ng tin t'#224'i kho'#7843'n'
             TabOrder = 13
             OnClick = CkFullEditModeClick
           end
@@ -724,7 +720,7 @@ object frmMain: TfrmMain
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #30830#23450'(&O)'
+            Caption = 'X'#225'c '#273#7883'nh(&O)'
             Enabled = False
             TabOrder = 14
             OnClick = ButtonLoginAccountOKClick
@@ -733,7 +729,7 @@ object frmMain: TfrmMain
             Left = 100
             Top = 110
             Width = 151
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -752,10 +748,6 @@ object frmMain: TfrmMain
       Margins.Bottom = 4
       Caption = 'Server'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object PageControl2: TPageControl
         Left = 600
         Top = 180
@@ -780,18 +772,12 @@ object frmMain: TfrmMain
         Align = alClient
         TabOrder = 1
         TabPosition = tpBottom
-        ExplicitWidth = 512
-        ExplicitHeight = 330
         object TabSheet4: TTabSheet
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
           Caption = 'Server Details'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox1: TGroupBox
             Left = 10
             Top = 10
@@ -873,7 +859,7 @@ object frmMain: TfrmMain
               Left = 170
               Top = 30
               Width = 281
-              Height = 23
+              Height = 25
               Hint = #36755#20837#26381#21153#22120#25152#22312#30446#24405#12290#19968#33324#40664#35748#20026#8220'D:\MirServer\'#8221#12290
               Margins.Left = 4
               Margins.Top = 4
@@ -891,7 +877,7 @@ object frmMain: TfrmMain
               Margins.Top = 4
               Margins.Right = 4
               Margins.Bottom = 4
-              Caption = #27983#35272'(&B)'
+              Caption = 'Duy'#7879't(&B)'
               TabOrder = 1
               Visible = False
             end
@@ -899,7 +885,7 @@ object frmMain: TfrmMain
               Left = 170
               Top = 60
               Width = 281
-              Height = 23
+              Height = 25
               Hint = #26381#21153#22120#31471'BDE '#25968#25454#24211#21517#31216#65292#40664#35748#20026' '#8220'HeroDB'#8221#12290
               Margins.Left = 4
               Margins.Top = 4
@@ -912,7 +898,7 @@ object frmMain: TfrmMain
               Left = 170
               Top = 90
               Width = 201
-              Height = 23
+              Height = 25
               Hint = #36755#20837#28216#25103#30340#21517#31216#12290
               Margins.Left = 4
               Margins.Top = 4
@@ -925,7 +911,7 @@ object frmMain: TfrmMain
               Left = 170
               Top = 120
               Width = 121
-              Height = 23
+              Height = 25
               Hint = #36755#20837#26381#21153#22120#30340#22806#32593'IP'#22320#22336#12290
               Margins.Left = 4
               Margins.Top = 4
@@ -978,7 +964,7 @@ object frmMain: TfrmMain
               Left = 280
               Top = 160
               Width = 61
-              Height = 24
+              Height = 27
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -1024,10 +1010,6 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Caption = 'LoginGate Details'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object ButtonNext2: TButton
             Left = 510
             Top = 329
@@ -1089,7 +1071,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 20
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'X'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1105,7 +1087,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 50
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'Y'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1157,7 +1139,7 @@ object frmMain: TfrmMain
                 Left = 70
                 Top = 20
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -1213,10 +1195,6 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Caption = 'SelGate Details'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox3: TGroupBox
             Left = 10
             Top = 10
@@ -1265,7 +1243,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 20
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'X'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1281,7 +1259,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 50
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'Y'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1344,7 +1322,7 @@ object frmMain: TfrmMain
                 Left = 70
                 Top = 20
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -1356,7 +1334,7 @@ object frmMain: TfrmMain
                 Left = 70
                 Top = 50
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -1425,10 +1403,6 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Caption = 'RunGate Details'
           ImageIndex = 8
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object ButtonPrv4: TButton
             Left = 400
             Top = 329
@@ -1504,7 +1478,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 20
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'X'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1520,7 +1494,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 50
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'Y'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1559,7 +1533,7 @@ object frmMain: TfrmMain
                 Left = 80
                 Top = 20
                 Width = 51
-                Height = 24
+                Height = 27
                 Hint = #35774#32622#24320#21551#28216#25103#32593#20851#25968#37327#65292#19968#33324'200'#20154#20197#19979#30340#24320#19968#20010#32593#20851#65292'400'#20154#20197#19979#30340#24320#20108#20010#32593#20851#65292'400'#20154#20197#19978#30340#24320#19977#20010#32593#20851#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1600,7 +1574,7 @@ object frmMain: TfrmMain
                 Left = 50
                 Top = 20
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -1631,10 +1605,6 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Caption = 'LoginSrv Details'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox9: TGroupBox
             Left = 10
             Top = 10
@@ -1683,7 +1653,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 20
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'X'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1699,7 +1669,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 50
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'Y'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1776,7 +1746,7 @@ object frmMain: TfrmMain
                 Left = 90
                 Top = 20
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -1788,7 +1758,7 @@ object frmMain: TfrmMain
                 Left = 90
                 Top = 50
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -1857,10 +1827,6 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Caption = 'DBSrv Details'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox11: TGroupBox
             Left = 10
             Top = 10
@@ -1909,7 +1875,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 20
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'X'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -1925,7 +1891,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 50
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'Y'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -2039,7 +2005,7 @@ object frmMain: TfrmMain
                 Left = 90
                 Top = 20
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -2051,7 +2017,7 @@ object frmMain: TfrmMain
                 Left = 90
                 Top = 50
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -2095,10 +2061,6 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Caption = 'LogData Details'
           ImageIndex = 5
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox13: TGroupBox
             Left = 10
             Top = 10
@@ -2147,7 +2109,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 20
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'X'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -2163,7 +2125,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 50
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'Y'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -2240,7 +2202,7 @@ object frmMain: TfrmMain
                 Left = 50
                 Top = 20
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -2284,10 +2246,6 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Caption = 'M2Server Details'
           ImageIndex = 6
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object GroupBox15: TGroupBox
             Left = 10
             Top = 10
@@ -2336,7 +2294,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 20
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'X'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -2352,7 +2310,7 @@ object frmMain: TfrmMain
                 Left = 30
                 Top = 50
                 Width = 81
-                Height = 24
+                Height = 27
                 Hint = #21551#21160#31243#24207#31383#21475#22312#23631#24149#19978#30340#20301#32622#65292#24231#26631'Y'#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -2415,7 +2373,7 @@ object frmMain: TfrmMain
                 Left = 85
                 Top = 20
                 Width = 86
-                Height = 24
+                Height = 27
                 Hint = #20154#29289#36215#22987#31561#32423#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -2431,7 +2389,7 @@ object frmMain: TfrmMain
                 Left = 85
                 Top = 50
                 Width = 86
-                Height = 24
+                Height = 27
                 Hint = #27979#35797#27169#24335#20154#29289#36215#22987#37329#24065#25968#12290
                 Margins.Left = 4
                 Margins.Top = 4
@@ -2482,7 +2440,7 @@ object frmMain: TfrmMain
                 Left = 90
                 Top = 20
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -2494,7 +2452,7 @@ object frmMain: TfrmMain
                 Left = 90
                 Top = 50
                 Width = 51
-                Height = 23
+                Height = 25
                 Margins.Left = 4
                 Margins.Top = 4
                 Margins.Right = 4
@@ -2563,10 +2521,6 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Caption = 'Save Details'
           ImageIndex = 7
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object ButtonSave: TButton
             Left = 510
             Top = 329
@@ -2616,10 +2570,6 @@ object frmMain: TfrmMain
       Margins.Bottom = 4
       Caption = 'Backup'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object LabelBackMsg: TLabel
         Left = 480
         Top = 380
@@ -2645,7 +2595,7 @@ object frmMain: TfrmMain
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = #22791#20221#21015#34920
+        Caption = 'Sao l'#432'u danh s'#225'ch'
         TabOrder = 0
         object ListViewDataBackup: TListView
           Left = 10
@@ -2658,14 +2608,15 @@ object frmMain: TfrmMain
           Margins.Bottom = 4
           Columns = <
             item
-              Caption = #25968#25454#30446#24405
+              Caption = 'd'#7919' li'#7879'u th'#432' m'#7909'c'
               Width = 275
             end
             item
-              Caption = #22791#20221#30446#24405
+              Caption = 'Sao l'#432'u th'#432' m'#7909'c'
               Width = 275
             end>
           GridLines = True
+          Items.ItemData = {}
           ReadOnly = True
           RowSelect = True
           TabOrder = 0
@@ -2682,93 +2633,93 @@ object frmMain: TfrmMain
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = #32534#36753
+        Caption = 'bi'#234'n t'#7853'p vi'#234'n'
         TabOrder = 1
         object Label5: TLabel
           Left = 10
           Top = 25
-          Width = 48
+          Width = 112
           Height = 17
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #25968#25454#30446#24405':'
+          Caption = 'Th'#432' m'#7909'c d'#7919' li'#7879'u:'
         end
         object Label6: TLabel
           Left = 10
           Top = 55
-          Width = 48
+          Width = 114
           Height = 17
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #22791#20221#30446#24405':'
+          Caption = 'Sao l'#432'u th'#432' m'#7909'c:'
         end
         object Label7: TLabel
-          Left = 150
+          Left = 215
           Top = 85
-          Width = 11
+          Width = 32
           Height = 17
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #28857
+          Caption = #273'i'#7875'm'
         end
         object Label8: TLabel
-          Left = 250
-          Top = 85
-          Width = 11
+          Left = 338
+          Top = 83
+          Width = 32
           Height = 17
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #20998
+          Caption = #273'i'#7875'm'
         end
         object Label64: TLabel
-          Left = 145
+          Left = 210
           Top = 115
-          Width = 22
+          Width = 21
           Height = 17
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #23567#26102
+          Caption = 'gi'#7901
         end
         object Label65: TLabel
-          Left = 250
-          Top = 115
-          Width = 11
+          Left = 338
+          Top = 113
+          Width = 32
           Height = 17
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #20998
+          Caption = #273'i'#7875'm'
         end
         object RadioButtonBackMode1: TRadioButton
           Left = 10
           Top = 80
-          Width = 61
+          Width = 95
           Height = 21
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #27599#22825
+          Caption = 'm'#7895'i ng'#224'y'
           Checked = True
           TabOrder = 0
           TabStop = True
           OnClick = RadioButtonBackMode1Click
         end
         object RzButtonEditSource: TRzButtonEdit
-          Left = 80
+          Left = 130
           Top = 20
-          Width = 531
+          Width = 481
           Height = 25
           Margins.Left = 4
           Margins.Top = 4
@@ -2780,9 +2731,9 @@ object frmMain: TfrmMain
           OnButtonClick = RzButtonEditSourceButtonClick
         end
         object RzButtonEditDest: TRzButtonEdit
-          Left = 80
+          Left = 130
           Top = 50
-          Width = 531
+          Width = 481
           Height = 25
           Margins.Left = 4
           Margins.Top = 4
@@ -2796,21 +2747,21 @@ object frmMain: TfrmMain
         object RadioButtonBackMode2: TRadioButton
           Left = 10
           Top = 110
-          Width = 61
+          Width = 127
           Height = 21
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #27599#38548
+          Caption = #7903' kho'#7843'ng th'#7901'i gian'
           TabOrder = 3
           OnClick = RadioButtonBackMode2Click
         end
         object RzSpinEditHour1: TRzSpinEdit
-          Left = 80
+          Left = 145
           Top = 80
           Width = 59
-          Height = 23
+          Height = 25
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
@@ -2819,10 +2770,10 @@ object frmMain: TfrmMain
           TabOrder = 4
         end
         object RzSpinEditHour2: TRzSpinEdit
-          Left = 80
+          Left = 145
           Top = 110
           Width = 59
-          Height = 23
+          Height = 25
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
@@ -2831,10 +2782,10 @@ object frmMain: TfrmMain
           TabOrder = 5
         end
         object RzSpinEditMin1: TRzSpinEdit
-          Left = 180
-          Top = 80
+          Left = 268
+          Top = 78
           Width = 59
-          Height = 23
+          Height = 25
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
@@ -2843,22 +2794,22 @@ object frmMain: TfrmMain
           TabOrder = 6
         end
         object CheckBoxBackUp: TCheckBox
-          Left = 280
+          Left = 384
           Top = 100
-          Width = 61
+          Width = 72
           Height = 21
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #22791#20221
+          Caption = 'Sao l'#432'u'
           TabOrder = 7
         end
         object RzSpinEditMin2: TRzSpinEdit
-          Left = 180
-          Top = 110
+          Left = 268
+          Top = 108
           Width = 59
-          Height = 23
+          Height = 25
           Margins.Left = 4
           Margins.Top = 4
           Margins.Right = 4
@@ -2867,7 +2818,7 @@ object frmMain: TfrmMain
           TabOrder = 8
         end
         object CheckBoxZip: TCheckBox
-          Left = 360
+          Left = 464
           Top = 100
           Width = 61
           Height = 21
@@ -2875,7 +2826,7 @@ object frmMain: TfrmMain
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #21387#32553
+          Caption = 'n'#233'n'
           TabOrder = 9
         end
       end
@@ -2888,7 +2839,7 @@ object frmMain: TfrmMain
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = #20462#25913'(&C)'
+        Caption = 's'#432#777'a '#273#244#777'i(&C)'
         TabOrder = 2
         OnClick = ButtonBackChgClick
       end
@@ -2901,7 +2852,7 @@ object frmMain: TfrmMain
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = #21024#38500'(&D)'
+        Caption = 'x'#243'a(&D)'
         TabOrder = 3
         OnClick = ButtonBackDelClick
       end
@@ -2914,7 +2865,7 @@ object frmMain: TfrmMain
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = #22686#21152'(&A)'
+        Caption = 't'#259'ng l'#234'n(&A)'
         TabOrder = 4
         OnClick = ButtonBackAddClick
       end
@@ -2927,7 +2878,7 @@ object frmMain: TfrmMain
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = #21551#21160'(&B)'
+        Caption = 'B'#7855't '#273#7847'u(&B)'
         TabOrder = 5
         OnClick = ButtonBackStartClick
       end
@@ -2940,7 +2891,7 @@ object frmMain: TfrmMain
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = #20445#23384'(&S)'
+        Caption = 'l'#432'u(&S)'
         TabOrder = 6
         OnClick = ButtonBackSaveClick
       end
@@ -2952,10 +2903,6 @@ object frmMain: TfrmMain
       Margins.Bottom = 4
       Caption = 'About'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GroupBox41: TGroupBox
         Left = 10
         Top = 10
@@ -3007,12 +2954,8 @@ object frmMain: TfrmMain
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      Caption = #27979#35797
+      Caption = 'ki'#7875'm tra'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GroupBox29: TGroupBox
         Left = 10
         Top = 0
@@ -3022,7 +2965,7 @@ object frmMain: TfrmMain
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        Caption = #36827#31243#20449#24687
+        Caption = 'X'#7917' l'#253' th'#244'ng tin'
         TabOrder = 0
         object GroupBox30: TGroupBox
           Left = 10
@@ -3033,46 +2976,46 @@ object frmMain: TfrmMain
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #28216#25103#24341#25806
+          Caption = 'tr'#242' ch'#417'i '#273#7897'ng c'#417
           TabOrder = 0
           object Label45: TLabel
             Left = 10
             Top = 25
-            Width = 26
+            Width = 46
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #22320#22336':'
+            Caption = #273#7883'a ch'#7881':'
           end
           object Label46: TLabel
             Left = 10
             Top = 55
-            Width = 37
+            Width = 84
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #26816#26597#30721':'
+            Caption = 'Ki'#7875'm tra m'#227':'
           end
           object Label58: TLabel
             Left = 10
             Top = 85
-            Width = 37
+            Width = 126
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #26816#26597#20018':'
+            Caption = 'Ki'#7875'm tra c'#225'c chu'#7895'i:'
           end
           object EditM2CheckCodeAddr: TEdit
-            Left = 70
+            Left = 105
             Top = 20
             Width = 121
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -3080,10 +3023,10 @@ object frmMain: TfrmMain
             TabOrder = 0
           end
           object EditM2CheckCode: TEdit
-            Left = 70
+            Left = 105
             Top = 50
             Width = 121
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -3099,16 +3042,16 @@ object frmMain: TfrmMain
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #26242#20572#31243#24207
+            Caption = 'T'#7841'm d'#7915'ng'
             TabOrder = 2
             Visible = False
             OnClick = ButtonM2SuspendClick
           end
           object EditM2CheckStr: TEdit
-            Left = 70
+            Left = 144
             Top = 80
-            Width = 251
-            Height = 23
+            Width = 177
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -3125,46 +3068,46 @@ object frmMain: TfrmMain
           Margins.Top = 4
           Margins.Right = 4
           Margins.Bottom = 4
-          Caption = #25968#25454#24211
+          Caption = 'C'#417' s'#7903' d'#7919' li'#7879'u'
           TabOrder = 1
           object Label47: TLabel
             Left = 10
             Top = 25
-            Width = 26
+            Width = 46
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #22320#22336':'
+            Caption = #273#7883'a ch'#7881':'
           end
           object Label48: TLabel
             Left = 10
             Top = 55
-            Width = 37
+            Width = 84
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #26816#26597#30721':'
+            Caption = 'Ki'#7875'm tra m'#227':'
           end
           object Label57: TLabel
             Left = 10
             Top = 85
-            Width = 33
+            Width = 94
             Height = 17
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #26816#26597#20018
+            Caption = 'Ki'#7875'm tra chu'#7895'i'
           end
           object EditDBCheckCodeAddr: TEdit
-            Left = 70
+            Left = 97
             Top = 20
             Width = 121
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -3172,10 +3115,10 @@ object frmMain: TfrmMain
             TabOrder = 0
           end
           object EditDBCheckCode: TEdit
-            Left = 70
+            Left = 97
             Top = 50
             Width = 121
-            Height = 23
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -3191,16 +3134,16 @@ object frmMain: TfrmMain
             Margins.Top = 4
             Margins.Right = 4
             Margins.Bottom = 4
-            Caption = #26242#20572#31243#24207
+            Caption = 'T'#7841'm d'#7915'ng'
             TabOrder = 2
             Visible = False
             OnClick = ButtonM2SuspendClick
           end
           object EditDBCheckStr: TEdit
-            Left = 70
+            Left = 112
             Top = 80
-            Width = 251
-            Height = 23
+            Width = 209
+            Height = 25
             Margins.Left = 4
             Margins.Top = 4
             Margins.Right = 4
@@ -3254,8 +3197,8 @@ object frmMain: TfrmMain
     Enabled = False
     Interval = 500
     OnTimer = TimerCheckDebugTimer
-    Left = 504
-    Top = 96
+    Left = 544
+    Top = 80
   end
   object TimerUpDate: TTimer
     Enabled = False
@@ -3266,7 +3209,7 @@ object frmMain: TfrmMain
   object TimerAutoStartServer: TTimer
     Enabled = False
     OnTimer = TimerAutoStartServerTimer
-    Left = 404
-    Top = 95
+    Left = 452
+    Top = 71
   end
 end

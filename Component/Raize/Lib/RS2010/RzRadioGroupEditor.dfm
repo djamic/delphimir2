@@ -1,8 +1,8 @@
 object RzRadioGroupEditDlg: TRzRadioGroupEditDlg
   Left = 185
   Top = 115
-  Width = 566
-  Height = 303
+  Width = 579
+  Height = 347
   Caption = '- RadioGroup Editor'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,8 +17,8 @@ object RzRadioGroupEditDlg: TRzRadioGroupEditDlg
   TextHeight = 13
   object PnlButtons: TRzPanel
     Left = 0
-    Top = 237
-    Width = 558
+    Top = 277
+    Width = 563
     Height = 32
     Align = alBottom
     BorderOuter = fsNone
@@ -42,7 +42,7 @@ object RzRadioGroupEditDlg: TRzRadioGroupEditDlg
       OnClick = BtnClearClick
     end
     object RzPanel1: TRzPanel
-      Left = 390
+      Left = 395
       Top = 0
       Width = 168
       Height = 32
@@ -75,10 +75,13 @@ object RzRadioGroupEditDlg: TRzRadioGroupEditDlg
     Left = 0
     Top = 0
     Width = 293
-    Height = 237
+    Height = 277
     Align = alLeft
     BorderOuter = fsNone
     TabOrder = 0
+    DesignSize = (
+      293
+      277)
     object Label1: TRzLabel
       Left = 8
       Top = 16
@@ -116,7 +119,8 @@ object RzRadioGroupEditDlg: TRzRadioGroupEditDlg
       Left = 8
       Top = 88
       Width = 277
-      Height = 141
+      Height = 181
+      Anchors = [akLeft, akTop, akBottom]
       ScrollBars = ssBoth
       TabOrder = 0
       WordWrap = False
@@ -138,8 +142,8 @@ object RzRadioGroupEditDlg: TRzRadioGroupEditDlg
   object PnlPreview: TRzPanel
     Left = 293
     Top = 0
-    Width = 265
-    Height = 237
+    Width = 270
+    Height = 277
     Align = alClient
     BorderOuter = fsNone
     BorderWidth = 8
@@ -149,8 +153,8 @@ object RzRadioGroupEditDlg: TRzRadioGroupEditDlg
     object GrpPreview: TRzRadioGroup
       Left = 8
       Top = 8
-      Width = 249
-      Height = 221
+      Width = 254
+      Height = 261
       Align = alClient
       TabOrder = 0
     end

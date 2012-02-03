@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -24,6 +24,18 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed positioning of TRzSpinEdit buttons between XP, Vista, and Windows 7.
+    * Updated display of spin arrows in TRzSpinEdit when running under Windows
+      7 and using FlatButtons.
+    * Fixed display of TRzSpinner themed buttons to accomodate for the
+      difference in styles between XP, Vista, and Windows 7.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Changed the TRzSpinEdit.IntValue property to be of type Int64.
+    * Fixed issue where setting the TRzSpinEdit.Max property to 0 would not get
+      saved to the DFM file even though the default value of Max is 100.0.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -520,15 +532,13 @@ type
     procedure SetMin( const Value: Extended ); virtual;
     procedure SetMax( const Value: Extended ); virtual;
 
-    function GetIntValue: Integer; virtual;
-    procedure SetIntValue( Value: Integer ); virtual;
+    function GetIntValue: Int64; virtual;
+    procedure SetIntValue( Value: Int64 ); virtual;
     function GetValue: Extended; virtual;
     function CheckValue( const Value: Extended ): Extended; virtual;
     procedure SetValue( const Value: Extended); virtual;
 
     function StoreIncrement: Boolean;
-    function StoreMax: Boolean;
-    function StoreMin: Boolean;
     function StorePageSize: Boolean;
   public
     constructor Create( AOwner: TComponent ); override;
@@ -545,7 +555,7 @@ type
       index 2
       read GetButton;
 
-    property IntValue: Integer
+    property IntValue: Int64
       read GetIntValue
       write SetIntValue;
   published
@@ -626,12 +636,12 @@ type
     property Max: Extended
       read FMax
       write SetMax
-      stored StoreMax;
+      stored True;
 
     property Min: Extended
       read FMin
       write SetMin
-      stored StoreMin;
+      stored True;
 
     property Orientation: TOrientation
       read GetOrientation
@@ -2057,13 +2067,13 @@ begin
 end;
 
 
-function TRzSpinEdit.GetIntValue: Integer;
+function TRzSpinEdit.GetIntValue: Int64;
 begin
   Result := Round( GetValue );
 end;
 
 
-procedure TRzSpinEdit.SetIntValue( Value: Integer );
+procedure TRzSpinEdit.SetIntValue( Value: Int64 );
 begin
   SetValue( Value );
 end;
@@ -2142,18 +2152,6 @@ end; {= TRzSpinEdit.SetValue =}
 function TRzSpinEdit.StoreIncrement: Boolean;
 begin
   Result := FIncrement <> DefaultIncrement;
-end;
-
-
-function TRzSpinEdit.StoreMax: Boolean;
-begin
-  Result := FMax <> DefaultMax;
-end;
-
-
-function TRzSpinEdit.StoreMin: Boolean;
-begin
-  Result := FMin <> DefaultMin;
 end;
 
 
@@ -2261,7 +2259,17 @@ begin
           if Ctl3D then
           begin
             if ThemeServices.ThemesEnabled then
-              FButtons.SetBounds( Width - W - 3, -1, W, Height - 2 )
+            begin
+              if RunningAtLeast( winVista ) then
+              begin
+                if FButtons.Orientation = orVertical then
+                  FButtons.SetBounds( Width - W - 3, 0, W, Height - 3 )
+                else
+                  FButtons.SetBounds( Width - W - 3, -1, W, Height - 3 );
+              end
+              else
+                FButtons.SetBounds( Width - W - 3, -1, W, Height - 2 );
+            end
             else
               FButtons.SetBounds( Width - W - 4, 0, W, Height - 4 );
           end
@@ -2271,7 +2279,17 @@ begin
         else
         begin
           if ThemeServices.ThemesEnabled then
-            FButtons.SetBounds( Width - W - 3, -1, W, Height - 2 )
+          begin
+            if RunningAtLeast( winVista ) then
+            begin
+              if FButtons.Orientation = orVertical then
+                FButtons.SetBounds( Width - W - 3, 0, W, Height - 3 )
+              else
+                FButtons.SetBounds( Width - W - 3, -1, W, Height - 3 );
+            end
+            else
+              FButtons.SetBounds( Width - W - 3, -1, W, Height - 2 );
+          end
           else
             FButtons.SetBounds( Width - W - 4, 0, W, Height - 4 );
         end;
@@ -2424,8 +2442,16 @@ begin
   DrawFrame;
   DrawValue;
 
-  DrawButton( saMinusButton, FMinusBtnDown, Rect( 1, 1, FButtonWidth - 1, Height - 1 ) );
-  DrawButton( saPlusButton, FPlusBtnDown, Rect( Width - FButtonWidth + 1, 1, Width - 1, Height - 1 ) );
+  if RunningAtLeast( winVista ) then
+  begin
+    DrawButton( saMinusButton, FMinusBtnDown, Rect( -1, -1, FButtonWidth, Height ) );
+    DrawButton( saPlusButton, FPlusBtnDown, Rect( Width - FButtonWidth, -1, Width + 1, Height ) );
+  end
+  else
+  begin
+    DrawButton( saMinusButton, FMinusBtnDown, Rect( 1, 1, FButtonWidth - 1, Height - 1 ) );
+    DrawButton( saPlusButton, FPlusBtnDown, Rect( Width - FButtonWidth + 1, 1, Width - 1, Height - 1 ) );
+  end;
 
   if Focused and FShowFocusRect then
   begin
@@ -2516,45 +2542,71 @@ begin
   begin
     if Area = saMinusButton then
     begin
-      if Down then
-        ElementDetails := ThemeServices.GetElementDetails( tsDownHorzPressed )
-      else if Enabled then
+      if csDesigning in ComponentState then
       begin
-        if FOverMinusButton then
-          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzHot )
+        if Enabled then
+          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzNormal )
         else
-          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzNormal );
+          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzDisabled );
       end
-      else
-        ElementDetails := ThemeServices.GetElementDetails( tsDownHorzDisabled );
+      else // @ runtime
+      begin
+        if Down then
+          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzPressed )
+        else if Enabled then
+        begin
+          if FOverMinusButton then
+            ElementDetails := ThemeServices.GetElementDetails( tsDownHorzHot )
+          else
+            ElementDetails := ThemeServices.GetElementDetails( tsDownHorzNormal );
+        end
+        else
+          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzDisabled );
+      end;
 
       ThemeServices.DrawElement( Canvas.Handle, ElementDetails, Bounds );
 
-      // Erase right side of the theme element
-      Canvas.Pen.Color := clWindow;
-      Canvas.MoveTo( Bounds.Right - 1, Bounds.Top );
-      Canvas.LineTo( Bounds.Right - 1, Bounds.Bottom );
+      if not RunningAtLeast( winVista ) then
+      begin
+        // Erase right side of the theme element
+        Canvas.Pen.Color := clWindow;
+        Canvas.MoveTo( Bounds.Right - 1, Bounds.Top );
+        Canvas.LineTo( Bounds.Right - 1, Bounds.Bottom );
+      end;
     end
     else // Area = saPlusButton
     begin
-      if Down then
-        ElementDetails := ThemeServices.GetElementDetails( tsUpHorzPressed )
-      else if Enabled then
+      if csDesigning in ComponentState then
       begin
-        if FOverPlusButton then
-          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzHot )
+        if Enabled then
+          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzNormal )
         else
-          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzNormal );
+          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzDisabled );
       end
-      else
-        ElementDetails := ThemeServices.GetElementDetails( tsUpHorzDisabled );
+      else // @ runtime
+      begin
+        if Down then
+          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzPressed )
+        else if Enabled then
+        begin
+          if FOverPlusButton then
+            ElementDetails := ThemeServices.GetElementDetails( tsUpHorzHot )
+          else
+            ElementDetails := ThemeServices.GetElementDetails( tsUpHorzNormal );
+        end
+        else
+          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzDisabled );
+      end;
 
       ThemeServices.DrawElement( Canvas.Handle, ElementDetails, Bounds );
 
-      // Erase left side of the theme element
-      Canvas.Pen.Color := clWindow;
-      Canvas.MoveTo( Bounds.Left, Bounds.Top );
-      Canvas.LineTo( Bounds.Left, Bounds.Bottom );
+      if not RunningAtLeast( winVista ) then
+      begin
+        // Erase left side of the theme element
+        Canvas.Pen.Color := clWindow;
+        Canvas.MoveTo( Bounds.Left, Bounds.Top );
+        Canvas.LineTo( Bounds.Left, Bounds.Bottom );
+      end;
     end;
   end
   else // No XP Themes

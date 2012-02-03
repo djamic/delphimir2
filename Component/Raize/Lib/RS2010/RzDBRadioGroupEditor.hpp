@@ -79,21 +79,19 @@ class PASCALIMPLEMENTATION TRzDBRadioGroupEditDlg : public Forms::TForm
 __published:
 	Rzpanel::TRzPanel* pnlButtons;
 	Rzpanel::TRzPanel* PnlOptions;
-	Rzedit::TRzEdit* edtCaption;
-	Rzlabel::TRzLabel* Label1;
-	Rzlabel::TRzLabel* Label2;
 	Rzbutton::TRzButton* btnLoad;
 	Rzbutton::TRzButton* btnClear;
 	Dialogs::TOpenDialog* dlgOpen;
-	Rztrkbar::TRzTrackBar* trkColumns;
 	Rzpanel::TRzPanel* pnlPreview;
 	Rzdbrgrp::TRzDBRadioGroup* grpPreview;
 	Rzpanel::TRzPanel* RzPanel1;
 	Rzbutton::TRzButton* btnOk;
 	Rzbutton::TRzButton* btnCancel;
-	Rzpanel::TRzPanel* pnlClientArea;
 	Rzgrids::TRzStringGrid* grdItemsValues;
-	Rzpanel::TRzPanel* RzPanel2;
+	Rzlabel::TRzLabel* Label1;
+	Rzedit::TRzEdit* edtCaption;
+	Rzlabel::TRzLabel* Label2;
+	Rztrkbar::TRzTrackBar* trkColumns;
 	void __fastcall edtCaptionChange(System::TObject* Sender);
 	void __fastcall trkColumnsChange(System::TObject* Sender);
 	void __fastcall btnLoadClick(System::TObject* Sender);

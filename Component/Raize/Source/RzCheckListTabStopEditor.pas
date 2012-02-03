@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -73,21 +73,22 @@ type
 
 
   TRzCheckListTabStopEditDlg = class(TForm)
-    btnOK: TRzButton;
-    btnCancel: TRzButton;
     grpPreview: TRzGroupBox;
+    LstPreview: TRzCheckList;
+    RzPanel1: TRzPanel;
+    grpTabStopsMode: TRzRadioGroup;
     grpTabStops: TRzGroupBox;
-    lstTabs: TRzListBox;
     lblMin: TRzLabel;
     lblMax: TRzLabel;
     Label3: TRzLabel;
     lblTabNum: TRzLabel;
-    LstPreview: TRzCheckList;
+    lstTabs: TRzListBox;
     btnAdd: TRzButton;
     btnDelete: TRzButton;
     chkRightAligned: TRzCheckBox;
     trkTabPos: TRzTrackBar;
-    grpTabStopsMode: TRzRadioGroup;
+    btnOK: TRzButton;
+    btnCancel: TRzButton;
     procedure btnAddClick(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
     procedure lstTabsClick(Sender: TObject);

@@ -57,6 +57,7 @@ private:
 	int FStartYPos;
 	int FVerticalSpacing;
 	int FItemHeight;
+	bool FItemHeightChanged;
 	int FGlyphWidth;
 	int FGlyphHeight;
 	int FNumGlyphs;
@@ -77,6 +78,9 @@ private:
 	Graphics::TColor FItemHotTrackColor;
 	Rzcommon::TRzHotTrackColorType FItemHotTrackColorType;
 	Graphics::TColor FItemHighlightColor;
+	bool FReadOnly;
+	Graphics::TColor FReadOnlyColor;
+	bool FReadOnlyColorOnFocus;
 	TRzIndexChangingEvent FOnChanging;
 	void __fastcall ReadOldFlatProp(Classes::TReader* Reader);
 	void __fastcall ButtonClick(System::TObject* Sender);
@@ -94,7 +98,6 @@ protected:
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	virtual void __fastcall SetButtonCount(int Value);
-	virtual void __fastcall ArrangeButtons(void);
 	virtual void __fastcall UpdateButtons(void);
 	virtual void __fastcall ReadState(Classes::TReader* Reader);
 	virtual bool __fastcall CanModify(void);
@@ -124,6 +127,9 @@ protected:
 	virtual void __fastcall SetTextHighlightColor(Graphics::TColor Value);
 	virtual void __fastcall SetTextShadowColor(Graphics::TColor Value);
 	virtual void __fastcall SetTextShadowDepth(int Value);
+	virtual void __fastcall SetReadOnly(bool Value);
+	virtual void __fastcall SetReadOnlyColor(Graphics::TColor Value);
+	virtual void __fastcall SetReadOnlyColorOnFocus(bool Value);
 	virtual void __fastcall SetSpaceEvenly(bool Value);
 	virtual void __fastcall SetStartPos(int Index, int Value);
 	virtual void __fastcall SetTextStyle(Rzcommon::TTextStyle Value);
@@ -143,7 +149,7 @@ protected:
 	__property Graphics::TColor ItemHotTrackColor = {read=FItemHotTrackColor, write=SetItemHotTrackColor, default=1350640};
 	__property Rzcommon::TRzHotTrackColorType ItemHotTrackColorType = {read=FItemHotTrackColorType, write=SetItemHotTrackColorType, default=1};
 	__property Graphics::TFont* ItemFont = {read=FItemFont, write=SetItemFont, stored=FItemFontChanged};
-	__property int ItemHeight = {read=FItemHeight, write=SetItemHeight, default=17};
+	__property int ItemHeight = {read=FItemHeight, write=SetItemHeight, stored=FItemHeightChanged, nodefault};
 	__property int ItemIndex = {read=FItemIndex, write=SetItemIndex, default=-1};
 	__property bool ItemEnabled[int Index] = {read=GetItemEnabled, write=SetItemEnabled};
 	__property Classes::TStrings* Items = {read=FItems, write=SetItems};
@@ -151,6 +157,9 @@ protected:
 	__property Graphics::TColor TextHighlightColor = {read=FTextHighlightColor, write=SetTextHighlightColor, default=-16777196};
 	__property Graphics::TColor TextShadowColor = {read=FTextShadowColor, write=SetTextShadowColor, default=-16777200};
 	__property int TextShadowDepth = {read=FTextShadowDepth, write=SetTextShadowDepth, default=2};
+	__property bool ReadOnly = {read=FReadOnly, write=SetReadOnly, default=0};
+	__property Graphics::TColor ReadOnlyColor = {read=FReadOnlyColor, write=SetReadOnlyColor, default=-16777192};
+	__property bool ReadOnlyColorOnFocus = {read=FReadOnlyColorOnFocus, write=SetReadOnlyColorOnFocus, default=0};
 	__property bool SpaceEvenly = {read=FSpaceEvenly, write=SetSpaceEvenly, default=0};
 	__property int StartXPos = {read=FStartXPos, write=SetStartPos, index=1, default=8};
 	__property int StartYPos = {read=FStartYPos, write=SetStartPos, index=2, default=2};
@@ -167,6 +176,7 @@ protected:
 public:
 	__fastcall virtual TRzCustomRadioGroup(Classes::TComponent* AOwner);
 	__fastcall virtual ~TRzCustomRadioGroup(void);
+	virtual void __fastcall ArrangeButtons(void);
 	DYNAMIC void __fastcall FlipChildren(bool AllLevels);
 public:
 	/* TWinControl.CreateParented */ inline __fastcall TRzCustomRadioGroup(HWND ParentWindow) : Rzpanel::TRzCustomGroupBox(ParentWindow) { }
@@ -200,6 +210,7 @@ __published:
 	__property BorderSides = {default=15};
 	__property BorderWidth = {default=0};
 	__property Caption;
+	__property CaptionFont;
 	__property Color = {default=-16777201};
 	__property Columns = {default=1};
 	__property Constraints;
@@ -227,7 +238,7 @@ __published:
 	__property ItemHotTrackColor = {default=1350640};
 	__property ItemHotTrackColorType = {default=1};
 	__property ItemFont;
-	__property ItemHeight = {default=17};
+	__property ItemHeight;
 	__property ItemIndex = {default=-1};
 	__property Items;
 	__property LightTextStyle = {default=0};
@@ -241,6 +252,9 @@ __published:
 	__property TextShadowColor = {default=-16777200};
 	__property TextShadowDepth = {default=2};
 	__property Touch;
+	__property ReadOnly = {default=0};
+	__property ReadOnlyColor = {default=-16777192};
+	__property ReadOnlyColorOnFocus = {default=0};
 	__property ShowHint;
 	__property SpaceEvenly = {default=0};
 	__property StartXPos = {index=1, default=8};
@@ -304,6 +318,7 @@ private:
 	int FStartYPos;
 	int FVerticalSpacing;
 	int FItemHeight;
+	bool FItemHeightChanged;
 	int FGlyphWidth;
 	int FGlyphHeight;
 	int FNumGlyphs;
@@ -345,7 +360,6 @@ private:
 protected:
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	virtual void __fastcall SetCheckCount(int Value);
-	virtual void __fastcall ArrangeChecks(void);
 	virtual void __fastcall UpdateChecks(void);
 	int __fastcall GetIndex(Rzradchk::TRzCheckBox* CheckBox);
 	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
@@ -405,7 +419,7 @@ protected:
 	__property Graphics::TColor ItemHotTrackColor = {read=FItemHotTrackColor, write=SetItemHotTrackColor, default=1350640};
 	__property Rzcommon::TRzHotTrackColorType ItemHotTrackColorType = {read=FItemHotTrackColorType, write=SetItemHotTrackColorType, default=1};
 	__property Graphics::TFont* ItemFont = {read=FItemFont, write=SetItemFont, stored=FItemFontChanged};
-	__property int ItemHeight = {read=FItemHeight, write=SetItemHeight, default=17};
+	__property int ItemHeight = {read=FItemHeight, write=SetItemHeight, stored=FItemHeightChanged, nodefault};
 	__property bool ItemChecked[int Index] = {read=GetItemChecked, write=SetItemChecked};
 	__property bool ItemEnabled[int Index] = {read=GetItemEnabled, write=SetItemEnabled};
 	__property Stdctrls::TCheckBoxState ItemState[int Index] = {read=GetItemState, write=SetItemState};
@@ -433,6 +447,7 @@ protected:
 public:
 	__fastcall virtual TRzCustomCheckGroup(Classes::TComponent* AOwner);
 	__fastcall virtual ~TRzCustomCheckGroup(void);
+	virtual void __fastcall ArrangeChecks(void);
 	DYNAMIC void __fastcall FlipChildren(bool AllLevels);
 public:
 	/* TWinControl.CreateParented */ inline __fastcall TRzCustomCheckGroup(HWND ParentWindow) : Rzpanel::TRzCustomGroupBox(ParentWindow) { }
@@ -468,6 +483,7 @@ __published:
 	__property BorderSides = {default=15};
 	__property BorderWidth = {default=0};
 	__property Caption;
+	__property CaptionFont;
 	__property Color = {default=-16777201};
 	__property Columns = {default=1};
 	__property Constraints;
@@ -494,7 +510,7 @@ __published:
 	__property ItemHotTrackColor = {default=1350640};
 	__property ItemHotTrackColorType = {default=1};
 	__property ItemFont;
-	__property ItemHeight = {default=17};
+	__property ItemHeight;
 	__property Items;
 	__property LightTextStyle = {default=0};
 	__property ParentBiDiMode = {default=1};

@@ -1,9 +1,9 @@
 object RzLookupForm: TRzLookupForm
   Left = 209
   Top = 123
+  Width = 275
+  Height = 268
   Caption = 'Enter your own caption'
-  ClientHeight = 234
-  ClientWidth = 267
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clBlack

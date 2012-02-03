@@ -1,8 +1,8 @@
 object RzDBRadioGroupEditDlg: TRzDBRadioGroupEditDlg
   Left = 330
   Top = 124
-  Width = 590
-  Height = 321
+  Width = 608
+  Height = 333
   Caption = '- DBRadioGroup Editor'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,8 +17,8 @@ object RzDBRadioGroupEditDlg: TRzDBRadioGroupEditDlg
   TextHeight = 13
   object pnlButtons: TRzPanel
     Left = 0
-    Top = 254
-    Width = 582
+    Top = 262
+    Width = 592
     Height = 33
     Align = alBottom
     BorderOuter = fsNone
@@ -42,7 +42,7 @@ object RzDBRadioGroupEditDlg: TRzDBRadioGroupEditDlg
       OnClick = btnClearClick
     end
     object RzPanel1: TRzPanel
-      Left = 416
+      Left = 426
       Top = 0
       Width = 166
       Height = 33
@@ -76,84 +76,68 @@ object RzDBRadioGroupEditDlg: TRzDBRadioGroupEditDlg
     Left = 0
     Top = 0
     Width = 305
-    Height = 254
+    Height = 262
     Align = alLeft
     BorderOuter = fsNone
     TabOrder = 0
-    object pnlClientArea: TRzPanel
-      Left = 0
-      Top = 85
-      Width = 305
-      Height = 169
-      Align = alClient
-      BorderOuter = fsNone
-      BorderWidth = 4
-      TabOrder = 0
-      object grdItemsValues: TRzStringGrid
-        Left = 4
-        Top = 4
-        Width = 297
-        Height = 161
-        Align = alClient
-        ColCount = 3
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowMoving, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking]
-        TabOrder = 0
-        OnClick = grdItemsValuesClick
-        FrameVisible = True
-        OnResize = grdItemsValuesResize
-      end
+    DesignSize = (
+      305
+      262)
+    object Label1: TRzLabel
+      Left = 8
+      Top = 16
+      Width = 44
+      Height = 13
+      Caption = 'Caption'
+      ParentColor = False
     end
-    object RzPanel2: TRzPanel
-      Left = 0
-      Top = 0
-      Width = 305
-      Height = 85
-      Align = alTop
-      BorderOuter = fsNone
+    object Label2: TRzLabel
+      Left = 8
+      Top = 48
+      Width = 50
+      Height = 13
+      Caption = 'Columns'
+      ParentColor = False
+    end
+    object edtCaption: TRzEdit
+      Left = 76
+      Top = 12
+      Width = 216
+      Height = 21
+      FrameVisible = True
+      TabOrder = 0
+      OnChange = edtCaptionChange
+    end
+    object trkColumns: TRzTrackBar
+      Left = 68
+      Top = 35
+      Width = 233
+      Min = 1
+      Position = 1
+      TickStyle = tkOwnerDraw
+      OnChange = trkColumnsChange
+      OnDrawTick = trkColumnsDrawTick
       TabOrder = 1
-      object Label2: TRzLabel
-        Left = 8
-        Top = 48
-        Width = 50
-        Height = 13
-        Caption = 'Columns'
-        ParentColor = False
-      end
-      object Label1: TRzLabel
-        Left = 8
-        Top = 16
-        Width = 44
-        Height = 13
-        Caption = 'Caption'
-        ParentColor = False
-      end
-      object trkColumns: TRzTrackBar
-        Left = 68
-        Top = 35
-        Width = 233
-        Min = 1
-        Position = 1
-        TickStyle = tkOwnerDraw
-        OnChange = trkColumnsChange
-        OnDrawTick = trkColumnsDrawTick
-        TabOrder = 0
-      end
-      object edtCaption: TRzEdit
-        Left = 76
-        Top = 12
-        Width = 216
-        Height = 21
-        FrameVisible = True
-        TabOrder = 1
-        OnChange = edtCaptionChange
-      end
+    end
+    object grdItemsValues: TRzStringGrid
+      Left = 10
+      Top = 87
+      Width = 282
+      Height = 167
+      Anchors = [akLeft, akTop, akBottom]
+      ColCount = 3
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowMoving, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking]
+      TabOrder = 2
+      OnClick = grdItemsValuesClick
+      FrameVisible = True
+      OnResize = grdItemsValuesResize
     end
   end
   object pnlPreview: TRzPanel
     Left = 305
     Top = 0
-    Width = 277
-    Height = 254
+    Width = 287
+    Height = 262
     Align = alClient
     BorderOuter = fsNone
     BorderWidth = 8
@@ -163,8 +147,8 @@ object RzDBRadioGroupEditDlg: TRzDBRadioGroupEditDlg
     object grpPreview: TRzDBRadioGroup
       Left = 8
       Top = 8
-      Width = 261
-      Height = 238
+      Width = 271
+      Height = 246
       Align = alClient
       TabOrder = 0
     end

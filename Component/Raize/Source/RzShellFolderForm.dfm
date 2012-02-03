@@ -1,9 +1,9 @@
 object RzSelectFolderForm: TRzSelectFolderForm
   Left = 444
   Top = 113
+  Width = 383
+  Height = 359
   BorderIcons = [biSystemMenu, biMaximize]
-  ClientHeight = 325
-  ClientWidth = 358
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -67,7 +67,7 @@ object RzSelectFolderForm: TRzSelectFolderForm
   object ButtonPanel: TPanel
     Left = 0
     Top = 277
-    Width = 358
+    Width = 375
     Height = 29
     Align = alBottom
     BevelOuter = bvNone
@@ -97,7 +97,7 @@ object RzSelectFolderForm: TRzSelectFolderForm
   object RzStatusBar1: TRzStatusBar
     Left = 0
     Top = 306
-    Width = 358
+    Width = 375
     Height = 19
     SimpleFrameStyle = fsNone
     SimpleStatus = True

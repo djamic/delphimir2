@@ -81,6 +81,7 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMExit(Messages::TWMNoParams &Msg);
 	HIDESBASE MESSAGE void __fastcall WMCut(Messages::TMessage &Msg);
 	HIDESBASE MESSAGE void __fastcall WMPaste(Messages::TMessage &Msg);
+	MESSAGE void __fastcall WMClear(Messages::TMessage &Msg);
 	MESSAGE void __fastcall WMUndo(Messages::TMessage &Msg);
 	MESSAGE void __fastcall CMGetDataLink(Messages::TMessage &Msg);
 	
@@ -252,8 +253,8 @@ protected:
 	virtual void __fastcall SetIntegersOnly(bool Value);
 	virtual void __fastcall SetMin(const System::Extended Value);
 	virtual void __fastcall SetMax(const System::Extended Value);
-	virtual int __fastcall GetIntValue(void);
-	virtual void __fastcall SetIntValue(int Value);
+	virtual __int64 __fastcall GetIntValue(void);
+	virtual void __fastcall SetIntValue(__int64 Value);
 	virtual System::Extended __fastcall GetValue(void);
 	virtual System::Extended __fastcall CheckValue(const System::Extended Value, bool &KeepFocusOnEdit);
 	virtual void __fastcall SetValue(const System::Extended Value);
@@ -263,7 +264,7 @@ protected:
 public:
 	__fastcall virtual TRzDBNumericEdit(Classes::TComponent* AOwner);
 	__fastcall virtual ~TRzDBNumericEdit(void);
-	__property int IntValue = {read=GetIntValue, write=SetIntValue, nodefault};
+	__property __int64 IntValue = {read=GetIntValue, write=SetIntValue};
 	__property bool Modified = {read=FModified, nodefault};
 	
 __published:
@@ -277,8 +278,8 @@ __published:
 	__property bool IntegersOnly = {read=FIntegersOnly, write=SetIntegersOnly, default=1};
 	__property System::Extended Max = {read=FMax, write=SetMax};
 	__property System::Extended Min = {read=FMin, write=SetMin};
-	__property System::Extended Value = {read=GetValue, write=SetValue};
 	__property System::UnicodeString DisplayFormat = {read=FDisplayFormat, write=SetDisplayFormat};
+	__property System::Extended Value = {read=GetValue, write=SetValue};
 	__property Rzedit::TRzRangeErrorEvent OnRangeError = {read=FOnRangeError, write=FOnRangeError};
 	__property Alignment = {default=1};
 	__property FlatButtonColor = {default=-16777201};

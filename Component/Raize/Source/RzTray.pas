@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -840,7 +840,7 @@ end;
 
 {$IFDEF VCL100_OR_HIGHER}
 function MainFormOnTaskBar: Boolean;
-{$IFDEF VCL100}
+{$IFNDEF VCL105_OR_HIGHER}
 var
   MainFormStyle: Integer;
 {$ENDIF}

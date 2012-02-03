@@ -1,14 +1,14 @@
 object frmMain: TfrmMain
   Left = 381
   Top = 211
-  Caption = 'frmMain'
-  ClientHeight = 224
+  Caption = 'Login Gate'
+  ClientHeight = 243
   ClientWidth = 425
   Color = clBtnFace
   Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
-  Font.Name = '??'
+  Font.Name = 'Arial Unicode MS'
   Font.Style = []
   Menu = MainMenu
   OldCreateOrder = False
@@ -18,7 +18,7 @@ object frmMain: TfrmMain
   TextHeight = 16
   object StatusBar: TRzStatusBar
     Left = 0
-    Top = 205
+    Top = 224
     Width = 425
     Height = 19
     Margins.Left = 4
@@ -146,19 +146,21 @@ object frmMain: TfrmMain
     Left = 0
     Top = 37
     Width = 425
-    Height = 168
+    Height = 187
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
     Align = alClient
     BorderOuter = fsNone
+    PopupMenu = PopupMenu
     TabOrder = 2
+    UseDockManager = False
     object ListViewLog: TRzListView
       Left = 0
       Top = 0
       Width = 425
-      Height = 168
+      Height = 187
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4

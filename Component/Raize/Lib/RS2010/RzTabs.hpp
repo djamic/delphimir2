@@ -304,6 +304,8 @@ public:
 
 typedef void __fastcall (__closure *TRzTabOrderChangeEvent)(System::TObject* Sender, int OldIndex, int NewIndex);
 
+typedef void __fastcall (__closure *TRzTabDraggingEvent)(System::TObject* Sender, int TabIndex, bool &AllowDrag);
+
 typedef void __fastcall (__closure *TRzTabCloseEvent)(System::TObject* Sender, bool &AllowClose);
 
 typedef void __fastcall (__closure *TRzTabChangingEvent)(System::TObject* Sender, int NewIndex, bool &AllowChange);
@@ -469,6 +471,7 @@ private:
 	int FLastMoveTabIndex;
 	bool FMoveTabIndicatorVisible;
 	Graphics::TColor FDragIndicatorColor;
+	Classes::TNotifyEvent FOnAlignControls;
 	Classes::TNotifyEvent FOnPageChange;
 	Classes::TNotifyEvent FOnChange;
 	TRzTabChangingEvent FOnChanging;
@@ -479,6 +482,7 @@ private:
 	TRzPaintTabBackgroundEvent FOnPaintTabBackground;
 	Classes::TNotifyEvent FOnTabClick;
 	TRzTabOrderChangeEvent FOnTabOrderChange;
+	TRzTabDraggingEvent FOnTabDragging;
 	Classes::TNotifyEvent FOnScrolledTabs;
 	void __fastcall AddCommand(const int Command);
 	void __fastcall AddCommandPt(const int Command, const Types::TPoint &APoint);
@@ -589,6 +593,7 @@ protected:
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall DragOver(System::TObject* Source, int X, int Y, Controls::TDragState State, bool &Accept);
 	DYNAMIC void __fastcall TabOrderChange(int OldIndex, int NewIndex);
+	DYNAMIC bool __fastcall CanDragTab(int TabIndex);
 	DYNAMIC void __fastcall PageChange(void);
 	DYNAMIC bool __fastcall CanClose(void);
 	virtual void __fastcall SetAlignTabs(bool Value);
@@ -698,6 +703,7 @@ protected:
 	__property bool UseColoredTabs = {read=FUseColoredTabs, write=SetUseColoredTabs, default=0};
 	__property bool Transparent = {read=FTransparent, write=SetTransparent, default=0};
 	__property bool UseGradients = {read=FUseGradients, write=SetUseGradients, default=1};
+	__property Classes::TNotifyEvent OnAlignControls = {read=FOnAlignControls, write=FOnAlignControls};
 	__property Classes::TNotifyEvent OnPageChange = {read=FOnPageChange, write=FOnPageChange};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property TRzTabChangingEvent OnChanging = {read=FOnChanging, write=FOnChanging};
@@ -707,6 +713,7 @@ protected:
 	__property TRzPaintCardBackgroundEvent OnPaintCardBackground = {read=FOnPaintCardBackground, write=FOnPaintCardBackground};
 	__property TRzPaintTabBackgroundEvent OnPaintTabBackground = {read=FOnPaintTabBackground, write=FOnPaintTabBackground};
 	__property Classes::TNotifyEvent OnTabClick = {read=FOnTabClick, write=FOnTabClick};
+	__property TRzTabDraggingEvent OnTabDragging = {read=FOnTabDragging, write=FOnTabDragging};
 	__property TRzTabOrderChangeEvent OnTabOrderChange = {read=FOnTabOrderChange, write=FOnTabOrderChange};
 	__property Classes::TNotifyEvent OnScrolledTabs = {read=FOnScrolledTabs, write=FOnScrolledTabs};
 	
@@ -1055,6 +1062,7 @@ __published:
 	__property OnMouseDown;
 	__property OnMouseMove;
 	__property OnMouseUp;
+	__property OnAlignControls;
 	__property OnPageChange;
 	__property OnPaintBackground;
 	__property OnPaintCardBackground;
@@ -1062,6 +1070,7 @@ __published:
 	__property OnStartDock;
 	__property OnStartDrag;
 	__property OnTabClick;
+	__property OnTabDragging;
 	__property OnTabOrderChange;
 	__property OnScrolledTabs;
 	__property OnUnDock;
@@ -1285,6 +1294,7 @@ __published:
 	__property OnStartDock;
 	__property OnStartDrag;
 	__property OnTabClick;
+	__property OnTabDragging;
 	__property OnTabOrderChange;
 	__property OnScrolledTabs;
 	__property OnUnDock;

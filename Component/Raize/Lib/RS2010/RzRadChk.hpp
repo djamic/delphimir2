@@ -61,6 +61,7 @@ class PASCALIMPLEMENTATION TRzCustomGlyphButton : public Rzbutton::TRzCustomButt
 private:
 	Classes::TAlignment FAlignment;
 	bool FAutoSize;
+	bool FWordWrap;
 	Graphics::TColor FFrameColor;
 	int FNumGlyphs;
 	Graphics::TBitmap* FCustomGlyphs;
@@ -77,6 +78,8 @@ private:
 	Graphics::TColor FReadOnlyColor;
 	int FGlyphWidth;
 	int FGlyphHeight;
+	int FThemedGlyphWidth;
+	int FThemedGlyphHeight;
 	bool FTabOnEnter;
 	Rzcommon::TRzButtonHotTrackStyle FHotTrackStyle;
 	Rzcommon::TRzFrameController* FFrameController;
@@ -103,6 +106,7 @@ protected:
 	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Loaded(void);
 	DYNAMIC void __fastcall AdjustBounds(void);
+	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	DYNAMIC void __fastcall ActionChange(System::TObject* Sender, bool CheckDefaults);
 	DYNAMIC Controls::TControlActionLinkClass __fastcall GetActionLinkClass(void);
 	virtual void __fastcall CustomFramingChanged(void);
@@ -137,6 +141,7 @@ protected:
 	virtual void __fastcall SetTransparent(bool Value);
 	virtual void __fastcall SetTransparentColor(Graphics::TColor Value);
 	virtual void __fastcall SetWinMaskColor(Graphics::TColor Value);
+	virtual void __fastcall SetWordWrap(bool Value);
 	__property Classes::TLeftRight Alignment = {read=FAlignment, write=SetAlignment, default=1};
 	__property bool AutoSize = {read=FAutoSize, write=SetAutoSize, default=1};
 	__property bool Checked = {read=GetChecked, write=SetChecked, stored=IsCheckedStored, default=0};
@@ -156,6 +161,7 @@ protected:
 	__property Graphics::TColor TransparentColor = {read=FTransparentColor, write=SetTransparentColor, default=32896};
 	__property bool UseCustomGlyphs = {read=FUseCustomGlyphs, write=SetUseCustomGlyphs, default=0};
 	__property Graphics::TColor WinMaskColor = {read=FWinMaskColor, write=SetWinMaskColor, default=65280};
+	__property bool WordWrap = {read=FWordWrap, write=SetWordWrap, default=0};
 	
 public:
 	__fastcall virtual TRzCustomGlyphButton(Classes::TComponent* AOwner);
@@ -268,6 +274,7 @@ __published:
 	__property Visible = {default=1};
 	__property Width;
 	__property WinMaskColor = {default=65280};
+	__property WordWrap = {default=0};
 	__property OnClick;
 	__property OnContextPopup;
 	__property OnDblClick;
@@ -398,6 +405,7 @@ __published:
 	__property Visible = {default=1};
 	__property Width;
 	__property WinMaskColor = {default=65280};
+	__property WordWrap = {default=0};
 	__property OnClick;
 	__property OnContextPopup;
 	__property OnDragDrop;

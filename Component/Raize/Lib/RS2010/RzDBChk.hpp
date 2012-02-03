@@ -140,6 +140,7 @@ __published:
 	__property UseCustomGlyphs = {default=0};
 	__property Visible = {default=1};
 	__property WinMaskColor = {default=65280};
+	__property WordWrap = {default=0};
 	__property OnClick;
 	__property OnContextPopup;
 	__property OnDragDrop;

@@ -1,8 +1,8 @@
 object frmMain: TfrmMain
   Left = 245
   Top = 117
-  Width = 802
-  Height = 564
+  Width = 972
+  Height = 605
   Caption = 'Raize Components 5 Demo'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,10 +18,10 @@ object frmMain: TfrmMain
   PixelsPerInch = 96
   TextHeight = 13
   object pnlNotes: TRzSizePanel
-    Left = 555
+    Left = 717
     Top = 44
     Width = 239
-    Height = 447
+    Height = 484
     Align = alRight
     HotSpotColor = cl3DLight
     HotSpotDotColor = 7879740
@@ -33,7 +33,7 @@ object frmMain: TfrmMain
       Left = 8
       Top = 0
       Width = 231
-      Height = 447
+      Height = 484
       Align = alClient
       Color = 13170170
       ScrollBars = ssVertical
@@ -44,8 +44,8 @@ object frmMain: TfrmMain
   end
   object sbrMain: TRzStatusBar
     Left = 0
-    Top = 491
-    Width = 794
+    Top = 528
+    Width = 956
     Height = 19
     AutoStyle = False
     BorderInner = fsNone
@@ -115,7 +115,7 @@ object frmMain: TfrmMain
     object RzVersionInfoStatus1: TRzVersionInfoStatus
       Left = 548
       Top = 0
-      Width = 246
+      Width = 408
       Height = 19
       Align = alClient
       Field = vifCopyright
@@ -125,7 +125,7 @@ object frmMain: TfrmMain
   object tbrMain: TRzToolbar
     Left = 0
     Top = 0
-    Width = 794
+    Width = 956
     Height = 44
     Images = imlMain
     RowHeight = 40
@@ -325,7 +325,7 @@ object frmMain: TfrmMain
     Left = 0
     Top = 44
     Width = 187
-    Height = 447
+    Height = 484
     GradientPath = gpBottomToTop
     HotSpotColor = cl3DLight
     HotSpotDotColor = 7879740
@@ -338,7 +338,7 @@ object frmMain: TfrmMain
       Left = 0
       Top = 0
       Width = 180
-      Height = 447
+      Height = 484
       GradientColorStart = 9229030
       GradientColorStop = 5607865
       GroupBorderSize = 8
@@ -533,12 +533,13 @@ object frmMain: TfrmMain
   object pgcWorkArea: TRzPageControl
     Left = 187
     Top = 44
-    Width = 368
-    Height = 447
+    Width = 530
+    Height = 484
     ActivePage = tabWelcome
     ActivePageDefault = tabWelcome
     Align = alClient
     FlatColor = 10524310
+    ParentColor = False
     ShowFocusRect = False
     ShowShadow = False
     TabOrder = 4
@@ -550,8 +551,8 @@ object frmMain: TfrmMain
       object pnlWelcomeImage: TRzPanel
         Left = 0
         Top = 35
-        Width = 366
-        Height = 410
+        Width = 528
+        Height = 447
         Align = alClient
         BorderOuter = fsNone
         Color = clWhite
@@ -559,8 +560,8 @@ object frmMain: TfrmMain
         object imgWelcome: TImage
           Left = 0
           Top = 0
-          Width = 366
-          Height = 410
+          Width = 528
+          Height = 447
           Align = alClient
           AutoSize = True
           Picture.Data = {
@@ -7279,7 +7280,7 @@ object frmMain: TfrmMain
       object pnlHeader: TRzPanel
         Left = 0
         Top = 0
-        Width = 366
+        Width = 528
         Height = 35
         Align = alTop
         Alignment = taLeftJustify

@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -15,6 +15,20 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed problem where the Copy toolbar button was not enabled after clicking
+      the Select All button.
+    * Updated the Open/Save dialogs to use new Vista/Windows 7 versions if
+      available.
+    * Cleaned up the appearance of the string list editor.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Fixed problem with Indent and Unindent operations in the Raize String List
+      Editor.
+    * The Tab key can now be used to tab to the OK and Cancel buttons. Press
+      Ctrl+Tab to insert a tab character (#9) into the edit area.
+    * Added a new Select All button to the Raize String List Editor toolbar.
   ------------------------------------------------------------------------------
   4.0    (23 Dec 2005)
     * Fixed positioning of Raize String List Editor under Delphi 2005 and
@@ -58,7 +72,7 @@ uses
   Mask,
   RzEdit,
   RzButton, 
-  ImgList, RzShellDialogs;
+  ImgList;
 
 type
   TRzStringListProperty = class( TPropertyEditor )
@@ -88,13 +102,8 @@ type
     RzPanel2: TRzPanel;
     btnOk: TRzButton;
     btnCancel: TRzButton;
-    pnlStatusBar: TRzPanel;
-    stsLine: TRzFieldStatus;
-    stsColumn: TRzFieldStatus;
-    stsLineCount: TRzStatusPane;
     pnlWorkSpace: TRzPanel;
     edtStrings: TRzMemo;
-    pbrPrint: TRzProgressStatus;
     btnCodeEditor: TRzButton;
     mnuSelectAll: TMenuItem;
     ImageList1: TImageList;
@@ -120,8 +129,15 @@ type
     RzSpacer7: TRzSpacer;
     btnSetTabSize: TRzToolButton;
     btnCancelTabSize: TRzToolButton;
-    dlgOpen: TRzOpenDialog;
-    dlgSave: TRzSaveDialog;
+    dlgOpen: TOpenDialog;
+    dlgSave: TSaveDialog;
+    btnSelectAll: TRzToolButton;
+    RzSpacer8: TRzSpacer;
+    RzStatusBar1: TRzStatusBar;
+    stsLine: TRzFieldStatus;
+    stsColumn: TRzFieldStatus;
+    stsLineCount: TRzStatusPane;
+    pbrPrint: TRzProgressStatus;
     procedure mnuSelectAllClick(Sender: TObject);
     procedure FormCreate( Sender: TObject );
     procedure FormDestroy( Sender: TObject );
@@ -145,6 +161,7 @@ type
     procedure btnPrintClick(Sender: TObject);
     procedure btnCodeEditorClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnSelectAllClick(Sender: TObject);
   private
     SingleLine: string;
     MultipleLines: string;
@@ -404,6 +421,13 @@ begin
 end;
 
 
+procedure TRzStringListEditDlg.btnSelectAllClick(Sender: TObject);
+begin
+  edtStrings.SelectAll;
+  UpdateClipboardStatus;
+end;
+
+
 procedure TRzStringListEditDlg.btnFontClick(Sender: TObject);
 begin
   dlgFont.Font := edtStrings.Font;
@@ -549,15 +573,12 @@ end;
 
 procedure TRzStringListEditDlg.IndentLine( LineNum: Integer );
 begin
-  with edtStrings do
-  begin
-    { Move to Beginning of line and insert tab }
-    SelStart := Perform( em_LineIndex, LineNum, 0 );
-    Perform( wm_Char, vk_tab, 0 );
-    { Move cursor to end of line }
-    SelStart := EndOfLine( LineNum );
-    UpdateLineColStatus;
-  end;
+  // Move to Beginning of line and insert tab
+  edtStrings.SelStart := edtStrings.Perform( em_LineIndex, LineNum, 0 );
+  edtStrings.Perform( wm_Char, vk_tab, 0 );
+  // Move cursor to end of line
+  edtStrings.SelStart := EndOfLine( LineNum );
+  UpdateLineColStatus;
 end;
 
 
@@ -568,12 +589,12 @@ begin
   L := edtStrings.Lines[ LineNum ];
   if ( Length( L ) > 0 ) and ( L[ 1 ] = #9 ) then
   begin
-    { Move to Beginning of line and remove first character }
-    edtStrings.SelStart := Perform( em_LineIndex, LineNum, 0 );
-    Perform( wm_KeyDown, vk_Delete, 0 );
-    Perform( wm_KeyUp, vk_Delete, 0 );
+    // Move to Beginning of line and remove first character
+    edtStrings.SelStart := edtStrings.Perform( em_LineIndex, LineNum, 0 );
+    edtStrings.Perform( wm_KeyDown, vk_Delete, 0 );
+    edtStrings.Perform( wm_KeyUp, vk_Delete, 0 );
 
-    { Move cursor to end of line }
+    // Move cursor to end of line
     edtStrings.SelStart := EndOfLine( LineNum );
     Result := True;
     UpdateLineColStatus;
@@ -844,6 +865,7 @@ procedure TRzStringListEditDlg.btnCodeEditorClick(Sender: TObject);
 begin
   ModalResult := mrYes;
 end;
+
 
 end.
 

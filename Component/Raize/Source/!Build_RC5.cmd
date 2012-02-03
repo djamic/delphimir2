@@ -48,7 +48,9 @@ exit
 
 
 
-rem     Change the SysPath variable to the path of your Windows System folder
+rem     Change the SysPath variable to the path of your Windows System folder.
+rem     Please note that if you are running a 64-bit OS, then the Windows
+rem     System folder should be the SysWOW64 folder.
 
 set SysPath="C:\Windows\System32"
 
@@ -62,13 +64,15 @@ rem       Borland Developer Studio 2006 (including Turbo Editions)
 rem       CodeGear RAD Studio 2007 (e.g. Delphi 2007)
 rem       CodeGear RAD Studio 2009
 rem       Embarcadero RAD Studio 2010
+rem       Embarcadero RAD Studio XE
 
-set Compiler="Delphi"
+set Compiler="BDS"
 
 
-rem     Change VCLVersion to 7, 9, 10, 12, or 14 depending on version of 
+rem     Change VCLVersion to 7, 9, 10, 12, 14, or 15 depending on version of 
 rem     Delphi/BDS/RADStudio you are using
 rem
+rem     RAD Studio XE   (Delphi XE)      VCLVersion="15"
 rem     RAD Studio 2010 (Delphi 2010)    VCLVersion="14"
 rem     RAD Studio 2009 (Delphi 2009)    VCLVersion="12"
 rem     RAD Studio 2007 (Delphi 2007)    VCLVersion="10"   RS 2007 & BDS 2006 use same VCL
@@ -76,14 +80,14 @@ rem     BDS 2006                         VCLVersion="10"
 rem     Delphi 2005                      VCLVersion="9"
 rem     Delphi 7                         VCLVersion="7"
 
-set VCLVersion="7"
+set VCLVersion="15"
 
 
 rem     Change the DCC32EXE variable to specify the full path of the DCC32.exe 
 rem     command line compiler located in your Delphi/BDS Bin directory.
 
-set DCC32EXE="D:\Borland\Delphi70\Bin\DCC32.exe"
-                                            
+set DCC32EXE="C:\Program Files\Embarcadero\RAD Studio\8.0\Bin\DCC32.exe"
+
 
 rem ****************************************************************************
 rem **** DO NOT CHANGE ANYTHING BELOW THIS POINT *******************************
@@ -94,6 +98,7 @@ if %VCLVersion% == "9" goto Version9
 if %VCLVersion% == "10" goto Version10
 if %VCLVersion% == "12" goto Version12
 if %VCLVersion% == "14" goto Version14
+if %VCLVersion% == "15" goto Version15
 echo Invalid VCL Version %VCLVersion%
 goto Error
 
@@ -192,6 +197,26 @@ set ND_DP=RaizeComponentsVcl_Design
 set ND_DP_BPL=RaizeComponentsVcl_Design140.bpl
 set DB_DP=RaizeComponentsVclDb_Design
 set DB_DP_BPL=RaizeComponentsVclDb_Design140.bpl
+
+goto Init
+
+rem ============================================================================
+:Version15
+
+set DCC32=%DCC32EXE% -Q -W -H -$D- -$L- -$Y-
+set LibDir=RS-XE
+set Options=-LUDclStd
+set DBOptions=-LUDclDB
+set SkipFixupHppFiles=True
+
+set ND_RTP=RaizeComponentsVcl
+set ND_RTP_BPL=RaizeComponentsVcl150.bpl
+set DB_RTP=RaizeComponentsVclDb
+set DB_RTP_BPL=RaizeComponentsVclDb150.bpl
+set ND_DP=RaizeComponentsVcl_Design
+set ND_DP_BPL=RaizeComponentsVcl_Design150.bpl
+set DB_DP=RaizeComponentsVclDb_Design
+set DB_DP_BPL=RaizeComponentsVclDb_Design150.bpl
 
 goto Init
 

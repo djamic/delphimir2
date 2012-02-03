@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -18,6 +18,33 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Modified the TRzRadioGroup and TRzCheckGroup so that if individual radio
+      buttons or check boxes are hidden, the group takes this into account when
+      arranging the radio buttons or check boxes.
+    * Moved the TRzRadioGroup.ArrangeButtons method to the public section.
+    * Moved the TRzCheckGroup.ArrangeChecks method to the public section.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * The TRzRadioGroup and TRzCheckGroup now utilize the updated AutoSize
+      behavior in the TRzRadioButton and TRzCheckBox components. Specifically,
+      the individual radio buttons and check boxes in TRzRadioGroup and
+      TRzCheckGroup now have their AutoSize property set to True and their
+      WordWrap property set to False.
+    * Added new CaptionFont property to TRzRadioGroup and TRzCheckGroup.
+    * The TRzRadioGroup and TRzCheckGroup now automatically adjust the
+      ItemHeight property based on the ItemFont property. If the ItemHeight
+      property is modified directly, then that value overrides the value
+      associated with the height of the ItemFont. This change ensures that as
+      the font size increases, the radio buttons and check boxes are completely
+      visible in the group and do not overlap.
+    * The AlignmentVertical properties of the embedded radio buttons and check
+      boxes in the TRzRadioGroup and TRzCheckGroup are now set to avCenter.
+      This produces more visually appealing results, especially when the font
+      size used increases.
+    * Added ReadOnly, ReadOnlyColor, and ReadOnlyColorOnFocus properties to the
+      TRzRadioGroup.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -196,6 +223,7 @@ type
     FStartYPos: Integer;
     FVerticalSpacing: Integer;
     FItemHeight: Integer;
+    FItemHeightChanged: Boolean;
 
     FGlyphWidth: Integer;
     FGlyphHeight: Integer;
@@ -219,6 +247,10 @@ type
     FItemHotTrackColorType: TRzHotTrackColorType;
     FItemHighlightColor: TColor;
 
+    FReadOnly: Boolean;
+    FReadOnlyColor: TColor;
+    FReadOnlyColorOnFocus: Boolean;
+
     FOnChanging: TRzIndexChangingEvent;
 
     procedure ReadOldFlatProp( Reader: TReader );
@@ -241,7 +273,6 @@ type
 
     procedure ChangeScale( M, D: Integer ); override;
     procedure SetButtonCount( Value: Integer ); virtual;
-    procedure ArrangeButtons; virtual;
     procedure UpdateButtons; virtual;
 
     procedure ReadState( Reader: TReader ); override;
@@ -280,6 +311,11 @@ type
     procedure SetTextHighlightColor( Value: TColor ); virtual;
     procedure SetTextShadowColor( Value: TColor ); virtual;
     procedure SetTextShadowDepth( Value: Integer ); virtual;
+
+    procedure SetReadOnly( Value: Boolean ); virtual;
+    procedure SetReadOnlyColor( Value: TColor ); virtual;
+    procedure SetReadOnlyColorOnFocus( Value: Boolean ); virtual;
+
     procedure SetSpaceEvenly( Value: Boolean ); virtual;
     procedure SetStartPos( Index: Integer; Value: Integer ); virtual;
     procedure SetTextStyle( Value: TTextStyle ); virtual;
@@ -343,7 +379,7 @@ type
     property ItemHeight: Integer
       read FItemHeight
       write SetItemHeight
-      default 17;
+      stored FItemHeightChanged;
 
     property ItemIndex: Integer
       read FItemIndex
@@ -377,6 +413,21 @@ type
       read FTextShadowDepth
       write SetTextShadowDepth
       default 2;
+
+    property ReadOnly: Boolean
+      read FReadOnly
+      write SetReadOnly
+      default False;
+
+    property ReadOnlyColor: TColor
+      read FReadOnlyColor
+      write SetReadOnlyColor
+      default clInfoBk;
+
+    property ReadOnlyColorOnFocus: Boolean
+      read FReadOnlyColorOnFocus
+      write SetReadOnlyColorOnFocus
+      default False;
 
     property SpaceEvenly: Boolean
       read FSpaceEvenly
@@ -436,6 +487,7 @@ type
     constructor Create( AOwner: TComponent ); override;
     destructor Destroy; override;
 
+    procedure ArrangeButtons; virtual;
     procedure FlipChildren( AllLevels: Boolean ); override;
   end;
 
@@ -465,6 +517,7 @@ type
     property BorderSides;
     property BorderWidth;
     property Caption;
+    property CaptionFont;
     property Color;
     property Columns;
     property Constraints;
@@ -508,6 +561,9 @@ type
     {$IFDEF VCL140_OR_HIGHER}
     property Touch;
     {$ENDIF}
+    property ReadOnly;
+    property ReadOnlyColor;
+    property ReadOnlyColorOnFocus;
     property ShowHint;
     property SpaceEvenly;
     property StartXPos;
@@ -565,6 +621,7 @@ type
     FStartYPos: Integer;
     FVerticalSpacing: Integer;
     FItemHeight: Integer;
+    FItemHeightChanged: Boolean;
 
     FGlyphWidth: Integer;
     FGlyphHeight: Integer;
@@ -615,7 +672,6 @@ type
   protected
     procedure ChangeScale( M, D: Integer ); override;
     procedure SetCheckCount( Value: Integer ); virtual;
-    procedure ArrangeChecks; virtual;
     procedure UpdateChecks; virtual;
     function GetIndex( CheckBox: TRzCheckBox ): Integer;
 
@@ -733,7 +789,7 @@ type
     property ItemHeight: Integer
       read FItemHeight
       write SetItemHeight
-      default 17;
+      stored FItemHeightChanged;
 
     property ItemChecked[ Index: Integer ]: Boolean
       read GetItemChecked
@@ -845,6 +901,7 @@ type
     constructor Create( AOwner: TComponent ); override;
     destructor Destroy; override;
 
+    procedure ArrangeChecks; virtual;
     procedure FlipChildren(AllLevels: Boolean); override;
   end;
 
@@ -876,6 +933,7 @@ type
     property BorderSides;
     property BorderWidth;
     property Caption;
+    property CaptionFont;
     property Color;
     property Columns;
     property Constraints;
@@ -994,8 +1052,9 @@ begin
   inherited Create( RadioGroup );
 
   RadioGroup.FButtons.Add( Self );
-  AutoSize := False;
-  Visible := False;
+  AlignmentVertical := avCenter;
+  AutoSize := True;
+  WordWrap := False;
   Enabled := RadioGroup.Enabled;
   ParentShowHint := False;
   OnClick := RadioGroup.ButtonClick;
@@ -1101,6 +1160,7 @@ begin
   FTextShadowDepth := 2;
   FTextShadowColor := clBtnShadow;
   FTextHighlightColor := clBtnHighlight;
+  FReadOnlyColor := clInfoBk;
 
   FTransparentColor := clOlive;
   FWinMaskColor := clLime;
@@ -1189,6 +1249,7 @@ end;
 
 procedure TRzCustomRadioGroup.ItemFontChanged( Sender: TObject );
 begin
+  FItemHeight := GetMinFontHeight( FItemFont );
   FItemFontChanged := True;
   ArrangeButtons;
   Invalidate;
@@ -1277,7 +1338,7 @@ end;
 
 function TRzCustomRadioGroup.CanModify: Boolean;
 begin
-  Result := True;
+  Result := not FReadOnly;
 end;
 
 
@@ -1298,13 +1359,37 @@ end;
 
 procedure TRzCustomRadioGroup.ArrangeButtons;
 var
-  ButtonsPerCol, ButtonWidth, TopMargin, I, K, X, W, L: Integer;
+  VisibleButtons, BtnIdx, ButtonsPerCol, ButtonWidth, TopMargin, I, K, X, W, L: Integer;
   R, CalcRect: TRect;
   ColWidths: array[ 0..15 ] of Integer;
+  Btn: TRzGroupButton;
+
+  function AdjustedIndex( Index: Integer ): Integer;
+  var
+    I: Integer;
+    Btn: TRzGroupButton;
+  begin
+    Result := Index;
+    for I := Index - 1 downto 0 do
+    begin
+      Btn := TRzGroupButton( FButtons[ I ] );
+      if not Btn.Visible then
+        Dec( Result );
+    end;
+  end;
+
 begin
   if ( FButtons.Count <> 0 ) and not FReading then
   begin
-    ButtonsPerCol := ( FButtons.Count + FColumns - 1 ) div FColumns;
+    VisibleButtons := 0;
+    for I := 0 to FButtons.Count - 1 do
+    begin
+      Btn := TRzGroupButton( FButtons[ I ] );
+      if Btn.Visible then
+        Inc( VisibleButtons );
+    end;
+
+    ButtonsPerCol := ( VisibleButtons + FColumns - 1 ) div FColumns;
 
     if FSpaceEvenly then
       ButtonWidth := ( ( Width - FStartXPos ) - ( 2 * BorderWidth ) - 10 ) div FColumns
@@ -1323,73 +1408,82 @@ begin
       Canvas.Font := FItemFont;
       for I := 0 to FButtons.Count - 1 do
       begin
-        with TRzGroupButton( FButtons[ I ] ) do
+        Btn := TRzGroupButton( FButtons[ I ] );
+        BtnIdx := AdjustedIndex( I );
+        if Btn.Visible then
         begin
           CalcRect := R;
-          DrawString( Self.Canvas, RemoveAccelerators( Trim( Caption ) ), CalcRect,
-                      dt_CalcRect or dt_WordBreak or dt_ExpandTabs or dt_NoPrefix );
+          DrawString( Self.Canvas, RemoveAccelerators( Trim( Btn.Caption ) ), CalcRect,
+                      dt_CalcRect or dt_ExpandTabs or dt_NoPrefix );
 
           W := CalcRect.Right - CalcRect.Left + FGlyphWidth + 4 + 8;
 
-          if W > ColWidths[ I div ButtonsPerCol ] then
-            ColWidths[ I div ButtonsPerCol ] := W;
+          if W > ColWidths[ BtnIdx div ButtonsPerCol ] then
+            ColWidths[ BtnIdx div ButtonsPerCol ] := W;
         end;
       end;
     end;
 
     for I := 0 to FButtons.Count - 1 do
     begin
-      with TRzGroupButton( FButtons[ I ] ) do
+      Btn := TRzGroupButton( FButtons[ I ] );
+      BtnIdx := AdjustedIndex( I );
+      if Btn.Visible then
       begin
         if FSpaceEvenly then
         begin
-          L := ( I div ButtonsPerCol ) * ButtonWidth + BorderWidth;
+          L := ( BtnIdx div ButtonsPerCol ) * ButtonWidth + BorderWidth;
           if not UseRightToLeftAlignment then
             L := L + FStartXPos
           else
             L := Self.ClientWidth - L - ButtonWidth - FStartXPos;
 
-          SetBounds( L, ( I mod ButtonsPerCol ) * ( FItemHeight + FVerticalSpacing ) + TopMargin,
-                     ButtonWidth, FItemHeight );
+          Btn.SetBounds( L, ( BtnIdx mod ButtonsPerCol ) * ( FItemHeight + FVerticalSpacing ) + TopMargin,
+                         ButtonWidth, FItemHeight );
         end
         else
         begin
           X := 0;
-          for K := ( I div ButtonsPerCol ) - 1 downto 0 do
+          for K := ( BtnIdx div ButtonsPerCol ) - 1 downto 0 do
             X := X + ColWidths[ K ];
 
           L := X + BorderWidth;
           if not UseRightToLeftAlignment then
             L := L + FStartXPos
           else
-            L := Self.ClientWidth - L - ColWidths[ I div ButtonsPerCol ] - 4 + 8 - FStartXPos;
+            L := Self.ClientWidth - L - ColWidths[ BtnIdx div ButtonsPerCol ] - 4 + 8 - FStartXPos;
 
-          SetBounds( L, ( I mod ButtonsPerCol ) * ( FItemHeight + FVerticalSpacing ) + TopMargin,
-                     ColWidths[ I div ButtonsPerCol ] - 4, FItemHeight );
+          Btn.SetBounds( L, ( BtnIdx mod ButtonsPerCol ) * ( FItemHeight + FVerticalSpacing ) + TopMargin,
+                         ColWidths[ BtnIdx div ButtonsPerCol ] - 4, FItemHeight );
         end;
-        Visible := True;
-        Font.Assign( FItemFont );
-        BiDiMode := Self.BiDiMode;
-        TextHighlightColor := FTextHighlightColor;
-        TextShadowColor := FTextShadowColor;
-        TextShadowDepth := FTextShadowDepth;
-        LightTextStyle := FLightTextStyle;
-        TextStyle := FTextStyle;
-        Transparent := Self.Transparent;
-        WinMaskColor := FWinMaskColor;
-        TransparentColor := FTransparentColor;
-        CustomGlyphs.Assign( FCustomGlyphs );
-        CustomGlyphImages := FCustomGlyphImages;
-        UseCustomGlyphs := FUseCustomGlyphs;
-        FrameColor := FItemFrameColor;
-        HotTrack := FItemHotTrack;
-        HighlightColor := FItemHighlightColor;
-        HotTrackColor := FItemHotTrackColor;
-        HotTrackColorType := FItemHotTrackColorType;
+
+        Btn.Font.Assign( FItemFont );
+        Btn.BiDiMode := Self.BiDiMode;
+        Btn.TextHighlightColor := FTextHighlightColor;
+        Btn.TextShadowColor := FTextShadowColor;
+        Btn.TextShadowDepth := FTextShadowDepth;
+        Btn.LightTextStyle := FLightTextStyle;
+        Btn.TextStyle := FTextStyle;
+        Btn.Transparent := Self.Transparent;
+        Btn.WinMaskColor := FWinMaskColor;
+        Btn.TransparentColor := FTransparentColor;
+        if not FCustomGlyphs.Empty then
+          Btn.CustomGlyphs.Assign( FCustomGlyphs );
+        Btn.CustomGlyphImages := FCustomGlyphImages;
+        Btn.UseCustomGlyphs := FUseCustomGlyphs;
+        Btn.FrameColor := FItemFrameColor;
+        Btn.HotTrack := FItemHotTrack;
+        Btn.HighlightColor := FItemHighlightColor;
+        Btn.HotTrackColor := FItemHotTrackColor;
+        Btn.HotTrackColorType := FItemHotTrackColorType;
+        Btn.ReadOnly := FReadOnly;
+        Btn.ReadOnlyColor := FReadOnlyColor;
+        Btn.ReadOnlyColorOnFocus := FReadOnlyColorOnFocus;
       end;
     end;
   end;
 end; {= TRzCustomRadioGroup.ArrangeButtons =}
+
 
 
 procedure TRzCustomRadioGroup.UpdateButtons;
@@ -1472,6 +1566,7 @@ begin
   FVerticalSpacing := MulDiv( FVerticalSpacing, M, D );
   FItemHeight := MulDiv( FItemHeight, M, D );
   FStartYPos := MulDiv( FStartYPos, M, D );
+  FStartXPos := MulDiv( FStartXPos, M, D );
   ArrangeButtons;
 end;
 
@@ -1490,6 +1585,7 @@ procedure TRzCustomRadioGroup.SetItemHeight( Value: Integer );
 begin
   if FItemHeight <> Value then
   begin
+    FItemHeightChanged := True;
     FItemHeight := Value;
     ArrangeButtons;
   end;
@@ -1596,6 +1692,36 @@ begin
   if FTextShadowDepth <> Value then
   begin
     FTextShadowDepth := Value;
+    ArrangeButtons;
+  end;
+end;
+
+
+procedure TRzCustomRadioGroup.SetReadOnly( Value: Boolean );
+begin
+  if FReadOnly <> Value then
+  begin
+    FReadOnly := Value;
+    ArrangeButtons;
+  end;
+end;
+
+
+procedure TRzCustomRadioGroup.SetReadOnlyColor( Value: TColor );
+begin
+  if FReadOnlyColor <> Value then
+  begin
+    FReadOnlyColor := Value;
+    ArrangeButtons;
+  end;
+end;
+
+
+procedure TRzCustomRadioGroup.SetReadOnlyColorOnFocus( Value: Boolean );
+begin
+  if FReadOnlyColorOnFocus <> Value then
+  begin
+    FReadOnlyColorOnFocus := Value;
     ArrangeButtons;
   end;
 end;
@@ -1709,16 +1835,13 @@ end;
 
 procedure TRzCustomRadioGroup.CMDialogChar( var Msg: TCMDialogChar );
 begin
-  with Msg do
+  if IsAccel( Msg.CharCode, Caption ) and CanFocus then
   begin
-    if IsAccel( CharCode, Caption ) and CanFocus then
-    begin
-      SelectFirst;
-      Result := 1;
-    end
-    else
-      inherited;
-  end;
+    SelectFirst;
+    Msg.Result := 1;
+  end
+  else
+    inherited;
 end;
 
 
@@ -1797,8 +1920,9 @@ begin
   inherited Create( CheckGroup );
 
   CheckGroup.FChecks.Add( Self );
-  AutoSize := False;
-  Visible := False;
+  AlignmentVertical := avCenter;
+  AutoSize := True;
+  WordWrap := False;
   Enabled := CheckGroup.Enabled;
   ParentShowHint := False;
   OnClick := CheckGroup.CheckClick;
@@ -1957,6 +2081,7 @@ end;
 
 procedure TRzCustomCheckGroup.ItemFontChanged( Sender: TObject );
 begin
+  FItemHeight := GetMinFontHeight( FItemFont );
   FItemFontChanged := True;
   ArrangeChecks;
   Invalidate;
@@ -2061,7 +2186,7 @@ end;
 
 function TRzCustomCheckGroup.CanModify: Boolean;
 begin
-  Result := True;
+  Result := not FReadOnly;
 end;
 
 
@@ -2082,13 +2207,37 @@ end;
 
 procedure TRzCustomCheckGroup.ArrangeChecks;
 var
-  ChecksPerCol, CheckWidth, TopMargin, I, K, X, W, L: Integer;
+  VisibleChecks, ChkIdx, ChecksPerCol, CheckWidth, TopMargin, I, K, X, W, L: Integer;
   R, CalcRect: TRect;
   ColWidths: array[ 0..15 ] of Integer;
+  Chk: TRzGroupCheck;
+
+  function AdjustedIndex( Index: Integer ): Integer;
+  var
+    I: Integer;
+    Chk: TRzGroupCheck;
+  begin
+    Result := Index;
+    for I := Index - 1 downto 0 do
+    begin
+      Chk := TRzGroupCheck( FChecks[ I ] );
+      if not Chk.Visible then
+        Dec( Result );
+    end;
+  end;
+
 begin
   if ( FChecks.Count <> 0 ) and not FReading then
   begin
-    ChecksPerCol := ( FChecks.Count + FColumns - 1 ) div FColumns;
+    VisibleChecks := 0;
+    for I := 0 to FChecks.Count - 1 do
+    begin
+      Chk := TRzGroupCheck( FChecks[ I ] );
+      if Chk.Visible then
+        Inc( VisibleChecks );
+    end;
+
+    ChecksPerCol := ( VisibleChecks + FColumns - 1 ) div FColumns;
 
     if FSpaceEvenly then
       CheckWidth := ( ( Width - FStartXPos ) - ( 2 * BorderWidth ) - 10 ) div FColumns
@@ -2107,76 +2256,78 @@ begin
       Canvas.Font := FItemFont;
       for I := 0 to FChecks.Count - 1 do
       begin
-        with TRzGroupCheck( FChecks[ I ] ) do
+        Chk := TRzGroupCheck( FChecks[ I ] );
+        ChkIdx := AdjustedIndex( I );
+        if Chk.Visible then
         begin
           CalcRect := R;
-
-          DrawString( Self.Canvas, RemoveAccelerators( Trim( Caption ) ), CalcRect,
-                      dt_CalcRect or dt_WordBreak or dt_ExpandTabs or dt_NoPrefix );
+          DrawString( Self.Canvas, RemoveAccelerators( Trim( Chk.Caption ) ), CalcRect,
+                      dt_CalcRect or dt_ExpandTabs or dt_NoPrefix );
 
           W := CalcRect.Right - CalcRect.Left + FGlyphWidth + 4 + 8;
 
-          if W > ColWidths[ I div ChecksPerCol ] then
-            ColWidths[ I div ChecksPerCol ] := W;
+          if W > ColWidths[ ChkIdx div ChecksPerCol ] then
+            ColWidths[ ChkIdx div ChecksPerCol ] := W;
         end;
       end;
     end;
 
     for I := 0 to FChecks.Count - 1 do
     begin
-      with TRzGroupCheck( FChecks[ I ] ) do
+      Chk := TRzGroupCheck( FChecks[ I ] );
+      ChkIdx := AdjustedIndex( I );
+      if Chk.Visible then
       begin
         if FSpaceEvenly then
         begin
-          L := ( I div ChecksPerCol ) * CheckWidth + BorderWidth;
+          L := ( ChkIdx div ChecksPerCol ) * CheckWidth + BorderWidth;
           if not UseRightToLeftAlignment then
             L := L + FStartXPos
           else
             L := Self.ClientWidth - L - CheckWidth - FStartXPos;
 
-          SetBounds( L, ( I mod ChecksPerCol ) * ( FItemHeight + FVerticalSpacing ) + TopMargin,
-                     CheckWidth, FItemHeight );
+          Chk.SetBounds( L, ( ChkIdx mod ChecksPerCol ) * ( FItemHeight + FVerticalSpacing ) + TopMargin,
+                         CheckWidth, FItemHeight );
         end
         else
         begin
           X := 0;
-          for K := ( I div ChecksPerCol ) - 1 downto 0 do
+          for K := ( ChkIdx div ChecksPerCol ) - 1 downto 0 do
             X := X + ColWidths[ K ];
 
           L := X + BorderWidth;
           if not UseRightToLeftAlignment then
             L := L + FStartXPos
           else
-            L := Self.ClientWidth - L - ColWidths[ I div ChecksPerCol ] - 4 + 8 - FStartXPos;
+            L := Self.ClientWidth - L - ColWidths[ ChkIdx div ChecksPerCol ] - 4 + 8 - FStartXPos;
 
-          SetBounds( L, ( I mod ChecksPerCol ) * ( FItemHeight + FVerticalSpacing ) + TopMargin,
-                     ColWidths[ I div ChecksPerCol ] - 4, FItemHeight );
+          Chk.SetBounds( L, ( ChkIdx mod ChecksPerCol ) * ( FItemHeight + FVerticalSpacing ) + TopMargin,
+                         ColWidths[ ChkIdx div ChecksPerCol ] - 4, FItemHeight );
         end;
 
-        Visible := True;
-        Font.Assign( FItemFont );
-        BiDiMode := Self.BiDiMode;
-        TextHighlightColor := FTextHighlightColor;
-        TextShadowColor := FTextShadowColor;
-        TextShadowDepth := FTextShadowDepth;
-        LightTextStyle := FLightTextStyle;
-        TextStyle := FTextStyle;
-        Transparent := Self.Transparent;
-        WinMaskColor := FWinMaskColor;
-        TransparentColor := FTransparentColor;
+        Chk.Font.Assign( FItemFont );
+        Chk.BiDiMode := Self.BiDiMode;
+        Chk.TextHighlightColor := FTextHighlightColor;
+        Chk.TextShadowColor := FTextShadowColor;
+        Chk.TextShadowDepth := FTextShadowDepth;
+        Chk.LightTextStyle := FLightTextStyle;
+        Chk.TextStyle := FTextStyle;
+        Chk.Transparent := Self.Transparent;
+        Chk.WinMaskColor := FWinMaskColor;
+        Chk.TransparentColor := FTransparentColor;
         if not FCustomGlyphs.Empty then
-          CustomGlyphs.Assign( FCustomGlyphs );
-        CustomGlyphImages := FCustomGlyphImages;
-        UseCustomGlyphs := FUseCustomGlyphs;
-        FrameColor := FItemFrameColor;
-        HotTrack := FItemHotTrack;
-        HighlightColor := FItemHighlightColor;
-        HotTrackColor := FItemHotTrackColor;
-        HotTrackColorType := FItemHotTrackColorType;
-        AllowGrayed := FAllowGrayed;
-        ReadOnly := FReadOnly;
-        ReadOnlyColor := FReadOnlyColor;
-        ReadOnlyColorOnFocus := FReadOnlyColorOnFocus;
+          Chk.CustomGlyphs.Assign( FCustomGlyphs );
+        Chk.CustomGlyphImages := FCustomGlyphImages;
+        Chk.UseCustomGlyphs := FUseCustomGlyphs;
+        Chk.FrameColor := FItemFrameColor;
+        Chk.HotTrack := FItemHotTrack;
+        Chk.HighlightColor := FItemHighlightColor;
+        Chk.HotTrackColor := FItemHotTrackColor;
+        Chk.HotTrackColorType := FItemHotTrackColorType;
+        Chk.AllowGrayed := FAllowGrayed;
+        Chk.ReadOnly := FReadOnly;
+        Chk.ReadOnlyColor := FReadOnlyColor;
+        Chk.ReadOnlyColorOnFocus := FReadOnlyColorOnFocus;
       end;
     end;
   end;
@@ -2343,6 +2494,11 @@ begin
   FVerticalSpacing := MulDiv( FVerticalSpacing, M, D );
   FItemHeight := MulDiv( FItemHeight, M, D );
   FStartYPos := MulDiv( FStartYPos, M, D );
+  FStartXPos := MulDiv( FStartXPos, M, D );
+
+//  for I := 0 to FChecks.Count - 1 do
+//    FChecks[ I ].ChangeScale( M, D );
+
   ArrangeChecks;
 end;
 
@@ -2361,6 +2517,7 @@ procedure TRzCustomCheckGroup.SetItemHeight( Value: Integer );
 begin
   if FItemHeight <> Value then
   begin
+    FItemHeightChanged := True;
     FItemHeight := Value;
     ArrangeChecks;
   end;
@@ -2553,16 +2710,13 @@ end;
 
 procedure TRzCustomCheckGroup.CMDialogChar( var Msg: TCMDialogChar );
 begin
-  with Msg do
+  if IsAccel( Msg.CharCode, Caption ) and CanFocus then
   begin
-    if IsAccel( CharCode, Caption ) and CanFocus then
-    begin
-      SelectFirst;
-      Result := 1;
-    end
-    else
-      inherited;
-  end;
+    SelectFirst;
+    Msg.Result := 1;
+  end
+  else
+    inherited;
 end;
 
 

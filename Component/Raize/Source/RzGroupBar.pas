@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -38,6 +38,11 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed issue where changes to the GroupBorderSize property in TRzGroupBar
+      at design-time were not being honored at runtime of the Style of the
+      TRzGroupBar was something other than gbsCategoryView.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -1705,11 +1710,6 @@ type
       write SetGradientPath
       default gpTopToBottom;
 
-    property GroupBorderSize: Integer
-      read FGroupBorderSize
-      write SetGroupBorderSize
-      nodefault;
-
     property FlatColor: TColor
       read FFlatColor
       write SetFlatColor
@@ -1732,6 +1732,11 @@ type
       read FStyle
       write SetStyle
       default gbsCategoryView;
+
+    property GroupBorderSize: Integer
+      read FGroupBorderSize
+      write SetGroupBorderSize
+      nodefault;
 
     property UniqueItemSelection: Boolean
       read FUniqueItemSelection

@@ -38,7 +38,6 @@
 #include <Rzedit.hpp>	// Pascal unit
 #include <Rzbutton.hpp>	// Pascal unit
 #include <Imglist.hpp>	// Pascal unit
-#include <Rzshelldialogs.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
 
@@ -86,13 +85,8 @@ __published:
 	Rzpanel::TRzPanel* RzPanel2;
 	Rzbutton::TRzButton* btnOk;
 	Rzbutton::TRzButton* btnCancel;
-	Rzpanel::TRzPanel* pnlStatusBar;
-	Rzstatus::TRzFieldStatus* stsLine;
-	Rzstatus::TRzFieldStatus* stsColumn;
-	Rzstatus::TRzStatusPane* stsLineCount;
 	Rzpanel::TRzPanel* pnlWorkSpace;
 	Rzedit::TRzMemo* edtStrings;
-	Rzstatus::TRzProgressStatus* pbrPrint;
 	Rzbutton::TRzButton* btnCodeEditor;
 	Menus::TMenuItem* mnuSelectAll;
 	Controls::TImageList* ImageList1;
@@ -118,8 +112,15 @@ __published:
 	Rzpanel::TRzSpacer* RzSpacer7;
 	Rzbutton::TRzToolButton* btnSetTabSize;
 	Rzbutton::TRzToolButton* btnCancelTabSize;
-	Rzshelldialogs::TRzOpenDialog* dlgOpen;
-	Rzshelldialogs::TRzSaveDialog* dlgSave;
+	Dialogs::TOpenDialog* dlgOpen;
+	Dialogs::TSaveDialog* dlgSave;
+	Rzbutton::TRzToolButton* btnSelectAll;
+	Rzpanel::TRzSpacer* RzSpacer8;
+	Rzpanel::TRzStatusBar* RzStatusBar1;
+	Rzstatus::TRzFieldStatus* stsLine;
+	Rzstatus::TRzFieldStatus* stsColumn;
+	Rzstatus::TRzStatusPane* stsLineCount;
+	Rzstatus::TRzProgressStatus* pbrPrint;
 	void __fastcall mnuSelectAllClick(System::TObject* Sender);
 	void __fastcall FormCreate(System::TObject* Sender);
 	void __fastcall FormDestroy(System::TObject* Sender);
@@ -143,6 +144,7 @@ __published:
 	void __fastcall btnPrintClick(System::TObject* Sender);
 	void __fastcall btnCodeEditorClick(System::TObject* Sender);
 	void __fastcall FormClose(System::TObject* Sender, Forms::TCloseAction &Action);
+	void __fastcall btnSelectAllClick(System::TObject* Sender);
 	
 private:
 	System::UnicodeString SingleLine;

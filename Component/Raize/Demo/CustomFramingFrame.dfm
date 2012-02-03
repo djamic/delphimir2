@@ -423,6 +423,7 @@ object FmeCustomFraming: TFmeCustomFraming
     Top = 464
     Width = 55
     Height = 21
+    Max = 100.000000000000000000
     FrameController = RzFrameController1
     TabOrder = 7
   end

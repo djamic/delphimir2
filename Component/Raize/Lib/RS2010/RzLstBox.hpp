@@ -113,6 +113,7 @@ protected:
 	virtual void __fastcall RepaintFrame(void);
 	virtual int __fastcall OwnerDrawItemIndent(void);
 	virtual void __fastcall UpdateItemHeight(void);
+	virtual System::UnicodeString __fastcall HorzExtentPrefix(void);
 	virtual void __fastcall WndProc(Messages::TMessage &Msg);
 	virtual void __fastcall GroupFontChanged(void);
 	void __fastcall InvalidKeyPressed(void);
@@ -177,7 +178,6 @@ protected:
 	__property bool GroupColorFromTheme = {read=FGroupColorFromTheme, write=SetGroupColorFromTheme, default=1};
 	__property Graphics::TFont* GroupFont = {read=FGroupFont, write=SetGroupFont, stored=FGroupFontChanged};
 	__property System::UnicodeString GroupPrefix = {read=FGroupPrefix, write=SetGroupPrefix, stored=StoreGroupPrefix};
-	__property System::Word HorzExtent = {read=FHorzExtent, write=SetHorzExtent, default=0};
 	__property bool HorzScrollBar = {read=FHorzScrollBar, write=SetHorzScrollBar, default=0};
 	__property bool IncrementalSearch = {read=FIncrementalSearch, write=FIncrementalSearch, default=1};
 	__property int OwnerDrawIndent = {read=FOwnerDrawIndent, write=SetOwnerDrawIndent, default=0};
@@ -268,7 +268,6 @@ __published:
 	__property GroupColorFromTheme = {default=1};
 	__property GroupFont;
 	__property GroupPrefix;
-	__property HorzExtent = {default=0};
 	__property HorzScrollBar = {default=0};
 	__property ImeMode = {default=3};
 	__property ImeName;
@@ -472,7 +471,6 @@ __published:
 	__property GroupColorFromTheme = {default=1};
 	__property GroupFont;
 	__property GroupPrefix;
-	__property HorzExtent = {default=0};
 	__property HorzScrollBar = {default=0};
 	__property ImeMode = {default=3};
 	__property ImeName;

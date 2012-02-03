@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -13,6 +13,10 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Updated the display of embedded buttons in TRzDBButtonEdit when running
+      under Windows Vista and Windows 7.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -814,7 +818,7 @@ begin
         else
         begin
           if ( Parent <> nil ) and Parent.ClassNameIs( 'TDBCtrlPanel' ) then
-            FButtons.SetBounds( Width - W - 2, 2, W, Height - 4 )
+            FButtons.SetBounds( Width - W - 2, 2, W, Height - 3 )
           else
             FButtons.SetBounds( Width - W - 4, 0, W, Height - 3 );
         end;

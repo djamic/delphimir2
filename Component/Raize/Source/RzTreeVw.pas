@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -16,6 +16,14 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed issue where the check boxes in a TRzCheckTree would have a white
+      area around the check box when the Color of the TRzCheckTree was changed
+      to a non-white color.
+    * Fixed issue where saving the contents of a TRzCheckTree to a stream and
+      then loading that stream into another TRzCheckTree would lose the current
+      node states of the original tree.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -1993,11 +2001,21 @@ end;
 
 
 procedure TRzCustomTreeView.LoadFromFile( const FileName: string );
+{$IFNDEF UNICODE}
+var
+  List: TStringList;
+{$ENDIF}
 begin
   {$IFDEF UNICODE}
   LoadFromFile( FileName, nil );
   {$ELSE}
-  inherited LoadFromFile( FileName );
+  List := TStringList.Create;
+  try
+    List.LoadFromFile( FileName );
+    LoadTreeFromList( List );
+  finally
+    List.Free;
+  end;
   {$ENDIF}
 end;
 
@@ -2021,11 +2039,21 @@ end;
 
 
 procedure TRzCustomTreeView.LoadFromStream( Stream: TStream );
+{$IFNDEF UNICODE}
+var
+  List: TStringList;
+{$ENDIF}
 begin
   {$IFDEF UNICODE}
   LoadFromStream( Stream, nil );
   {$ELSE}
-  inherited LoadFromStream( Stream );
+  List := TStringList.Create;
+  try
+    List.LoadFromStream( Stream );
+    LoadTreeFromList( List );
+  finally
+    List.Free;
+  end;
   {$ENDIF}
 end;
 
@@ -2073,11 +2101,21 @@ end;
 
 
 procedure TRzCustomTreeView.SaveToFile( const FileName: string );
+{$IFNDEF UNICODE}
+var
+  List: TStringList;
+{$ENDIF}
 begin
   {$IFDEF UNICODE}
   SaveToFile( FileName, nil );
   {$ELSE}
-  inherited SaveToFile( FileName );
+  List := TStringList.Create;
+  try
+    SaveTreeToList( List );
+    List.SaveToFile( FileName );
+  finally
+    List.Free;
+  end;
   {$ENDIF}
 end;
 
@@ -2101,11 +2139,21 @@ end;
 
 
 procedure TRzCustomTreeView.SaveToStream( Stream: TStream );
+{$IFNDEF UNICODE}
+var
+  List: TStringList;
+{$ENDIF}
 begin
   {$IFDEF UNICODE}
   SaveToStream( Stream, nil );
   {$ELSE}
-  inherited SaveToStream( Stream );
+  List := TStringList.Create;
+  try
+    SaveTreeToList( List );
+    List.SaveToStream( Stream );
+  finally
+    List.Free;
+  end;
   {$ENDIF}
 end;
 
@@ -2335,8 +2383,12 @@ begin
   try
     ChkBmp.Width := W;
     ChkBmp.Height := H;
+
     R := Rect( 0, 0, W, H );
     CheckRect := Rect( 0, 0, 13, 13 );
+
+    ChkBmp.Canvas.Brush.Color := Color;
+    ChkBmp.Canvas.FillRect( R );
 
     if ThemeServices.ThemesEnabled then
     begin
@@ -2369,7 +2421,9 @@ begin
         DrawCheckBox( ChkBmp.Canvas, CheckRect, cbUnchecked, bdsNormal, False,
                       htsInterior, FFrameColor, FHighlightColor, clWindow,
                       clLime, DisabledColor, clLime, clRed, False, False, clWindow );
+
         ImgBmp.Canvas.Draw( 2, Y, ChkBmp );
+
         // Add once for No Image
         FCheckImages.AddMasked( ImgBmp, clOlive );
         // Add again for Unchecked

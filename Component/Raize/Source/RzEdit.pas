@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -42,6 +42,24 @@
     Enhanced THotKey--supports Custom Framing.
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed issue in TRzNumericEdit where pressing the keypad decimal key would
+      not insert the DecimalSeparator character (based on user locale settings)
+      if the DecimalSeparator was something other than a period and the
+      calculator was dropped-down.
+    * Fixed issue in TRzNumericEdit where setting the Value property to a
+      decimal value at design-time would truncate the decimal portion when the
+      form was loaded if DisplayFormat used a decimal based format such as
+      ',0.0;(,0.0)'.
+    * Updated the display of the drop-down button for TRzDateTimeEdit,
+      TRzNumericEdit, and TRzColorEdit when running under Windows Vista and
+      Windows 7.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Changed the TRzNumericEdit.IntValue property to be of type Int64.
+    * Fixed issue where TRzDateTimeEdit and TRzNumericEdit would trap the
+      Alt+F4 key combination and prevent the application from closing.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Fixed issue where assigning a negative value to a TRzNumericEdit with a
@@ -928,8 +946,8 @@ type
     procedure SetMin( const Value: Extended ); virtual;
     procedure SetMax( const Value: Extended ); virtual;
 
-    function GetIntValue: Integer; virtual;
-    procedure SetIntValue( Value: Integer ); virtual;
+    function GetIntValue: Int64; virtual;
+    procedure SetIntValue( Value: Int64 ); virtual;
     function GetValue: Extended; virtual;
     function CheckValue( const Value: Extended; var KeepFocusOnEdit: Boolean ): Extended; virtual;
     procedure SetValue( const Value: Extended ); virtual;
@@ -939,7 +957,7 @@ type
     constructor Create( AOwner: TComponent ); override;
     destructor Destroy; override;
 
-    property IntValue: Integer
+    property IntValue: Int64
       read GetIntValue
       write SetIntValue;
 
@@ -993,13 +1011,13 @@ type
       read FMin
       write SetMin;
 
-    property Value: Extended
-      read GetValue
-      write SetValue;
-
     property DisplayFormat: string
       read FDisplayFormat
       write SetDisplayFormat;
+
+    property Value: Extended
+      read GetValue
+      write SetValue;
 
     property OnRangeError: TRzRangeErrorEvent
       read FOnRangeError
@@ -3149,7 +3167,7 @@ begin
   inherited;
   if FShowDropButton and
      ( ( ( Key = vk_Down ) and ( Shift = [ ssAlt ] ) ) or
-       ( Key = vk_F4 ) ) then
+       ( ( Key = vk_F4 ) and ( Shift = [] ) ) ) then
   begin
     DoDropDown;
     Key := 0;
@@ -3312,6 +3330,12 @@ var
     else
       ElementDetails := ThemeServices.GetElementDetails( tcDropDownButtonNormal );
 
+    if RunningAtLeast( winVista ) then
+    begin
+      Dec( R.Top );
+      Inc( R.Bottom );
+      Inc( R.Right );
+    end;
     ThemeServices.DrawElement( FCanvas.Handle, ElementDetails, R );
   end;
 
@@ -3666,13 +3690,13 @@ begin
 end;
 
 
-function TRzNumericEdit.GetIntValue: Integer;
+function TRzNumericEdit.GetIntValue: Int64;
 begin
   Result := Round( GetValue );
 end;
 
 
-procedure TRzNumericEdit.SetIntValue( Value: Integer );
+procedure TRzNumericEdit.SetIntValue( Value: Int64 );
 begin
   SetValue( Value );
 end;
@@ -4230,13 +4254,20 @@ begin
         if ( KeyMsg.CharCode = vk_Down ) and ( ShiftState = [ ssAlt ] ) then
           inherited;
       end
-      else if TWMKey( Msg ).CharCode = vk_F4 then
-        inherited;
+      else if ( TWMKey( Msg ).CharCode = vk_F4 ) then
+      begin
+        KeyMsg := TWMKey( Msg );
+        ShiftState := KeyDataToShiftState( KeyMsg.KeyData );
+        if ( ShiftState = [] ) or ( ssAlt in ShiftState ) then
+          inherited;
+      end;
       // Eat all other messages
     end;
 
     else
+    begin
       inherited;
+    end;
   end;
 
   if ( Msg.Msg = wm_LButtonDown ) and not ( csDesigning in ComponentState ) then

@@ -1,1 +1,1 @@
-{$DESCRIPTION 'Raize Components 5.2 (Data-Aware)'}
+{$DESCRIPTION 'Raize Components 5.4 (Data-Aware)'}

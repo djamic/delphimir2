@@ -28,5 +28,5 @@
   <ToolData Name="MSVHWLogLevel" Value="3"/>
   <ToolData Name="MSVHWLogFile" Value="RC5Help_RS2010.log"/>
   <ToolData Name="MSVHWNamespace" Value="Raize.RC5Help_RS2010"/>
-  <ToolData Name="FAR.NamespaceDesc" Value="Raize Components 5.0"/>
+  <ToolData Name="FAR.NamespaceDesc" Value="Raize Components 5"/>
 </HelpCollection>

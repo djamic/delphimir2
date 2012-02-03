@@ -156,6 +156,7 @@ object FmeButtons: TFmeButtons
       State = cbChecked
       TabOrder = 0
       UseCustomGlyphs = True
+      WordWrap = True
     end
     object RzRadioButton1: TRzRadioButton
       Left = 12
@@ -171,12 +172,13 @@ object FmeButtons: TFmeButtons
       TabStop = True
       TextStyle = tsRecessed
       UseCustomGlyphs = True
+      WordWrap = True
     end
     object RzRadioButton2: TRzRadioButton
       Left = 12
       Top = 128
-      Width = 120
-      Height = 28
+      Width = 202
+      Height = 15
       Caption = 'And both support custom glyphs'
       CustomGlyphImages = imlRadioGlyphs
       HotTrack = True
@@ -199,6 +201,7 @@ object FmeButtons: TFmeButtons
       TabOrder = 3
       TextStyle = tsRaised
       UseCustomGlyphs = True
+      WordWrap = True
     end
   end
   object grpTRzMenuButton: TRzGroupBox

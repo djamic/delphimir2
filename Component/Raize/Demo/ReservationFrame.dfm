@@ -220,13 +220,13 @@ object FmeReservations: TFmeReservations
         Height = 21
         DataSource = srcReservations
         DataField = 'NumTickets'
-        Alignment = taRightJustify
         Ctl3D = True
         FrameController = RzFrameController1
         ParentColor = True
         ParentCtl3D = False
         TabOrder = 2
         FlatButtonColor = 9229030
+        Max = 100.000000000000000000
       end
       object edtEvent: TRzDBButtonEdit
         Left = 16
@@ -235,7 +235,6 @@ object FmeReservations: TFmeReservations
         Height = 21
         DataSource = srcReservations
         DataField = 'EventNo'
-        Alignment = taRightJustify
         Ctl3D = True
         FrameController = RzFrameController1
         ParentColor = True
@@ -270,7 +269,6 @@ object FmeReservations: TFmeReservations
         Height = 21
         DataSource = srcReservations
         DataField = 'Amt_Paid'
-        Alignment = taRightJustify
         Ctl3D = True
         FrameController = RzFrameController1
         ParentColor = True

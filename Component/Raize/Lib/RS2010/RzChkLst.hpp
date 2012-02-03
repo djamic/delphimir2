@@ -84,6 +84,7 @@ protected:
 	void __fastcall ExtractGlyph(int Index, Graphics::TBitmap* Bitmap, Graphics::TBitmap* Source, int W, int H);
 	virtual void __fastcall SelectGlyph(int Index, Graphics::TBitmap* Glyph);
 	virtual int __fastcall OwnerDrawItemIndent(void);
+	virtual System::UnicodeString __fastcall HorzExtentPrefix(void);
 	virtual void __fastcall DrawListItem(int Index, const Types::TRect &Rect, Windows::TOwnerDrawState State);
 	void __fastcall InvalidateItemImage(int Index);
 	DYNAMIC bool __fastcall CanChange(int Index, Stdctrls::TCheckBoxState NewState);
@@ -195,7 +196,6 @@ __published:
 	__property GroupColor = {default=-16777197};
 	__property GroupColorFromTheme = {default=1};
 	__property GroupFont;
-	__property HorzExtent = {default=0};
 	__property HorzScrollBar = {default=0};
 	__property ImeMode = {default=3};
 	__property ImeName;

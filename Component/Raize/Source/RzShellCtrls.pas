@@ -3,8 +3,8 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
-  Copyright © 1996-2008 by Plasmatech Software Design. All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1996-2010 by Plasmatech Software Design. All Rights Reserved.
 
   Raize Shell Controls are licensed from Plasmatech Software Design.
 
@@ -22,6 +22,10 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Adjusted the default column widths of TRzShellList so that date/time stamp
+      of file fits completely in the column.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * The TRzShellTree now correctly raises the OnCancelEdit event when a node
@@ -7860,7 +7864,7 @@ procedure TRzCustomShellList.InitColumns( ishd: IShellDetails_NRC );
       lc := Columns.Add;
       lc.Caption := StrretToString( nil, info.text );
       if not fIsNormalFolder or ( g_LastColWidths.Size = 0 ) then
-        lc.Width := 7 * info.Width;         // What's the algorithm explorer uses? It's not GetDialogBaseUnits, tmAveCharWidth...?
+        lc.Width := 9 * info.Width;         // What's the algorithm explorer uses? It's not GetDialogBaseUnits, tmAveCharWidth...?
       lc.Alignment := _justify[ info.justify ];
       StrretFree( info.text );
       ZeroMemory( @info, Sizeof( info ) );

@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components            Description
@@ -13,6 +13,9 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed display issue with setting Color property of TRzHintWindow.
   ------------------------------------------------------------------------------
   4.3    (13 Sep 2007)
     * Added new CenterThreshold property to TRzBalloonHints. This property is
@@ -205,6 +208,7 @@ type
     procedure WndProc( var msg: TMessage ); override;
 
     { Property Access Methods }
+    procedure SetColor( Value: TColor );
     procedure SetFont( Value: TFont );
   public
     constructor Create( AOwner: TComponent ); override;
@@ -220,7 +224,7 @@ type
   published
     property Color: TColor
       read FColor
-      write FColor;
+      write SetColor;
 
     property CaptionWidth: Integer
       read FCaptionWidth
@@ -1134,6 +1138,12 @@ begin
 
 end;{= TRzCustomHintWindow.DrawBitmapBalloon =}
 
+
+procedure TRzCustomHintWindow.SetColor( Value: TColor );
+begin
+  FColor := Value;
+  inherited Color := Value;
+end;
 
 
 procedure TRzCustomHintWindow.SetFont( Value: TFont );

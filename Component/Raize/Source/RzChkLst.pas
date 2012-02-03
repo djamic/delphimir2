@@ -3,7 +3,7 @@
 
   Raize Components - Component Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Components
@@ -13,6 +13,16 @@
 
 
   Modification History
+  ------------------------------------------------------------------------------
+  5.4    (14 Sep 2010)
+    * Fixed display issue with TRzCheckList where the background of the check
+      boxes would become black when the list is scrolled and the DoubleBuffered
+      property was set to True.
+    * Updated the appearance of the TRzCheckList design editor.
+  ------------------------------------------------------------------------------
+  5.3    (07 Feb 2010)
+    * Fixed problem where the horizontal scroll bar of a TRzCheckList would clip
+      the text too short under certain situations.
   ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * For RAD Studio 2010, surfaced Touch property and OnGesture event in the
@@ -206,6 +216,7 @@ type
     procedure SelectGlyph( Index: Integer; Glyph: TBitmap ); virtual;
 
     function OwnerDrawItemIndent: Integer; override;
+    function HorzExtentPrefix: string; override;
     procedure DrawListItem( Index: Integer; Rect: TRect; State: TOwnerDrawState ); override;
     procedure InvalidateItemImage( Index: Integer );
 
@@ -415,7 +426,6 @@ type
     property GroupColor;
     property GroupColorFromTheme;
     property GroupFont;
-    property HorzExtent;
     property HorzScrollBar;
     property ImeMode;
     property ImeName;
@@ -697,7 +707,7 @@ begin
     Repaint;
   if HorzScrollBar then
   begin
-    HorzExtent := 0;
+    SendMessage( Handle, lb_SetHorizontalExtent, 0, 0 );
     AdjustHorzExtent;
   end;
 
@@ -1247,6 +1257,14 @@ begin
 end;
 
 
+function TRzCheckList.HorzExtentPrefix: string;
+begin
+  // The leading tab characters offsets the text in the check list to take into
+  // account the space occupied by the check box glyph.
+  Result := #9;
+end;
+
+
 procedure TRzCheckList.DefaultDrawItem( Index: Integer; Rect: TRect; State: TOwnerDrawState );
 var
   TextOffset: Integer;
@@ -1292,8 +1310,7 @@ begin
     Phase2Bmp.Width := FGlyphWidth;
     Phase2Bmp.Height := FGlyphHeight;
 
-    // If and Image List is being used, then we need to move the check box
-    // over more.
+    // If Image List is being used, then we need to move the check box over more.
     if FImages <> nil then
       ImageWidth := FImages.Width + 4
     else

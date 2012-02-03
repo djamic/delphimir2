@@ -105,6 +105,7 @@ __published:
 	__property BorderSides = {default=15};
 	__property BorderWidth = {default=0};
 	__property Caption;
+	__property CaptionFont;
 	__property Color = {default=-16777201};
 	__property Columns = {default=1};
 	__property Constraints;
@@ -131,7 +132,7 @@ __published:
 	__property ItemHotTrackColor = {default=1350640};
 	__property ItemHotTrackColorType = {default=1};
 	__property ItemFont;
-	__property ItemHeight = {default=17};
+	__property ItemHeight;
 	__property LightTextStyle = {default=0};
 	__property ParentBiDiMode = {default=1};
 	__property ParentColor = {default=0};
@@ -142,6 +143,8 @@ __published:
 	__property TextHighlightColor = {default=-16777196};
 	__property TextShadowColor = {default=-16777200};
 	__property TextShadowDepth = {default=2};
+	__property ReadOnlyColor = {default=-16777192};
+	__property ReadOnlyColorOnFocus = {default=0};
 	__property ShowHint;
 	__property SpaceEvenly = {default=0};
 	__property StartXPos = {index=1, default=8};

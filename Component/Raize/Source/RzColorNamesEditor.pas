@@ -3,7 +3,7 @@
 
   Raize Components - Design Editor Source Unit
 
-  Copyright © 1995-2008 by Raize Software, Inc.  All Rights Reserved.
+  Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.
 
 
   Design Editors
@@ -243,22 +243,26 @@ procedure TRzColorNamesEditDlg.GrdColorsDrawCell(Sender: TObject; Col,
 begin
   with GrdColors.Canvas do
   begin
+    (*
     if Row = 0 then
     begin
       GrdColors.Canvas.Font.Style := [ fsBold ];
       TextRect( Rect, Rect.Left + 2, Rect.Top + 1, GrdColors.Cells[ Col, 0 ] );
       GrdColors.Canvas.Font.Style := [];
     end;
+    *)
 
     if ( Row > 0 ) and ( Col < 2 ) then
     begin
       Brush.Color := clBtnFace;
       Pen.Color := clGray;
       FillRect( Rect );
+      (*
       MoveTo( Rect.Left - 1, Rect.Top );
       LineTo( Rect.Left - 1, Rect.Bottom );
       LineTo( Rect.Right, Rect.Bottom );
       LineTo( Rect.Right, Rect.Top - 1 );
+      *)
 
       if Col = 0 then
         TextRect( Rect, Rect.Left + 2, Rect.Top + 1, GrdColors.Cells[ Col, Row ] )
