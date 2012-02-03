@@ -1,1 +1,1 @@
-{$DESCRIPTION 'Raize Components 5.4'}
+{$DESCRIPTION 'Raize Components 5.5'}

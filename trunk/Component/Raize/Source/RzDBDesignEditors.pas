@@ -57,6 +57,9 @@
   TRzDBCheckBoxEditor
     Adds context menu to TRzDBCheckBox component.
 
+  TRzDBCheckBoxGroupEditor
+    Adds context menu to TRzDBCheckBoxGroup component.
+
   TRzDBGridEditor
     Adds context menu to TRzDBGrid component.
 
@@ -109,6 +112,7 @@ uses
   RzDBStat,
   RzDBNav,
   RzDBSpin,
+  RzDBRGrp,
   RzDBGrid;
 
 type
@@ -385,6 +389,21 @@ type
   end;
 
 
+  {================================================}
+  {== TRzDBCheckBoxGroupEditor Class Declaration ==}
+  {================================================}
+
+  TRzDBCheckBoxGroupEditor = class( TRzDBControlEditor )
+  protected
+    function GroupBox: TRzDBCheckBoxGroup;
+    procedure PrepareMenuItem( Index: Integer; const Item: TMenuItem ); override;
+    procedure GroupStyleMenuHandler( Sender: TObject );
+  public
+    function GetVerbCount: Integer; override;
+    function GetVerb( Index: Integer ) : string; override;
+  end;
+
+
   {=======================================}
   {== TRzDBGridEditor Class Declaration ==}
   {=======================================}
@@ -399,6 +418,8 @@ type
     function GetVerb( Index: Integer ) : string; override;
     procedure ExecuteVerb( Index: Integer ); override;
   end;
+
+
 
 
   {== Property Editors ================================================================================================}
@@ -433,6 +454,7 @@ uses
   TypInfo,
   ImgList,
   RzCommon,
+  RzPanel,
   RzStatus,
   RzBtnEdt,
   RzSpnEdt,
@@ -1971,6 +1993,59 @@ begin
     end;
   end;
 end;
+
+
+{======================================}
+{== TRzDBCheckBoxGroupEditor Methods ==}
+{======================================}
+
+function TRzDBCheckBoxGroupEditor.GroupBox: TRzDBCheckBoxGroup;
+begin
+  Result := Component as TRzDBCheckBoxGroup;
+end;
+
+
+function TRzDBCheckBoxGroupEditor.GetVerbCount: Integer;
+begin
+  Result := 4;
+end;
+
+
+function TRzDBCheckBoxGroupEditor.GetVerb( Index: Integer ): string;
+begin
+  case Index of
+    0: Result := 'Set DataSource';
+    1: Result := 'Set DataField';
+    2: Result := '-';
+    3: Result := 'Group Style';
+  end;
+end;
+
+
+procedure TRzDBCheckBoxGroupEditor.PrepareMenuItem( Index: Integer; const Item: TMenuItem );
+begin
+  inherited;
+
+  case Index of
+    3: // GroupStyle
+    begin
+      CreateGroupStyleMenuItem( Item, gsFlat, GroupBox.GroupStyle, GroupStyleMenuHandler );
+      CreateGroupStyleMenuItem( Item, gsStandard, GroupBox.GroupStyle, GroupStyleMenuHandler );
+      CreateGroupStyleMenuItem( Item, gsTopLine, GroupBox.GroupStyle, GroupStyleMenuHandler );
+      CreateGroupStyleMenuItem( Item, gsBanner, GroupBox.GroupStyle, GroupStyleMenuHandler );
+      CreateGroupStyleMenuItem( Item, gsUnderline, GroupBox.GroupStyle, GroupStyleMenuHandler );
+      CreateGroupStyleMenuItem( Item, gsCustom, GroupBox.GroupStyle, GroupStyleMenuHandler );
+    end;
+  end;
+end;
+
+
+procedure TRzDBCheckBoxGroupEditor.GroupStyleMenuHandler( Sender: TObject );
+begin
+  GroupBox.GroupStyle := TRzGroupBoxStyle( TMenuItem( Sender ).Tag );
+  DesignerModified;
+end;
+
 
 
 {=============================}

@@ -1,6 +1,6 @@
 ===============================================================================
 Log File:             	C:\PROGRA~1\Raize\RC5\Help\H2Reg_Log.txt
-Date:                 	03/02/2012 10:13:34 AM
+Date:                 	03/02/2012 12:29:52 PM
 Operating System:      	Windows XP 5.1 (Build 2600) Service Pack 2
 SysLocale.DefaultLCID: 	0x0409 (1033)
 SysLocale.PriLangID:   	0x0009 (9)
@@ -85,36 +85,36 @@ embarcadero.rs2010|_DEFAULT|Raize.RC5Help_RS2010|_DEFAULT|RC5Help_RS2010.HxA
 [Merge_Namespace]
 embarcadero.rs2010
 -------------------------------------------------------------------------------
-10:13:35 AM   [Reg_Namespace] - Lines To Process = 1
-10:13:35 AM     <nsName>="Raize.RC5Help_RS2010"
-10:13:35 AM     <nsColfile>="C:\Program Files\Raize\RC5\Help\RC5Help_RS2010.HxC"
-10:13:35 AM     <nsDesc>="Raize Components 5"
-10:13:35 AM     +Mode = Not Enabled
-10:13:35 AM    -->Registered OK
+12:29:52 PM   [Reg_Namespace] - Lines To Process = 1
+12:29:52 PM     <nsName>="Raize.RC5Help_RS2010"
+12:29:52 PM     <nsColfile>="C:\Program Files\Raize\RC5\Help\RC5Help_RS2010.HxC"
+12:29:52 PM     <nsDesc>="Raize Components 5"
+12:29:52 PM     +Mode = Not Enabled
+12:29:53 PM    -->Registered OK
 -------------------------------------------------------------------------------
-10:13:35 AM   [Reg_Title] - Lines To Process = 1
-10:13:35 AM     <nsName>="Raize.RC5Help_RS2010"
-10:13:35 AM     <TitleID>="RC5Help_RS2010"
-10:13:35 AM     <LangID>="1033"
-10:13:35 AM     <HxS_HelpFile>="C:\Program Files\Raize\RC5\Help\RC5Help_RS2010.HxS"
-10:13:35 AM     <HxI_IndexFile>="C:\Program Files\Raize\RC5\Help\RC5Help_RS2010.HxI"
-10:13:35 AM     <HxQ_QueryFile>=""
-10:13:35 AM     <HxR_AttrQueryFile>=""
-10:13:35 AM     <HxsMediaLoc>=""
-10:13:35 AM     <HxqMediaLoc>=""
-10:13:35 AM     <HxrMediaLoc>=""
-10:13:35 AM     <SampleMediaLoc>=""
-10:13:35 AM    -->Registered OK
+12:29:53 PM   [Reg_Title] - Lines To Process = 1
+12:29:53 PM     <nsName>="Raize.RC5Help_RS2010"
+12:29:53 PM     <TitleID>="RC5Help_RS2010"
+12:29:53 PM     <LangID>="1033"
+12:29:53 PM     <HxS_HelpFile>="C:\Program Files\Raize\RC5\Help\RC5Help_RS2010.HxS"
+12:29:53 PM     <HxI_IndexFile>="C:\Program Files\Raize\RC5\Help\RC5Help_RS2010.HxI"
+12:29:53 PM     <HxQ_QueryFile>=""
+12:29:53 PM     <HxR_AttrQueryFile>=""
+12:29:53 PM     <HxsMediaLoc>=""
+12:29:53 PM     <HxqMediaLoc>=""
+12:29:53 PM     <HxrMediaLoc>=""
+12:29:53 PM     <SampleMediaLoc>=""
+12:29:53 PM    -->Registered OK
 -------------------------------------------------------------------------------
-10:13:35 AM   [Reg_Plugin] - Lines To Process = 1
-10:13:35 AM     <nsName_Parent>="embarcadero.rs2010"
-10:13:35 AM     <HxT_Parent>="_DEFAULT"
-10:13:35 AM     <nsName_Child>="Raize.RC5Help_RS2010"
-10:13:35 AM     <HxT_Child>="_DEFAULT"
-10:13:35 AM     <HxA_Child>="C:\Program Files\Raize\RC5\Help\RC5Help_RS2010.HxA"
-10:13:35 AM   ** Reg Error **: Parent Namespace - Matching Namespace name(s) not found: "embarcadero.rs2010"
+12:29:53 PM   [Reg_Plugin] - Lines To Process = 1
+12:29:53 PM     <nsName_Parent>="embarcadero.rs2010"
+12:29:53 PM     <HxT_Parent>="_DEFAULT"
+12:29:53 PM     <nsName_Child>="Raize.RC5Help_RS2010"
+12:29:53 PM     <HxT_Child>="_DEFAULT"
+12:29:53 PM     <HxA_Child>="C:\Program Files\Raize\RC5\Help\RC5Help_RS2010.HxA"
+12:29:53 PM   ** Reg Error **: Parent Namespace - Matching Namespace name(s) not found: "embarcadero.rs2010"
 -------------------------------------------------------------------------------
-10:13:35 AM   [Reg_Filter] - Lines To Process = 0
+12:29:53 PM   [Reg_Filter] - Lines To Process = 0
 ===============================================================================
 
 --END OF FILE--

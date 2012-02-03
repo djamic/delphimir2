@@ -18,6 +18,11 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * The TRzCalendar control has been updated such that it will hide the focus
+      rectangle until the user navigates on the form using the keyboard. The
+      control honors the Windows system setting that affects this behavior.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * Fixed issue where pressing the keypad decimal key would not insert the
       DecimalSeparator character (based on user locale settings) in the
@@ -381,6 +386,8 @@ type
   protected
     procedure CreateHandle; override;
     procedure CreateWnd; override;
+
+    function ShowFocus: Boolean;
 
     procedure Paint; override;
 
@@ -2148,6 +2155,10 @@ end;
 procedure TRzCalendar.CreateWnd;
 begin
   inherited;
+
+  if RunningAtLeast( win2000 ) then
+    Perform( wm_ChangeUIState, MakeWParam( UIS_INITIALIZE, UISF_HIDEACCEL or UISF_HIDEFOCUS ), 0 );
+
   SetFirstDayOfWeek( FFirstDayOfWeek );
   FTodayTimer.Enabled := True;
 end;
@@ -2479,7 +2490,7 @@ begin {= TRzCalendar.Paint =}
             Canvas.Brush.Color := FCalendarColors.SelectedDateBack;
             FillRect( Canvas.Handle, SelRect, Canvas.Brush.Handle );
 
-            if Focused then
+            if ShowFocus and Focused then
               Canvas.DrawFocusRect( SelRect );
           end;
 
@@ -2532,6 +2543,12 @@ begin {= TRzCalendar.Paint =}
   end;
 
 end; {= TRzCalendar.Paint =}
+
+
+function TRzCalendar.ShowFocus: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEFOCUS ) = 0;
+end;
 
 
 function TRzCalendar.GetMaxShortDayNameLength: Integer;

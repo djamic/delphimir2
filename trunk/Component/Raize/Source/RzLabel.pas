@@ -18,6 +18,10 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Fixed issue where the TRzLabel would not auto-size correctly when one of
+      the Border* properties were set to fsFlatBold or fsFlatRounded.
+  ------------------------------------------------------------------------------
   5.0    (30 Sep 2008)
     * Fixed problem where the TRzLabel would not get sized correctly when
       AutoSize was set to True and TextMargin was greater than zero.
@@ -449,6 +453,7 @@ type
 implementation
 
 uses
+  Types,
   Forms,
   ShellAPI,
   RzCommonCursors;
@@ -952,7 +957,7 @@ end;
 
 function TRzLabel.GetLabelText: string;
 begin
-  Result := Caption;
+  Result := Caption
 end;
 
 
@@ -1056,7 +1061,7 @@ begin
     AdjustRect( R, FBorderSides, 1 )
   else if FBorderOuter in [ fsStatus, fsPopup ] then
     AdjustRect( R, FBorderSides, BevelWidth )
-  else if FBorderOuter in [ fsGroove..fsButtonUp ] then
+  else if FBorderOuter in fsDoubleBorders then
     AdjustRect( R, FBorderSides, 2 );
 
   AdjustRect( R, FBorderSides, FBorderWidth );
@@ -1066,7 +1071,7 @@ begin
     AdjustRect( R, FBorderSides, 1 )
   else if FBorderInner in [ fsStatus, fsPopup ] then
     AdjustRect( R, FBorderSides, BevelWidth )
-  else if FBorderInner in [ fsGroove..fsButtonUp ] then
+  else if FBorderInner in fsDoubleBorders then
     AdjustRect( R, FBorderSides, 2 );
 
   if ( FRotation = roNone ) and ( FTextStyle = tsShadow ) then

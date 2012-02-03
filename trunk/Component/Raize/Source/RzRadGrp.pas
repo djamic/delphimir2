@@ -275,6 +275,9 @@ type
     procedure SetButtonCount( Value: Integer ); virtual;
     procedure UpdateButtons; virtual;
 
+    procedure FocusNextButton;
+    procedure FocusPreviousButton;
+
     procedure ReadState( Reader: TReader ); override;
     function CanModify: Boolean; virtual;
 
@@ -350,7 +353,7 @@ type
       read FItemFrameColor
       write SetItemFrameColor
       default clBtnShadow;
-      
+
     property ItemHotTrack: Boolean
       read FItemHotTrack
       write SetItemHotTrack
@@ -1036,9 +1039,12 @@ type
   TRzGroupButton = class( TRzRadioButton )
   private
     FInClick: Boolean;
+    procedure WMGetDlgCode( var Msg: TMessage ); message wm_GetDlgCode;
+    procedure CMDialogChar( var Msg: TCMDialogChar ); message cm_DialogChar;
+    procedure WMKeyDown(var Msg: TWMKeyDown); message wm_KeyDown;
   protected
-    procedure MouseDown( Button: TMouseButton; Shift: TShiftState; X, Y: Integer ); override;
     procedure MouseUp( Button: TMouseButton; Shift: TShiftState; X, Y: Integer ); override;
+
     procedure KeyDown( var Key: Word; Shift: TShiftState ); override;
     procedure KeyPress( var Key: Char ); override;
   public
@@ -1070,17 +1076,6 @@ begin
 end;
 
 
-procedure TRzGroupButton.MouseDown( Button: TMouseButton; Shift: TShiftState; X, Y: Integer );
-begin
-  try
-    if TRzCustomRadioGroup( Parent ).CanModify then
-      inherited;
-  except
-    Application.HandleException( Self );
-  end;
-end;
-
-
 procedure TRzGroupButton.MouseUp( Button: TMouseButton; Shift: TShiftState; X, Y: Integer );
 begin
   if not FInClick then
@@ -1095,6 +1090,52 @@ begin
     FInClick := False;
   end;
 end;
+
+
+procedure TRzGroupButton.WMGetDlgCode( var Msg: TMessage );
+begin
+  inherited;
+  Msg.Result := dlgc_WantArrows;
+end;
+
+
+procedure TRzGroupButton.CMDialogChar( var Msg: TCMDialogChar );
+begin
+  if IsAccel( Msg.CharCode, Caption ) and CanFocus then
+  begin
+    if TRzCustomRadioGroup( Parent ).CanModify then
+      inherited;
+  end
+  else
+    inherited;
+end;
+
+
+procedure TRzGroupButton.WMKeyDown( var Msg: TWMKeyDown );
+begin
+  case Msg.CharCode of
+    vk_Down,
+    vk_Right:
+    begin
+      if TRzCustomRadioGroup( Parent ).CanModify then
+      begin
+        TRzCustomRadioGroup( Parent ).FocusNextButton;
+      end;
+    end;
+
+    vk_Up,
+    vk_Left:
+    begin
+      if TRzCustomRadioGroup( Parent ).CanModify then
+        TRzCustomRadioGroup( Parent ).FocusPreviousButton;
+    end;
+
+    else
+      inherited;
+  end;
+end;
+
+
 
 
 procedure TRzGroupButton.KeyPress( var Key: Char );
@@ -1895,6 +1936,41 @@ begin
     FOnChanging( Self, NewIndex, Result );
 end;
 
+
+procedure TRzCustomRadioGroup.FocusNextButton;
+var
+  Idx, StartIdx: Integer;
+begin
+  if FButtons.Count <= 1 then
+    Exit;
+
+  Idx := FItemIndex;
+  StartIdx := Idx;
+  repeat
+    Inc( Idx );
+    if Idx >= FButtons.Count then
+      Idx := 0;
+  until TRzGroupButton( FButtons[ Idx ] ).Visible or ( Idx = StartIdx );
+  TRzGroupButton( FButtons[ Idx ] ).SetFocus;
+end;
+
+
+procedure TRzCustomRadioGroup.FocusPreviousButton;
+var
+  Idx, StartIdx: Integer;
+begin
+  if FButtons.Count <= 1 then
+    Exit;
+
+  Idx := FItemIndex;
+  StartIdx := Idx;
+  repeat
+    Dec( Idx );
+    if Idx < 0 then
+      Idx := FButtons.Count - 1;
+  until TRzGroupButton( FButtons[ Idx ] ).Visible or ( Idx = StartIdx );
+  TRzGroupButton( FButtons[ Idx ] ).SetFocus;
+end;
 
 
 {==================================}

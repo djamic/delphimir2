@@ -14,6 +14,20 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Added new TRzDBCheckBoxGroup control. This specialized group box has a
+      check box embedded next to the group's Caption. The check box state is
+      controlled from the DataSource and DataField properties. The ValueCheck
+      and ValueUncheck properties allow non Boolean values to be used to control
+      the state of the check box. The TRzDBCheckBoxGroup inherits the
+      EnableControlsOnCheck property, which allows child controls to be
+      automatically enabled/disabled based on the state of the check box.
+    * Fixed issue in TRzDBRadioGroup where using the arrow keys to change the
+      selected radio button would not place the dataset into edit mode.
+    * Fixed issue in TRzDBRadioGroup where pressing an accelerator character
+      defined for an Item's caption would not result in the dataset being placed
+      into edit mode.
+  ------------------------------------------------------------------------------
   5.3    (07 Feb 2010)
     * Added new CaptionFont property to TRzDBRadioGroup.
     * Added ReadOnlyColor, and ReadOnlyColorOnFocus properties to the
@@ -292,7 +306,170 @@ type
   end;
 
 
+
+  TRzDBCheckBoxGroup = class( TRzCustomGroupBox )
+  private
+    FAboutInfo: TRzAboutInfo;
+    FDataLink: TFieldDataLink;
+    FValueCheck: string;
+    FValueUncheck: string;
+
+    { Internal Event Handlers }
+    procedure DataChange( Sender: TObject );
+    procedure UpdateData( Sender: TObject );
+    procedure CMExit( var Msg: TCMExit ); message cm_Exit;
+    procedure CMGetDataLink( var Msg: TMessage ); message cm_GetDataLink;
+
+  protected
+    procedure KeyPress( var Key: Char ); override;
+    procedure Notification( AComponent: TComponent; Operation: TOperation ); override;
+
+    function ValueMatch( const ValueList, Value: string ): Boolean;
+    procedure ChangeState; override;
+
+    { Property Access Methods }
+    function GetDataField: string; virtual;
+    procedure SetDataField( const Value: string ); virtual;
+    function GetDataSource: TDataSource; virtual;
+    procedure SetDataSource( Value: TDataSource ); virtual;
+    function GetField: TField; virtual;
+    function GetFieldState: TCheckBoxState; virtual;
+    function GetReadOnly: Boolean; virtual;
+    procedure SetReadOnly( Value: Boolean ); virtual;
+    procedure SetValueCheck( const Value: string ); virtual;
+    procedure SetValueUncheck( const Value: string ); virtual;
+  public
+    constructor Create( AOwner: TComponent ); override;
+    destructor Destroy; override;
+
+    property Checked default False;
+    property Field: TField
+      read GetField;
+  published
+    property About: TRzAboutInfo
+      read FAboutInfo
+      write FAboutInfo
+      stored False;
+
+    property DataField: string
+      read GetDataField
+      write SetDataField;
+
+    property DataSource: TDataSource
+      read GetDataSource
+      write SetDataSource;
+
+    property ReadOnly: Boolean
+      read GetReadOnly
+      write SetReadOnly
+      default False;
+
+    property ValueChecked: string
+      read FValueCheck
+      write SetValueCheck;
+
+    property ValueUnchecked: string
+      read FValueUncheck
+      write SetValueUncheck;
+
+    { Inherited Properties & Events }
+    property Align;
+    property Alignment;
+    property Anchors;
+    property BannerHeight;
+    property BevelWidth;
+    property BiDiMode;
+    property BorderColor;
+    property BorderInner;
+    property BorderOuter;
+    property BorderSides;
+    property BorderWidth;
+    property Caption;
+    property CaptionFont;
+    property Color;
+    property Constraints;
+    property Ctl3D;
+    property DockSite;
+    {$IFDEF VCL120_OR_HIGHER}
+    property DoubleBuffered;
+    {$ENDIF}
+    property DragCursor;
+    property DragKind;
+    property DragMode;
+    property Enabled;
+    property EnableControlsOnCheck;
+    property FlatColor;
+    property FlatColorAdjustment;
+    property Font;
+    property FrameControllerNotifications;
+    property FrameController;
+    property GradientColorStyle;
+    property GradientColorStart;
+    property GradientColorStop;
+    property GradientDirection;
+    property GroupStyle;
+    property Height;
+    {$IFDEF VCL100_OR_HIGHER}
+    property Padding;
+    {$ENDIF}
+    property ParentBiDiMode;
+    property ParentColor;
+    property ParentCtl3D;
+    {$IFDEF VCL120_OR_HIGHER}
+    property ParentDoubleBuffered;
+    {$ENDIF}
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property ShowDockClientCaptions;
+    property ShowHint;
+    property TabOrder;
+    property TabStop;
+    {$IFDEF VCL140_OR_HIGHER}
+    property Touch;
+    {$ENDIF}
+    property Transparent;
+    property Visible;
+    property VisualStyle;
+
+    property OnCheckBoxClick;
+    property OnClick;
+    property OnContextPopup;
+    property OnDblClick;
+    property OnDockDrop;
+    property OnDockOver;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnEndDock;
+    property OnEndDrag;
+    property OnEnter;
+    property OnExit;
+    {$IFDEF VCL140_OR_HIGHER}
+    property OnGesture;
+    {$ENDIF}
+    property OnGetSiteInfo;
+    {$IFDEF VCL90_OR_HIGHER}
+    property OnMouseActivate;
+    {$ENDIF}
+    property OnMouseDown;
+    property OnMouseEnter;
+    property OnMouseLeave;
+    property OnMouseMove;
+    property OnMouseUp;
+    property OnPaint;
+    property OnResize;
+    property OnStartDock;
+    property OnStartDrag;
+    property OnUnDock;
+  end;
+
+
+
+
 implementation
+
+uses
+  DBConsts;
 
 
 {&RT}
@@ -423,20 +600,25 @@ end;
 
 procedure TRzDBRadioGroup.SetValue( const Value: string );
 var
+  WasFocused: Boolean;
   I, Index: Integer;
 begin
   if FValue <> Value then
   begin
     FInSetValue := True;
     try
+      WasFocused := ( ItemIndex > -1 ) and ( Buttons[ ItemIndex ].Focused );
       Index := -1;
       for I := 0 to Items.Count - 1 do
-        if Value = GetButtonValue(I) then
+        if Value = GetButtonValue( I ) then
         begin
           Index := I;
           Break;
         end;
       ItemIndex := Index;
+      // Move the focus rect along with the selected index
+      if WasFocused and ( ItemIndex <> -1 ) then
+        Buttons[ ItemIndex ].SetFocus;
     finally
       FInSetValue := False;
     end;
@@ -523,6 +705,215 @@ end;
 function TRzDBRadioGroup.UpdateAction( Action: TBasicAction ): Boolean;
 begin
   Result := inherited UpdateAction( Action ) or ( DataLink <> nil ) and DataLink.UpdateAction( Action );
+end;
+
+
+{================================}
+{== TRzDBCheckBoxGroup Methods ==}
+{================================}
+
+constructor TRzDBCheckBoxGroup.Create( AOwner: TComponent );
+begin
+  inherited;
+  Checked := False;
+  ShowCheckBox := True;
+
+  FValueCheck := STextTrue;
+  FValueUncheck := STextFalse;
+
+  FDataLink := TFieldDataLink.Create;
+  FDataLink.Control := Self;
+  FDataLink.OnDataChange := DataChange;
+  FDataLink.OnUpdateData := UpdateData;
+  {&RCI}
+end;
+
+
+destructor TRzDBCheckBoxGroup.Destroy;
+begin
+  FDataLink.Free;
+  FDataLink := nil;
+  inherited;
+end;
+
+
+procedure TRzDBCheckBoxGroup.Notification( AComponent: TComponent; Operation: TOperation );
+begin
+  inherited;
+  if ( Operation = opRemove ) and ( FDataLink <> nil ) and ( AComponent = DataSource ) then
+    DataSource := nil;
+end;
+
+
+function TRzDBCheckBoxGroup.GetFieldState: TCheckBoxState;
+var
+  Text: string;
+begin
+  if FDatalink.Field <> nil then
+  begin
+    if FDataLink.Field.IsNull then
+    begin
+      Result := cbUnchecked
+    end
+    else if FDataLink.Field.DataType = ftBoolean then
+    begin
+      if FDataLink.Field.AsBoolean then
+        Result := cbChecked
+      else
+        Result := cbUnchecked;
+    end
+    else
+    begin
+      Result := cbGrayed;
+      Text := FDataLink.Field.Text;
+      if ValueMatch( FValueCheck, Text ) then
+        Result := cbChecked
+      else if ValueMatch( FValueUncheck, Text ) then
+        Result := cbUnchecked;
+    end;
+  end
+  else
+    Result := cbUnchecked;
+end;
+
+
+procedure TRzDBCheckBoxGroup.DataChange( Sender: TObject );
+begin
+  if GetFieldState = cbChecked then
+    Checked := True
+  else
+    Checked := False;
+end;
+
+
+procedure TRzDBCheckBoxGroup.UpdateData( Sender: TObject );
+var
+  Pos: Integer;
+  S: string;
+begin
+  if FDataLink.Field.DataType = ftBoolean then
+    FDataLink.Field.AsBoolean := Checked
+  else
+  begin
+    if Checked then
+      S := FValueCheck
+    else
+      S := FValueUncheck;
+    Pos := 1;
+    FDataLink.Field.Text := ExtractFieldName( S, Pos );
+  end;
+end;
+
+
+function TRzDBCheckBoxGroup.ValueMatch( const ValueList, Value: string ): Boolean;
+var
+  Pos: Integer;
+begin
+  Result := False;
+  Pos := 1;
+  while Pos <= Length( ValueList ) do
+    if AnsiCompareText( ExtractFieldName( ValueList, Pos ), Value ) = 0 then
+    begin
+      Result := True;
+      Break;
+    end;
+end;
+
+
+procedure TRzDBCheckBoxGroup.ChangeState;
+begin
+  {&RV}
+  if FDataLink.Edit then
+  begin
+    inherited;
+    FDataLink.Modified;
+  end;
+end;
+
+
+function TRzDBCheckBoxGroup.GetDataSource: TDataSource;
+begin
+  Result := FDataLink.DataSource;
+end;
+
+procedure TRzDBCheckBoxGroup.SetDataSource( Value: TDataSource );
+begin
+  if not ( FDataLink.DataSourceFixed and ( csLoading in ComponentState ) ) then
+  begin
+    FDataLink.DataSource := Value;
+    if Value <> nil then
+      Value.FreeNotification( Self );
+  end;
+end;
+
+function TRzDBCheckBoxGroup.GetDataField: string;
+begin
+  Result := FDataLink.FieldName;
+end;
+
+procedure TRzDBCheckBoxGroup.SetDataField( const Value: string );
+begin
+  FDataLink.FieldName := Value;
+end;
+
+function TRzDBCheckBoxGroup.GetReadOnly: Boolean;
+begin
+  Result := FDataLink.ReadOnly;
+end;
+
+procedure TRzDBCheckBoxGroup.SetReadOnly( Value: Boolean );
+begin
+  inherited;
+  FDataLink.ReadOnly := Value;
+end;
+
+function TRzDBCheckBoxGroup.GetField: TField;
+begin
+  Result := FDataLink.Field;
+end;
+
+procedure TRzDBCheckBoxGroup.KeyPress( var Key: Char );
+begin
+  inherited;
+  case Key of
+    #8, ' ':
+      FDataLink.Edit;
+
+    #27:
+    begin
+      FDataLink.Reset;
+    end;
+  end;
+end;
+
+procedure TRzDBCheckBoxGroup.SetValueCheck( const Value: string );
+begin
+  FValueCheck := Value;
+  DataChange( Self );
+end;
+
+procedure TRzDBCheckBoxGroup.SetValueUncheck( const Value: string );
+begin
+  FValueUncheck := Value;
+  DataChange( Self );
+end;
+
+
+procedure TRzDBCheckBoxGroup.CMExit( var Msg: TCMExit );
+begin
+  try
+    FDataLink.UpdateRecord;
+  except
+    SetFocus;
+    raise;
+  end;
+  inherited;
+end;
+
+
+procedure TRzDBCheckBoxGroup.CMGetDataLink( var Msg: TMessage );
+begin
+  Msg.Result := Integer( FDataLink );
 end;
 
 

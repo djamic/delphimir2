@@ -25,6 +25,17 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * The TRzSpinner controls has been updated such that it will hide the focus
+      rectangle until the user navigates on the form using the keyboard. The
+      control honors the Windows system setting that affects this behavior.
+    * Fixed issue in TRzSpinner where changing the Color property would have no
+      effect when XP/Vista themes were enabled.
+    * Fixed issue in TRzSpinner where custom images would not appear if XP/Vista
+      themes were enabled.
+    * Fixed display issue in TRzSpinner where the spin buttons would not appear
+      correctly in applications that were not XP/Vista Theme enabled.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * Fixed positioning of TRzSpinEdit buttons between XP, Vista, and Windows 7.
     * Updated display of spin arrows in TRzSpinEdit when running under Windows
@@ -817,6 +828,7 @@ type
     procedure CMMouseEnter( var Msg: TMessage ); message cm_MouseEnter;
     procedure CMMouseLeave( var Msg: TMessage ); message cm_MouseLeave;
   protected
+    procedure CreateWnd; override;
     procedure Notification( AComponent : TComponent; Operation : TOperation ); override;
     procedure DefineProperties( Filer: TFiler ); override;
 
@@ -824,6 +836,7 @@ type
     procedure DrawFrame; virtual;
     procedure DrawValue; virtual;
     procedure DrawButton( Area: TRzSpinnerArea; Down: Boolean; Bounds: TRect ); virtual;
+    function UseCustomImages( Area: TRzSpinnerArea ): Boolean;
     procedure CalcCenterOffsets( Bounds: TRect; var L, T: Integer);
     procedure CheckMinSize;
     procedure CheckHotTracking( P: TPoint );
@@ -833,6 +846,7 @@ type
     procedure DecValue( Amount: Integer ); virtual;
     procedure IncValue( Amount: Integer ); virtual;
 
+    function ShowFocus: Boolean;
     function CursorPosition: TPoint;
     function HitTest( P: TPoint ): TRzSpinnerArea; overload;
     function HitTest( X, Y: Integer ): TRzSpinnerArea; overload;
@@ -2400,6 +2414,15 @@ begin
 end;
 
 
+procedure TRzSpinner.CreateWnd;
+begin
+  inherited;
+
+  if RunningAtLeast( win2000 ) then
+    Perform( wm_ChangeUIState, MakeWParam( UIS_INITIALIZE, UISF_HIDEACCEL or UISF_HIDEFOCUS ), 0 );
+end;
+
+
 destructor TRzSpinner.Destroy;
 begin
   FImagesChangeLink.Free;
@@ -2442,10 +2465,17 @@ begin
   DrawFrame;
   DrawValue;
 
-  if RunningAtLeast( winVista ) then
+  if RunningAtLeast( winVista ) and FThemeAware and ThemeServices.ThemesEnabled then
   begin
-    DrawButton( saMinusButton, FMinusBtnDown, Rect( -1, -1, FButtonWidth, Height ) );
-    DrawButton( saPlusButton, FPlusBtnDown, Rect( Width - FButtonWidth, -1, Width + 1, Height ) );
+    if not UseCustomImages( saMinusButton ) then
+      DrawButton( saMinusButton, FMinusBtnDown, Rect( -1, -1, FButtonWidth, Height ) )
+    else
+      DrawButton( saMinusButton, FMinusBtnDown, Rect( 1, 1, FButtonWidth - 1, Height - 1 ) );
+
+    if not UseCustomImages( saPlusButton ) then
+      DrawButton( saPlusButton, FPlusBtnDown, Rect( Width - FButtonWidth, -1, Width + 1, Height ) )
+    else
+      DrawButton( saPlusButton, FPlusBtnDown, Rect( Width - FButtonWidth + 1, 1, Width - 1, Height - 1 ) );
   end
   else
   begin
@@ -2453,7 +2483,7 @@ begin
     DrawButton( saPlusButton, FPlusBtnDown, Rect( Width - FButtonWidth + 1, 1, Width - 1, Height - 1 ) );
   end;
 
-  if Focused and FShowFocusRect then
+  if ShowFocus and Focused and FShowFocusRect then
   begin
     Canvas.Brush.Color := Self.Color;
     R := Rect( FButtonWidth + 1, 2, Width - FButtonWidth -1, Height - 2 );
@@ -2472,6 +2502,9 @@ begin
 
   if FThemeAware and ThemeServices.ThemesEnabled then
   begin
+    Canvas.Brush.Color := Self.Color;
+    // Eventually add DisabledColor property like TRzEdit
+
     if Enabled then
       ElementDetails := ThemeServices.GetElementDetails( teEditTextNormal )
     else
@@ -2536,34 +2569,36 @@ var
   R: TRect;
   L, T: Integer;
   Direction: TDirection;
+  SpinElement: TThemedSpin;
   ElementDetails: TThemedElementDetails;
 begin
-  if FThemeAware and ThemeServices.ThemesEnabled then
+  if FThemeAware and ThemeServices.ThemesEnabled and not UseCustomImages( Area ) then
   begin
     if Area = saMinusButton then
     begin
       if csDesigning in ComponentState then
       begin
         if Enabled then
-          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzNormal )
+          SpinElement := tsDownHorzNormal
         else
-          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzDisabled );
+          SpinElement := tsDownHorzDisabled;
       end
       else // @ runtime
       begin
         if Down then
-          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzPressed )
+          SpinElement := tsDownHorzPressed
         else if Enabled then
         begin
           if FOverMinusButton then
-            ElementDetails := ThemeServices.GetElementDetails( tsDownHorzHot )
+            SpinElement := tsDownHorzHot
           else
-            ElementDetails := ThemeServices.GetElementDetails( tsDownHorzNormal );
+            SpinElement := tsDownHorzNormal;
         end
         else
-          ElementDetails := ThemeServices.GetElementDetails( tsDownHorzDisabled );
+          SpinElement := tsDownHorzDisabled;
       end;
 
+      ElementDetails := ThemeServices.GetElementDetails( SpinElement );
       ThemeServices.DrawElement( Canvas.Handle, ElementDetails, Bounds );
 
       if not RunningAtLeast( winVista ) then
@@ -2579,25 +2614,26 @@ begin
       if csDesigning in ComponentState then
       begin
         if Enabled then
-          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzNormal )
+          SpinElement := tsUpHorzNormal
         else
-          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzDisabled );
+          SpinElement := tsUpHorzDisabled;
       end
       else // @ runtime
       begin
         if Down then
-          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzPressed )
+          SpinElement := tsUpHorzPressed
         else if Enabled then
         begin
           if FOverPlusButton then
-            ElementDetails := ThemeServices.GetElementDetails( tsUpHorzHot )
+            SpinElement := tsUpHorzHot
           else
-            ElementDetails := ThemeServices.GetElementDetails( tsUpHorzNormal );
+            SpinElement := tsUpHorzNormal;
         end
         else
-          ElementDetails := ThemeServices.GetElementDetails( tsUpHorzDisabled );
+          SpinElement := tsUpHorzDisabled;
       end;
 
+      ElementDetails := ThemeServices.GetElementDetails( SpinElement );
       ThemeServices.DrawElement( Canvas.Handle, ElementDetails, Bounds );
 
       if not RunningAtLeast( winVista ) then
@@ -2609,7 +2645,7 @@ begin
       end;
     end;
   end
-  else // No XP Themes
+  else // No XP Themes or using custom images
   begin
     R := DrawBox( Canvas, Bounds, clWindow );
 
@@ -2681,6 +2717,19 @@ begin
   Canvas.Pen.Color := clWindowText;
   Canvas.Brush.Color := clWindow;
 end; {= TRzSpinner.DrawButton =}
+
+
+function TRzSpinner.UseCustomImages( Area: TRzSpinnerArea ): Boolean;
+begin
+  Result := False;
+  case Area of
+    saMinusButton:
+      Result := ( Images <> nil ) and ( ImageIndexMinus <> -1 );
+
+    saPlusButton:
+      Result := ( Images <> nil ) and ( ImageIndexPlus <> -1 );
+  end;
+end;
 
 
 procedure TRzSpinner.CalcCenterOffsets( Bounds: TRect; var L, T: Integer );
@@ -2782,6 +2831,12 @@ begin
     vk_Next:
       DecValue( FPageSize );
   end;
+end;
+
+
+function TRzSpinner.ShowFocus: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEFOCUS ) = 0;
 end;
 
 

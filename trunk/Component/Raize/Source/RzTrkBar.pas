@@ -14,6 +14,11 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * The TRzTrackBar has been updated such that it will hide the focus
+      rectangle until the user navigates on the form using the keyboard. The
+      control honors the Windows system setting that affects this behavior.
+  ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Fixed issue in TRzTrackBar where the thumb would not be displayed when a
       the Min to Max range was very, very large.
@@ -159,7 +164,10 @@ type
   protected
     FAboutInfo: TRzAboutInfo;
 
+    procedure CreateWnd; override;
     procedure LoadThumbBitmaps;
+
+    function ShowFocus: Boolean;
     function CursorPosition: TPoint;
 
     procedure DrawTrack( ACanvas: TCanvas ); virtual;
@@ -476,6 +484,14 @@ begin
   FHorzCursor := LoadCursor( HInstance, 'RZTRKBAR_H_CURSOR' );
   FVertCursor := LoadCursor( HInstance, 'RZTRKBAR_V_CURSOR' );
   {&RV}
+end;
+
+
+procedure TRzTrackBar.CreateWnd;
+begin
+  inherited;
+  if RunningAtLeast( win2000 ) then
+    Perform( wm_ChangeUIState, MakeWParam( UIS_INITIALIZE, UISF_HIDEACCEL or UISF_HIDEFOCUS ), 0 );
 end;
 
 
@@ -1151,8 +1167,7 @@ end; {= TRzTrackBar.DrawThumb =}
 
 procedure TRzTrackBar.Paint;
 begin
-  // Indicate focus by drawing dotted box around control
-  if Focused and FShowFocusRect then
+  if ShowFocus and Focused and FShowFocusRect then
     Canvas.DrawFocusRect( ClientRect );
 
   DrawTrack( Canvas );
@@ -1366,6 +1381,13 @@ begin
       MouseUp( Button, Shift, X, Y );
   end;
 end; {= TRzTrackBar.MouseDown =}
+
+
+
+function TRzTrackBar.ShowFocus: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEFOCUS ) = 0;
+end;
 
 
 function TRzTrackBar.CursorPosition: TPoint;

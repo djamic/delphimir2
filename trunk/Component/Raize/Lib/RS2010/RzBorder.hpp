@@ -25,6 +25,7 @@
 #include <Dialogs.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
 #include <Rzgrafx.hpp>	// Pascal unit
+#include <Rzpanel.hpp>	// Pascal unit
 #include <Rzcommon.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
@@ -364,9 +365,9 @@ __published:
 
 
 class DELPHICLASS TRzColorPicker;
-class PASCALIMPLEMENTATION TRzColorPicker : public TRzBorder
+class PASCALIMPLEMENTATION TRzColorPicker : public Rzpanel::TRzCustomPanel
 {
-	typedef TRzBorder inherited;
+	typedef Rzpanel::TRzCustomPanel inherited;
 	
 private:
 	Graphics::TColor FCustomColor;
@@ -387,16 +388,18 @@ private:
 	bool FShowColorHints;
 	Controls::THintWindow* FHintWnd;
 	Graphics::TColor FButtonColor;
+	Graphics::TColor FButtonFontColor;
+	bool FIsPopup;
 	int __fastcall Margin(void);
-	void __fastcall UpdateBounds(void);
+	HIDESBASE void __fastcall UpdateBounds(void);
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Msg);
 	HIDESBASE MESSAGE void __fastcall CMMouseEnter(Messages::TMessage &Msg);
 	HIDESBASE MESSAGE void __fastcall CMMouseLeave(Messages::TMessage &Msg);
+	MESSAGE void __fastcall WMGetDlgCode(Messages::TWMNoParams &Msg);
 	
 protected:
 	virtual void __fastcall Loaded(void);
 	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
-	virtual Graphics::TColor __fastcall InteriorColor(void);
 	virtual void __fastcall Paint(void);
 	virtual bool __fastcall CanAutoSize(int &NewWidth, int &NewHeight);
 	int __fastcall HitTest(int X, int Y);
@@ -408,7 +411,11 @@ protected:
 	DYNAMIC void __fastcall ColorChanged(void);
 	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall DoEnter(void);
+	DYNAMIC void __fastcall DoExit(void);
+	DYNAMIC void __fastcall KeyDown(System::Word &Key, Classes::TShiftState Shift);
 	virtual void __fastcall SetButtonColor(Graphics::TColor Value);
+	virtual void __fastcall SetButtonFontColor(Graphics::TColor Value);
 	virtual void __fastcall SetCustomColorCaption(const System::UnicodeString Value);
 	virtual void __fastcall SetCustomColor(Graphics::TColor Value);
 	virtual void __fastcall SetCustomColors(Rzcommon::TRzCustomColors* Value);
@@ -426,10 +433,12 @@ protected:
 	
 public:
 	__fastcall virtual TRzColorPicker(Classes::TComponent* AOwner);
+	__property bool IsPopup = {write=FIsPopup, nodefault};
 	__property int SelColorIndex = {read=FSelColorIndex, write=SetSelColorIndex, nodefault};
 	
 __published:
 	__property Graphics::TColor ButtonColor = {read=FButtonColor, write=SetButtonColor, default=-16777201};
+	__property Graphics::TColor ButtonFontColor = {read=FButtonFontColor, write=SetButtonFontColor, default=-16777208};
 	__property System::UnicodeString CustomColorCaption = {read=FCustomColorCaption, write=SetCustomColorCaption};
 	__property Graphics::TColor CustomColor = {read=FCustomColor, write=SetCustomColor, default=16777215};
 	__property Rzcommon::TRzCustomColors* CustomColors = {read=FCustomColors, write=SetCustomColors};
@@ -445,25 +454,62 @@ __published:
 	__property bool ShowSystemColors = {read=FShowSystemColors, write=SetShowSystemColors, default=0};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property Align = {default=0};
+	__property Anchors = {default=3};
 	__property AutoSize = {default=1};
-	__property BorderWidth = {default=2};
+	__property BevelWidth = {default=1};
+	__property BorderInner = {default=0};
+	__property BorderOuter = {default=8};
+	__property BorderSides = {default=15};
 	__property BorderColor = {default=-16777211};
+	__property BorderHighlight = {default=-16777196};
+	__property BorderShadow = {default=-16777200};
+	__property BorderWidth = {default=2};
 	__property Color = {default=-16777211};
+	__property Constraints;
+	__property Ctl3D;
+	__property DragCursor = {default=-12};
+	__property DragKind = {default=0};
+	__property DragMode = {default=0};
+	__property Enabled = {default=1};
+	__property FlatColor = {default=-16777200};
 	__property FlatColorAdjustment = {default=0};
 	__property Font;
+	__property FrameController;
+	__property FrameControllerNotifications = {default=65535};
 	__property Hint;
+	__property ParentColor = {default=0};
 	__property ParentFont = {default=1};
 	__property ParentShowHint = {default=1};
-	__property ParentColor = {default=1};
+	__property PopupMenu;
 	__property ShowHint;
+	__property TabOrder = {default=-1};
+	__property TabStop = {default=1};
+	__property Touch;
+	__property Visible = {default=1};
+	__property OnClick;
+	__property OnContextPopup;
+	__property OnDblClick;
+	__property OnDragDrop;
+	__property OnDragOver;
+	__property OnEndDrag;
+	__property OnEndDock;
+	__property OnEnter;
+	__property OnExit;
+	__property OnGesture;
 	__property OnMouseActivate;
 	__property OnMouseDown;
 	__property OnMouseMove;
 	__property OnMouseUp;
-	__property OnClick;
-	__property OnDblClick;
+	__property OnStartDock;
+	__property OnStartDrag;
+	__property OnKeyDown;
+	__property OnKeyPress;
+	__property OnKeyUp;
 public:
-	/* TRzBorder.Destroy */ inline __fastcall virtual ~TRzColorPicker(void) { }
+	/* TRzCustomPanel.Destroy */ inline __fastcall virtual ~TRzColorPicker(void) { }
+	
+public:
+	/* TWinControl.CreateParented */ inline __fastcall TRzColorPicker(HWND ParentWindow) : Rzpanel::TRzCustomPanel(ParentWindow) { }
 	
 };
 

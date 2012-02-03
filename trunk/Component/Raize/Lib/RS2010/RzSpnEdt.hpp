@@ -450,18 +450,21 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMMouseLeave(Messages::TMessage &Msg);
 	
 protected:
+	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	virtual void __fastcall Paint(void);
 	virtual void __fastcall DrawFrame(void);
 	virtual void __fastcall DrawValue(void);
 	virtual void __fastcall DrawButton(TRzSpinnerArea Area, bool Down, const Types::TRect &Bounds);
+	bool __fastcall UseCustomImages(TRzSpinnerArea Area);
 	void __fastcall CalcCenterOffsets(const Types::TRect &Bounds, int &L, int &T);
 	void __fastcall CheckMinSize(void);
 	void __fastcall CheckHotTracking(const Types::TPoint &P);
 	virtual void __fastcall CustomFramingChanged(void);
 	virtual void __fastcall DecValue(int Amount);
 	virtual void __fastcall IncValue(int Amount);
+	bool __fastcall ShowFocus(void);
 	Types::TPoint __fastcall CursorPosition(void);
 	TRzSpinnerArea __fastcall HitTest(const Types::TPoint &P)/* overload */;
 	TRzSpinnerArea __fastcall HitTest(int X, int Y)/* overload */;

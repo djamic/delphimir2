@@ -105,12 +105,14 @@ protected:
 	virtual void __fastcall Loaded(void);
 	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	DYNAMIC void __fastcall Resize(void);
+	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	Types::TRect __fastcall CalcHintRect(int MaxWidth, const System::UnicodeString HintStr, Controls::THintWindow* HintWnd);
 	void __fastcall DoHint(int X, int Y);
 	void __fastcall ReleaseHintWindow(void);
 	virtual void __fastcall UpdateColors(void);
 	virtual void __fastcall UpdateFrame(bool ViaMouse, bool InFocus);
 	virtual void __fastcall RepaintFrame(void);
+	bool __fastcall ShowFocus(void);
 	virtual int __fastcall OwnerDrawItemIndent(void);
 	virtual void __fastcall UpdateItemHeight(void);
 	virtual System::UnicodeString __fastcall HorzExtentPrefix(void);

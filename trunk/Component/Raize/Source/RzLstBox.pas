@@ -27,6 +27,15 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * The TRzListBox and descendant controls have been updated such that the
+      controls will hide the focus rectangle until the user navigates on the
+      form using the keyboard. The controls honor the Windows system setting
+      that affects this behavior.
+    * Fixed issue in TRzListBox and descendant controls where the Group font
+      would not get scaled along with the item font when the parent form was
+      scaled.
+  ------------------------------------------------------------------------------
   5.3    (07 Feb 2010)
     * Removed the HorzExtent property of the TRzListBox and descendant controls.
       This property has been obsolete for quite some time, ever since the 
@@ -328,6 +337,7 @@ type
     procedure Loaded; override;
     procedure Notification( AComponent: TComponent; Operation: TOperation ); override;
     procedure Resize; override;
+    procedure ChangeScale( M, D: Integer ); override;
 
     function CalcHintRect( MaxWidth: Integer; const HintStr: string; HintWnd: THintWindow ): TRect;
     procedure DoHint( X, Y: Integer );
@@ -337,6 +347,7 @@ type
     procedure UpdateFrame( ViaMouse, InFocus: Boolean ); virtual;
     procedure RepaintFrame; virtual;
 
+    function ShowFocus: Boolean;
     function OwnerDrawItemIndent: Integer; virtual;
     procedure UpdateItemHeight; virtual;
     function HorzExtentPrefix: string; virtual;
@@ -1420,6 +1431,9 @@ procedure TRzCustomListBox.CreateWnd;
 begin
   inherited;
 
+  if RunningAtLeast( win2000 ) then
+    Perform( wm_ChangeUIState, MakeWParam( UIS_INITIALIZE, UISF_HIDEACCEL or UISF_HIDEFOCUS ), 0 );
+
   // Initializing the scroll bar must occur after the Window Handle for the list
   // box has been created
 
@@ -1499,9 +1513,17 @@ begin
   inherited;
   if HorzScrollBar then
     AdjustHorzExtent;
-  
+
   if FUseGradients then
     Invalidate;
+end;
+
+
+procedure TRzCustomListBox.ChangeScale( M, D: Integer );
+begin
+  inherited;
+  if FGroupFontChanged and ( FGroupFont <> nil ) then
+    FGroupFont.Size := MulDiv( FGroupFont.Size, M, D );
 end;
 
 
@@ -2379,6 +2401,12 @@ begin
 end;
 
 
+function TRzCustomListBox.ShowFocus: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEFOCUS ) = 0;
+end;
+
+
 function TRzCustomListBox.OwnerDrawItemIndent: Integer;
 begin
   Result := FOwnerDrawIndent;
@@ -2444,7 +2472,7 @@ begin
   else
     Canvas.FillRect( ItemDetails.rcItem );
 
-  if odFocused in State then
+  if ShowFocus and ( odFocused in State ) then
     DrawFocusRect( ItemDetails.hDC, ItemDetails.rcItem );
 
   Canvas.Handle := 0;
@@ -2581,6 +2609,8 @@ var
   ForeColor, BackColor: TColor;
   Flags: Cardinal;
 begin
+  if not FGroupFontChanged then
+    FGroupFont.Assign( Self.Font );
   Canvas.Font := FGroupFont;
 
   if ThemeServices.ThemesEnabled and FGroupColorFromTheme then

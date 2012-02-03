@@ -179,6 +179,7 @@ private:
 protected:
 	virtual void __fastcall CreateHandle(void);
 	virtual void __fastcall CreateWnd(void);
+	bool __fastcall ShowFocus(void);
 	virtual void __fastcall Paint(void);
 	int __fastcall GetMaxShortDayNameLength(void);
 	void __fastcall CalcAreas(Types::TRect *Areas);

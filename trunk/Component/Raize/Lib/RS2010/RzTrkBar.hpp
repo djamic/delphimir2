@@ -124,7 +124,9 @@ private:
 	
 protected:
 	Rzcommon::TRzAboutInfo FAboutInfo;
+	virtual void __fastcall CreateWnd(void);
 	void __fastcall LoadThumbBitmaps(void);
+	bool __fastcall ShowFocus(void);
 	Types::TPoint __fastcall CursorPosition(void);
 	virtual void __fastcall DrawTrack(Graphics::TCanvas* ACanvas);
 	virtual void __fastcall DrawTicks(Graphics::TCanvas* ACanvas);
