@@ -126,7 +126,7 @@ object FrmMain: TFrmMain
     Align = alClient
     ColCount = 3
     DefaultColWidth = 158
-    DefaultRowHeight = 14
+    DefaultRowHeight = 25
     FixedCols = 0
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect]
     TabOrder = 2

@@ -1,4 +1,4 @@
-unit TestSelGate;
+锘縰nit TestSelGate;
 
 interface
 
@@ -29,7 +29,6 @@ var
 implementation
 
 uses RouteManage, DBShare;
-
 {$R *.dfm}
 
 procedure TfrmTestSelGate.ButtonTestClick(Sender: TObject);
@@ -40,8 +39,9 @@ var
 begin
   sSelGateIPaddr := Trim(EditSelGate.Text);
   sGameGateIPaddr := GateRouteIP(sSelGateIPaddr, nGameGatePort);
-  if sGameGateIPaddr = '' then begin
-    EditGameGate.Text := '无此网关设置';
+  if sGameGateIPaddr = '' then
+  begin
+    EditGameGate.Text := 'IP kh么ng 膽煤ng';
     Exit;
   end;
   EditGameGate.Text := format('%s:%d', [sGameGateIPaddr, nGameGatePort]);
@@ -49,6 +49,7 @@ end;
 
 procedure TfrmTestSelGate.Button1Click(Sender: TObject);
 begin
+  close;
   frmRouteManage.Open;
 end;
 

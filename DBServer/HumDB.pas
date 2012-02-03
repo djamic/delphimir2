@@ -4,8 +4,8 @@ interface
 uses
   Windows, Classes, SysUtils, Forms, MudUtil, Grobal2;
 resourcestring
-  sDBHeaderDesc = '飞尔世界数据库文件 2008/08/21';
-  sDBIdxHeaderDesc = '飞尔世界数据库文件 2008/08/21';
+  sDBHeaderDesc = 'Game MIR2 database 2012/01/12';
+  sDBIdxHeaderDesc = 'Game MIR2 database by dung059 2012/01/12';
 type
   TDBHeader = packed record //Size 124
     sDesc: string[$23]; //0x00    36

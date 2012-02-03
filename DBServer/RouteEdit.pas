@@ -5,6 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DBShare, StdCtrls;
+
 type
   TfrmRouteEdit = class(TForm)
     GroupBox1: TGroupBox;
@@ -55,9 +56,7 @@ var
 implementation
 
 uses HUtil32;
-
 {$R *.dfm}
-
 { TfrmRouteEdit }
 
 function TfrmRouteEdit.Open(): TRouteInfo;
@@ -65,10 +64,12 @@ begin
   m_EditOK := False;
   RefShowRoute();
   ShowModal;
-  if m_EditOK then begin
+  if m_EditOK then
+  begin
     Result := m_RouteInfo;
-  end else Result.nGateCount := -1;
-
+  end
+  else
+    Result.nGateCount := -1;
 end;
 
 procedure TfrmRouteEdit.RefShowRoute;
@@ -101,13 +102,16 @@ end;
 
 procedure TfrmRouteEdit.ButtonOKClick(Sender: TObject);
 begin
-  if Sender = ButtonOK then begin
-    if ProcessRouteOK() then begin
+  if Sender = ButtonOK then
+  begin
+    if ProcessRouteOK() then
+    begin
       m_EditOK := True;
       Close;
     end;
-  end else
-    if Sender = ButtonCancel then begin
+  end
+  else if Sender = ButtonCancel then
+  begin
     Close();
   end;
 end;
@@ -120,21 +124,27 @@ begin
   Result := False;
   FillChar(m_RouteInfo, SizeOf(m_RouteInfo), 0);
   m_RouteInfo.sSelGateIP := Trim(EditSelGate.Text);
-  if not IsIPaddr(m_RouteInfo.sSelGateIP) then begin
-    MessageBox(Handle, '角色网关输入错误！！！', '错误信息', MB_OK + MB_ICONERROR);
+  if not IsIPaddr(m_RouteInfo.sSelGateIP) then
+  begin
+    MessageBox(Handle, '角色网关输入错误！！！', '错误信息',
+      MB_OK + MB_ICONERROR);
     EditSelGate.SetFocus;
     Exit;
   end;
   sGameGateIP := Trim(EditGateIPaddr1.Text);
   nGameGatePort := Str_ToInt(EditGatePort1.Text, 0);
 
-  if not IsIPaddr(sGameGateIP) then begin
-    MessageBox(Handle, '游戏网关一输入错误！！！', '错误信息', MB_OK + MB_ICONERROR);
+  if not IsIPaddr(sGameGateIP) then
+  begin
+    MessageBox(Handle, '游戏网关一输入错误！！！', '错误信息',
+      MB_OK + MB_ICONERROR);
     EditGateIPaddr1.SetFocus;
     Exit;
   end;
-  if nGameGatePort <= 0 then begin
-    MessageBox(Handle, '游戏网关一输入错误！！！', '错误信息', MB_OK + MB_ICONERROR);
+  if nGameGatePort <= 0 then
+  begin
+    MessageBox(Handle, '游戏网关一输入错误！！！', '错误信息',
+      MB_OK + MB_ICONERROR);
     EditGatePort1.SetFocus;
     Exit;
   end;
@@ -144,7 +154,8 @@ begin
   Result := True;
   sGameGateIP := Trim(EditGateIPaddr2.Text);
   nGameGatePort := Str_ToInt(EditGatePort2.Text, 0);
-  if (not IsIPaddr(sGameGateIP)) or (nGameGatePort <= 0) then begin
+  if (not IsIPaddr(sGameGateIP)) or (nGameGatePort <= 0) then
+  begin
     Exit;
   end;
   m_RouteInfo.sGameGateIP[1] := sGameGateIP;
@@ -153,7 +164,8 @@ begin
 
   sGameGateIP := Trim(EditGateIPaddr3.Text);
   nGameGatePort := Str_ToInt(EditGatePort3.Text, 0);
-  if (not IsIPaddr(sGameGateIP)) or (nGameGatePort <= 0) then begin
+  if (not IsIPaddr(sGameGateIP)) or (nGameGatePort <= 0) then
+  begin
     Exit;
   end;
   m_RouteInfo.sGameGateIP[2] := sGameGateIP;
@@ -162,7 +174,8 @@ begin
 
   sGameGateIP := Trim(EditGateIPaddr4.Text);
   nGameGatePort := Str_ToInt(EditGatePort4.Text, 0);
-  if (not IsIPaddr(m_RouteInfo.sGameGateIP[3])) or (nGameGatePort <= 0) then begin
+  if (not IsIPaddr(m_RouteInfo.sGameGateIP[3])) or (nGameGatePort <= 0) then
+  begin
     Exit;
   end;
   m_RouteInfo.sGameGateIP[3] := sGameGateIP;
@@ -171,7 +184,8 @@ begin
 
   sGameGateIP := Trim(EditGateIPaddr5.Text);
   nGameGatePort := Str_ToInt(EditGatePort5.Text, 0);
-  if (not IsIPaddr(sGameGateIP)) or (nGameGatePort <= 0) then begin
+  if (not IsIPaddr(sGameGateIP)) or (nGameGatePort <= 0) then
+  begin
     Exit;
   end;
   m_RouteInfo.sGameGateIP[4] := sGameGateIP;
@@ -180,7 +194,8 @@ begin
 
   sGameGateIP := Trim(EditGateIPaddr6.Text);
   nGameGatePort := Str_ToInt(EditGatePort6.Text, 0);
-  if (not IsIPaddr(m_RouteInfo.sGameGateIP[5])) or (nGameGatePort <= 0) then begin
+  if (not IsIPaddr(m_RouteInfo.sGameGateIP[5])) or (nGameGatePort <= 0) then
+  begin
     Exit;
   end;
   m_RouteInfo.sGameGateIP[5] := sGameGateIP;
@@ -189,7 +204,8 @@ begin
 
   sGameGateIP := Trim(EditGateIPaddr7.Text);
   nGameGatePort := Str_ToInt(EditGatePort7.Text, 0);
-  if (not IsIPaddr(m_RouteInfo.sGameGateIP[6])) or (nGameGatePort <= 0) then begin
+  if (not IsIPaddr(m_RouteInfo.sGameGateIP[6])) or (nGameGatePort <= 0) then
+  begin
     Exit;
   end;
   m_RouteInfo.sGameGateIP[6] := sGameGateIP;
@@ -198,7 +214,8 @@ begin
 
   sGameGateIP := Trim(EditGateIPaddr8.Text);
   nGameGatePort := Str_ToInt(EditGatePort8.Text, 0);
-  if (not IsIPaddr(m_RouteInfo.sGameGateIP[7])) or (nGameGatePort <= 0) then begin
+  if (not IsIPaddr(m_RouteInfo.sGameGateIP[7])) or (nGameGatePort <= 0) then
+  begin
     Exit;
   end;
   m_RouteInfo.sGameGateIP[7] := sGameGateIP;

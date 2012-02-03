@@ -6,6 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, TabNotBk, Grids, ExtCtrls, Buttons,
   ComCtrls, HumDB, Grobal2, DBShare, HUtil32;
+
 type
   TFrmFDBViewer = class(TForm)
     TabbedNotebook1: TTabbedNotebook;
@@ -41,6 +42,7 @@ var
   FrmFDBViewer: TFrmFDBViewer;
 
 implementation
+
 {$R *.DFM}
 
 procedure TFrmFDBViewer.FormCreate(Sender: TObject);
@@ -54,11 +56,16 @@ end;
 
 procedure TFrmFDBViewer.ShowHumData();
 begin
-  if HumanGrid.Visible then ShowHumanInfo();
-  if UserItemGrid.Visible then ShowUserItems();
-  if BagItemGrid.Visible then ShowBagItems();
-  if UseMagicGrid.Visible then ShowUseMagic();
-  if SaveItemGrid.Visible then ShowSaveItem();
+  if HumanGrid.Visible then
+    ShowHumanInfo();
+  if UserItemGrid.Visible then
+    ShowUserItems();
+  if BagItemGrid.Visible then
+    ShowBagItems();
+  if UseMagicGrid.Visible then
+    ShowUseMagic();
+  if SaveItemGrid.Visible then
+    ShowSaveItem();
   TabbedNotebook1.PageIndex := 0;
 end;
 
@@ -166,15 +173,20 @@ begin
   UseMagicGrid.Cells[3, 0] := '技能名称';
 end;
 
-procedure TFrmFDBViewer.ShowBagItem(nIndex: Integer; sName: string; Item: TUserItem);
+procedure TFrmFDBViewer.ShowBagItem(nIndex: Integer; sName: string;
+  Item: TUserItem);
 begin
-  if Item.wIndex > 0 then begin
+  if Item.wIndex > 0 then
+  begin
     BagItemGrid.Cells[0, nIndex] := sName;
     BagItemGrid.Cells[1, nIndex] := IntToStr(Item.MakeIndex);
     BagItemGrid.Cells[2, nIndex] := IntToStr(Item.wIndex);
-    BagItemGrid.Cells[3, nIndex] := IntToStr(Item.Dura) + '/' + IntToStr(Item.DuraMax);
+    BagItemGrid.Cells[3, nIndex] := IntToStr(Item.Dura) + '/' + IntToStr
+      (Item.DuraMax);
     BagItemGrid.Cells[4, nIndex] := GetStdItemName(Item.wIndex);
-  end else begin
+  end
+  else
+  begin
     BagItemGrid.Cells[0, nIndex] := sName;
     BagItemGrid.Cells[1, nIndex] := '';
     BagItemGrid.Cells[2, nIndex] := '';
@@ -183,14 +195,19 @@ begin
   end;
 end;
 
-procedure TFrmFDBViewer.ShowUserItem(nIndex: Integer; sName: string; Item: TUserItem);
+procedure TFrmFDBViewer.ShowUserItem(nIndex: Integer; sName: string;
+  Item: TUserItem);
 begin
-  if Item.wIndex > 0 then begin
+  if Item.wIndex > 0 then
+  begin
     UserItemGrid.Cells[1, nIndex] := IntToStr(Item.MakeIndex);
     UserItemGrid.Cells[2, nIndex] := IntToStr(Item.wIndex);
-    UserItemGrid.Cells[3, nIndex] := IntToStr(Item.Dura) + '/' + IntToStr(Item.DuraMax);
+    UserItemGrid.Cells[3, nIndex] := IntToStr(Item.Dura) + '/' + IntToStr
+      (Item.DuraMax);
     UserItemGrid.Cells[4, nIndex] := GetStdItemName(Item.wIndex);
-  end else begin
+  end
+  else
+  begin
     UserItemGrid.Cells[1, nIndex] := '';
     UserItemGrid.Cells[2, nIndex] := '';
     UserItemGrid.Cells[3, nIndex] := '';
@@ -221,19 +238,19 @@ begin
   HumanGrid.Cells[2, 4] := IntToStr(HumData.Abil.Level);
   HumanGrid.Cells[3, 4] := IntToStr(HumData.Abil.AC);
   HumanGrid.Cells[4, 4] := IntToStr(HumData.Abil.MAC);
-  //  HumanGrid.Cells[5,4]:=IntToStr(HumData.Abil.bt49);
+  // HumanGrid.Cells[5,4]:=IntToStr(HumData.Abil.bt49);
   HumanGrid.Cells[6, 4] := IntToStr(LoByte(HumData.Abil.DC));
   HumanGrid.Cells[7, 4] := IntToStr(HiByte(HumData.Abil.DC));
   HumanGrid.Cells[8, 4] := IntToStr(LoByte(HumData.Abil.MC));
   HumanGrid.Cells[9, 4] := IntToStr(HiByte(HumData.Abil.MC));
   HumanGrid.Cells[10, 4] := IntToStr(LoByte(HumData.Abil.SC));
   HumanGrid.Cells[11, 4] := IntToStr(HiByte(HumData.Abil.SC));
-  //  HumanGrid.Cells[0,6]:=IntToStr(HumData.Abil.bt48);
+  // HumanGrid.Cells[0,6]:=IntToStr(HumData.Abil.bt48);
   HumanGrid.Cells[1, 6] := IntToStr(HumData.Abil.HP);
   HumanGrid.Cells[2, 6] := IntToStr(HumData.Abil.HP);
   HumanGrid.Cells[3, 6] := IntToStr(HumData.Abil.MaxMP);
   HumanGrid.Cells[4, 6] := IntToStr(HumData.Abil.MaxMP);
-  //  HumanGrid.Cells[5,6]:=IntToStr(HumData.Abil.bt48);
+  // HumanGrid.Cells[5,6]:=IntToStr(HumData.Abil.bt48);
   HumanGrid.Cells[6, 6] := IntToStr(HumData.Abil.Exp);
   HumanGrid.Cells[7, 6] := IntToStr(HumData.Abil.MaxExp);
   HumanGrid.Cells[8, 6] := IntToStr(HumData.nPKPoint);
@@ -245,13 +262,16 @@ begin
   HumanGrid.Cells[2, 8] := HumData.sStoragePwd;
   HumanGrid.Cells[3, 8] := IntToStr(HumData.btCreditPoint);
   HumanGrid.Cells[4, 8] := BooleanToStr(HumData.boIsHero);
-  if not HumData.boIsHero then begin
+  if not HumData.boIsHero then
+  begin
     HumanGrid.Cells[1, 7] := '师徒';
     HumanGrid.Cells[5, 7] := '是否有英雄';
     HumanGrid.Cells[6, 7] := '英雄名称';
     HumanGrid.Cells[5, 8] := BooleanToStr(HumData.boHasHero);
     HumanGrid.Cells[6, 8] := HumData.sHeroChrName;
-  end else begin
+  end
+  else
+  begin
     HumanGrid.Cells[1, 7] := '主人名称';
     HumanGrid.Cells[5, 7] := '';
     HumanGrid.Cells[6, 7] := '';
@@ -264,12 +284,15 @@ procedure TFrmFDBViewer.ShowBagItems();
 var
   I, II: Integer;
 begin
-  for I := 1 to BagItemGrid.RowCount - 1 do begin
-    for II := 0 to BagItemGrid.ColCount - 1 do begin
+  for I := 1 to BagItemGrid.RowCount - 1 do
+  begin
+    for II := 0 to BagItemGrid.ColCount - 1 do
+    begin
       BagItemGrid.Cells[II, I] := '';
     end;
   end;
-  for I := Low(ChrRecord.Data.BagItems) to High(ChrRecord.Data.BagItems) do begin
+  for I := Low(ChrRecord.Data.BagItems) to High(ChrRecord.Data.BagItems) do
+  begin
     ShowBagItem(I + 1, IntToStr(I + 1), ChrRecord.Data.BagItems[I]);
   end;
 end;
@@ -278,8 +301,10 @@ procedure TFrmFDBViewer.ShowUserItems();
 var
   I, II: Integer;
 begin
-  for I := 1 to UserItemGrid.RowCount - 1 do begin
-    for II := 1 to UserItemGrid.ColCount - 1 do begin
+  for I := 1 to UserItemGrid.RowCount - 1 do
+  begin
+    for II := 1 to UserItemGrid.ColCount - 1 do
+    begin
       UserItemGrid.Cells[II, I] := '';
     end;
   end;
@@ -300,41 +325,57 @@ end;
 
 procedure TFrmFDBViewer.ShowUseMagic();
 var
-  I, ii: Integer;
+  I, II: Integer;
 begin
-  for I := 1 to UseMagicGrid.RowCount - 1 do begin
-    for ii := 0 to UseMagicGrid.ColCount - 1 do begin
-      UseMagicGrid.Cells[ii, I] := '';
+  for I := 1 to UseMagicGrid.RowCount - 1 do
+  begin
+    for II := 0 to UseMagicGrid.ColCount - 1 do
+    begin
+      UseMagicGrid.Cells[II, I] := '';
     end;
   end;
-  for I := Low(ChrRecord.Data.HumMagics) to High(ChrRecord.Data.HumMagics) do begin
-    if ChrRecord.Data.HumMagics[I].wMagIdx <= 0 then Break;
-    UseMagicGrid.Cells[0, I + 1] := IntToStr(ChrRecord.Data.HumMagics[I].wMagIdx);
+  for I := Low(ChrRecord.Data.HumMagics) to High(ChrRecord.Data.HumMagics) do
+  begin
+    if ChrRecord.Data.HumMagics[I].wMagIdx <= 0 then
+      Break;
+    UseMagicGrid.Cells[0, I + 1] := IntToStr
+      (ChrRecord.Data.HumMagics[I].wMagIdx);
     UseMagicGrid.Cells[1, I + 1] := IntToStr(ChrRecord.Data.HumMagics[I].btKey);
-    UseMagicGrid.Cells[2, I + 1] := IntToStr(ChrRecord.Data.HumMagics[I].nTranPoint);
-    UseMagicGrid.Cells[3, I + 1] := GetMagicName(ChrRecord.Data.HumMagics[I].wMagIdx);
+    UseMagicGrid.Cells[2, I + 1] := IntToStr
+      (ChrRecord.Data.HumMagics[I].nTranPoint);
+    UseMagicGrid.Cells[3, I + 1] := GetMagicName
+      (ChrRecord.Data.HumMagics[I].wMagIdx);
   end;
 end;
 
 procedure TFrmFDBViewer.ShowSaveItem();
 var
-  I, ii: Integer;
+  I, II: Integer;
   nCount: Integer;
 begin
-  for I := 1 to SaveItemGrid.RowCount - 1 do begin
-    for ii := 0 to SaveItemGrid.ColCount - 1 do begin
-      SaveItemGrid.Cells[ii, I] := '';
+  for I := 1 to SaveItemGrid.RowCount - 1 do
+  begin
+    for II := 0 to SaveItemGrid.ColCount - 1 do
+    begin
+      SaveItemGrid.Cells[II, I] := '';
     end;
   end;
   nCount := 0;
-  for I := Low(ChrRecord.Data.StorageItems) to High(ChrRecord.Data.StorageItems) do begin
-    if ChrRecord.Data.StorageItems[I].wIndex <= 0 then Continue;
+  for I := Low(ChrRecord.Data.StorageItems) to High
+    (ChrRecord.Data.StorageItems) do
+  begin
+    if ChrRecord.Data.StorageItems[I].wIndex <= 0 then
+      Continue;
     SaveItemGrid.Cells[0, I + 1] := IntToStr(nCount);
-    SaveItemGrid.Cells[1, I + 1] := IntToStr(ChrRecord.Data.StorageItems[I].MakeIndex);
-    SaveItemGrid.Cells[2, I + 1] := IntToStr(ChrRecord.Data.StorageItems[I].wIndex);
-    SaveItemGrid.Cells[3, I + 1] := IntToStr(ChrRecord.Data.StorageItems[I].Dura) + '/' +
-      IntToStr(ChrRecord.Data.StorageItems[I].DuraMax);
-    SaveItemGrid.Cells[4, I + 1] := GetStdItemName(ChrRecord.Data.StorageItems[I].wIndex);
+    SaveItemGrid.Cells[1, I + 1] := IntToStr
+      (ChrRecord.Data.StorageItems[I].MakeIndex);
+    SaveItemGrid.Cells[2, I + 1] := IntToStr
+      (ChrRecord.Data.StorageItems[I].wIndex);
+    SaveItemGrid.Cells[3, I + 1] := IntToStr
+      (ChrRecord.Data.StorageItems[I].Dura) + '/' + IntToStr
+      (ChrRecord.Data.StorageItems[I].DuraMax);
+    SaveItemGrid.Cells[4, I + 1] := GetStdItemName
+      (ChrRecord.Data.StorageItems[I].wIndex);
     Inc(nCount);
   end;
 end;
