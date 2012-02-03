@@ -23,6 +23,11 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Fixed AV that would occur when selecting the Homegroup item in a
+      TRzShellTree or TRzShellList under Windows 7 and the Homegroup was
+      currently empty.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * Adjusted the default column widths of TRzShellList so that date/time stamp
       of file fits completely in the column.
@@ -5433,8 +5438,9 @@ begin
     dw := SHCONTF_FOLDERS or
           SHCONTF_INCLUDEHIDDEN_FLAG[ stoShowHidden in Options ] or
           SHCONTF_NONFOLDERS_FLAG[ stoIncludeNonFolders in Options ];
+
     dw := ishf.EnumObjects( GetParentHWND, dw, ienum );
-    if Failed( dw ) then
+    if Failed( dw ) or not Assigned( ienum ) then
     begin
       baseNode.HasChildren := True;
       Abort;                                // Error already reported (typically)
@@ -8373,7 +8379,7 @@ begin
           Verified for W95, W95/OSR2, W95/IE4, WNT4, WNT4/IE4
           Not verified for W98 or WNT5.
         }
-      if Failed( dw ) then
+      if Failed( dw ) or not Assigned( ienum ) then
         Abort;                              // Silent exception, as error already reported (typically)
 
      // -- The idea here is to create a copy of the list of items in the IEnumIdList interface in tmplist.
@@ -9469,7 +9475,7 @@ begin                                       {TRzCustomShellCombo.FillCombo}
       basepidl := CopyIdList( nil, aBasePidl );
 
     dw := aIShf.EnumObjects( GetValidParentHWND( Self ), SHCONTF_FOLDERS, ienum );
-    if ( dw <> S_OK ) then
+    if ( dw <> S_OK ) or not Assigned( ienum ) then
       RaiseSysError( dw );
 
     dw := ienum.Next( 1, curRelPidl, PInteger( @dummy ) );

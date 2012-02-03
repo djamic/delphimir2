@@ -105,7 +105,7 @@ type
 
 
 resourcestring
-  sCopyrightDate = '1995-2010';
+  sCopyrightDate = '1995-2011';
   sCompanyName = 'Raize Software, Inc.';
   sProductVersion  = 'Version ' + RaizeComponents_Version;
   {$IFDEF RAIZETRIAL}
@@ -139,6 +139,7 @@ resourcestring
   sRzRadioGroup         = 'This TRzGroupBox descendant automatically creates and manages a set of radio buttons.';
   sRzCheckGroup         = 'This TRzGroupBox descendant automatically creates and manages a set of check boxes.';
   sRzDBRadioGroup       = 'This data-aware TRzGroupBox descendant automatically manages a set of radio buttons.';
+  sRzDBCheckBoxGroup    = 'The Check Box state of this data-aware TRzGroupBox is controlled by the connected data field.';
 
   // Raize Edits
   sRzEdit               = 'This edit component supports Custom Framing options as well as right-alignment.';
@@ -304,7 +305,7 @@ type
   end;
 
 const
-  NumComponents = 127;
+  NumComponents = 128;
   StringTable: array[ 1..NumComponents ] of TRzCompMap =
   (
     // Raize Panels
@@ -322,6 +323,7 @@ const
     ( Name: 'TRzRadioGroup';          Description: sRzRadioGroup ),
     ( Name: 'TRzCheckGroup';          Description: sRzCheckGroup ),
     ( Name: 'TRzDBRadioGroup';        Description: sRzDBRadioGroup ),
+    ( Name: 'TRzDBCheckBoxGroup';     Description: sRzDBCheckBoxGroup ),
 
     // Raize Edits
     ( Name: 'TRzEdit';                Description: sRzEdit ),

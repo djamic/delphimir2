@@ -188,6 +188,131 @@ public:
 };
 
 
+class DELPHICLASS TRzDBCheckBoxGroup;
+class PASCALIMPLEMENTATION TRzDBCheckBoxGroup : public Rzpanel::TRzCustomGroupBox
+{
+	typedef Rzpanel::TRzCustomGroupBox inherited;
+	
+private:
+	Rzcommon::TRzAboutInfo FAboutInfo;
+	Dbctrls::TFieldDataLink* FDataLink;
+	System::UnicodeString FValueCheck;
+	System::UnicodeString FValueUncheck;
+	void __fastcall DataChange(System::TObject* Sender);
+	void __fastcall UpdateData(System::TObject* Sender);
+	HIDESBASE MESSAGE void __fastcall CMExit(Messages::TWMNoParams &Msg);
+	MESSAGE void __fastcall CMGetDataLink(Messages::TMessage &Msg);
+	
+protected:
+	DYNAMIC void __fastcall KeyPress(System::WideChar &Key);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	bool __fastcall ValueMatch(const System::UnicodeString ValueList, const System::UnicodeString Value);
+	virtual void __fastcall ChangeState(void);
+	virtual System::UnicodeString __fastcall GetDataField(void);
+	virtual void __fastcall SetDataField(const System::UnicodeString Value);
+	virtual Db::TDataSource* __fastcall GetDataSource(void);
+	virtual void __fastcall SetDataSource(Db::TDataSource* Value);
+	virtual Db::TField* __fastcall GetField(void);
+	virtual Stdctrls::TCheckBoxState __fastcall GetFieldState(void);
+	virtual bool __fastcall GetReadOnly(void);
+	virtual void __fastcall SetReadOnly(bool Value);
+	virtual void __fastcall SetValueCheck(const System::UnicodeString Value);
+	virtual void __fastcall SetValueUncheck(const System::UnicodeString Value);
+	
+public:
+	__fastcall virtual TRzDBCheckBoxGroup(Classes::TComponent* AOwner);
+	__fastcall virtual ~TRzDBCheckBoxGroup(void);
+	__property Checked = {default=0};
+	__property Db::TField* Field = {read=GetField};
+	
+__published:
+	__property Rzcommon::TRzAboutInfo About = {read=FAboutInfo, write=FAboutInfo, stored=false, nodefault};
+	__property System::UnicodeString DataField = {read=GetDataField, write=SetDataField};
+	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
+	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
+	__property System::UnicodeString ValueChecked = {read=FValueCheck, write=SetValueCheck};
+	__property System::UnicodeString ValueUnchecked = {read=FValueUncheck, write=SetValueUncheck};
+	__property Align = {default=0};
+	__property Alignment = {default=0};
+	__property Anchors = {default=3};
+	__property BannerHeight = {default=0};
+	__property BevelWidth = {default=1};
+	__property BiDiMode;
+	__property BorderColor = {default=-16777201};
+	__property BorderInner = {default=0};
+	__property BorderOuter = {default=0};
+	__property BorderSides = {default=15};
+	__property BorderWidth = {default=0};
+	__property Caption;
+	__property CaptionFont;
+	__property Color = {default=-16777201};
+	__property Constraints;
+	__property Ctl3D;
+	__property DockSite = {default=0};
+	__property DoubleBuffered;
+	__property DragCursor = {default=-12};
+	__property DragKind = {default=0};
+	__property DragMode = {default=0};
+	__property Enabled = {default=1};
+	__property EnableControlsOnCheck = {default=1};
+	__property FlatColor = {default=-16777200};
+	__property FlatColorAdjustment = {default=30};
+	__property Font;
+	__property FrameControllerNotifications = {default=65535};
+	__property FrameController;
+	__property GradientColorStyle = {default=0};
+	__property GradientColorStart = {default=16777215};
+	__property GradientColorStop = {default=-16777201};
+	__property GradientDirection = {default=2};
+	__property GroupStyle = {default=3};
+	__property Height = {default=105};
+	__property Padding;
+	__property ParentBiDiMode = {default=1};
+	__property ParentColor = {default=0};
+	__property ParentCtl3D = {default=1};
+	__property ParentDoubleBuffered = {default=1};
+	__property ParentFont = {default=1};
+	__property ParentShowHint = {default=1};
+	__property PopupMenu;
+	__property ShowDockClientCaptions = {default=1};
+	__property ShowHint;
+	__property TabOrder = {default=-1};
+	__property TabStop = {default=0};
+	__property Touch;
+	__property Transparent = {default=0};
+	__property Visible = {default=1};
+	__property VisualStyle = {default=1};
+	__property OnCheckBoxClick;
+	__property OnClick;
+	__property OnContextPopup;
+	__property OnDblClick;
+	__property OnDockDrop;
+	__property OnDockOver;
+	__property OnDragDrop;
+	__property OnDragOver;
+	__property OnEndDock;
+	__property OnEndDrag;
+	__property OnEnter;
+	__property OnExit;
+	__property OnGesture;
+	__property OnGetSiteInfo;
+	__property OnMouseActivate;
+	__property OnMouseDown;
+	__property OnMouseEnter;
+	__property OnMouseLeave;
+	__property OnMouseMove;
+	__property OnMouseUp;
+	__property OnPaint;
+	__property OnResize;
+	__property OnStartDock;
+	__property OnStartDrag;
+	__property OnUnDock;
+public:
+	/* TWinControl.CreateParented */ inline __fastcall TRzDBCheckBoxGroup(HWND ParentWindow) : Rzpanel::TRzCustomGroupBox(ParentWindow) { }
+	
+};
+
+
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Rzdbrgrp */

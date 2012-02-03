@@ -103,6 +103,7 @@ private:
 	bool FShowFocus;
 	bool FShowDownPattern;
 	Graphics::TColor FColor;
+	bool FWordWrap;
 	bool IsFocused;
 	Controls::TModalResult FModalResult;
 	void __fastcall BitmapChanged(System::TObject* Sender);
@@ -147,6 +148,7 @@ protected:
 	virtual void __fastcall SetShowDownPattern(bool Value);
 	virtual void __fastcall SetShowFocus(bool Value);
 	virtual void __fastcall SetSpacing(int Value);
+	virtual void __fastcall SetWordWrap(bool Value);
 	
 public:
 	__fastcall virtual TRzBmpButton(Classes::TComponent* AOwner);
@@ -170,6 +172,7 @@ __published:
 	__property Buttons::TButtonLayout Layout = {read=FLayout, write=SetLayout, default=0};
 	__property int Margin = {read=FMargin, write=SetMargin, default=-1};
 	__property int Spacing = {read=FSpacing, write=SetSpacing, default=4};
+	__property bool WordWrap = {read=FWordWrap, write=SetWordWrap, default=0};
 	__property Action;
 	__property Align = {default=0};
 	__property Anchors = {default=3};

@@ -71,9 +71,6 @@
 
   DOT_NET               Compiling for Microsoft .NET Framework
 
-  Modification History
-  ------------------------------------------------------------------------------
-  <Ver>  (DD MMM YYYY)  <Modification detail>
 
 
   Copyright © 1995-2010 by Raize Software, Inc.  All Rights Reserved.

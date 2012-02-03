@@ -517,7 +517,7 @@ private:
 	void __fastcall CreateMenuButton(void);
 	void __fastcall DeselectFont(void);
 	void __fastcall DoRealign(void);
-	void __fastcall DoTextOut(int X, int Y, const System::UnicodeString AString, Graphics::TCanvas* ACanvas, bool Horizontal, Graphics::TColor AColor);
+	void __fastcall DoTextOut(const Types::TRect &ARect, int X, int Y, const System::UnicodeString AString, Graphics::TCanvas* ACanvas, bool Horizontal, Graphics::TColor AColor);
 	void __fastcall ProcessCommands(void);
 	void __fastcall DrawTabBackground(int ATabIndex, const Types::TRect &ARect);
 	void __fastcall DrawTabFace(int ATabIndex, const Types::TRect &ARect);
@@ -571,12 +571,15 @@ protected:
 	virtual void __fastcall AlignControls(Controls::TControl* AControl, Types::TRect &Rect);
 	virtual void __fastcall Changing(int NewIndex, bool &Allowed);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
+	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	TRzTabDataList* __fastcall GetTabDataList(void);
 	virtual void __fastcall GetTextColor(int ATabIndex, TRzTextStyle AStyle, Graphics::TColor &AColor, bool &Handled);
 	virtual void __fastcall AdjustClientRect(Types::TRect &Rect);
 	virtual void __fastcall Rebuild(void);
 	virtual void __fastcall TabClick(void);
+	bool __fastcall ShowAccel(void);
+	bool __fastcall ShowFocus(void);
 	bool __fastcall TabInView(TRzTabData* TabData);
 	HIDESBASE virtual void __fastcall InvalidateControl(void);
 	virtual void __fastcall Paint(void);

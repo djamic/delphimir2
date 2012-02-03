@@ -622,12 +622,17 @@ private:
 	Graphics::TColor FIconBarColorStop;
 	Graphics::TColor FMenuColor;
 	Graphics::TColor FMenuFontColor;
+	Graphics::TFont* FMenuFont;
+	bool FUseCustomMenuFont;
 	bool __fastcall HideMenuPrefix(void);
 	void __fastcall ReadOldGradientColorStartProp(Classes::TReader* Reader);
 	void __fastcall ReadOldGradientColorStopProp(Classes::TReader* Reader);
 	void __fastcall ReadOldFrameColorProp(Classes::TReader* Reader);
+	void __fastcall SetMenuFontColor(Graphics::TColor Value);
+	void __fastcall SetMenuFont(Graphics::TFont* Value);
 	void __fastcall AdvancedDrawItemHandler(System::TObject* Sender, Graphics::TCanvas* ACanvas, const Types::TRect &ARect, Windows::TOwnerDrawState State);
 	void __fastcall MeasureItemHandler(System::TObject* Sender, Graphics::TCanvas* ACanvas, int &Width, int &Height);
+	void __fastcall MenuFontChangeHandler(System::TObject* Sender);
 	
 protected:
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
@@ -638,6 +643,7 @@ protected:
 	void __fastcall SetupMenuItem(Menus::TMenuItem* Item);
 	void __fastcall CleanupMenuItems(void);
 	void __fastcall CleanupMenuItem(Menus::TMenuItem* Item);
+	bool __fastcall MenuIsRightToLeft(Menus::TMenuItem* Item);
 	void __fastcall MeasureMenuItem(Menus::TMenuItem* Item, Graphics::TCanvas* Canvas, int &Width, int &Height);
 	void __fastcall PaintMenuItem(Menus::TMenuItem* Item, Graphics::TCanvas* Canvas, const Types::TRect &Rect, Windows::TOwnerDrawState State);
 	
@@ -654,7 +660,9 @@ __published:
 	__property Graphics::TColor IconBarColorStart = {read=FIconBarColorStart, write=FIconBarColorStart, default=16777215};
 	__property Graphics::TColor IconBarColorStop = {read=FIconBarColorStop, write=FIconBarColorStop, default=-16777201};
 	__property Graphics::TColor MenuColor = {read=FMenuColor, write=FMenuColor, default=-16777211};
-	__property Graphics::TColor MenuFontColor = {read=FMenuFontColor, write=FMenuFontColor, default=-16777208};
+	__property Graphics::TColor MenuFontColor = {read=FMenuFontColor, write=SetMenuFontColor, default=-16777208};
+	__property Graphics::TFont* MenuFont = {read=FMenuFont, write=SetMenuFont, stored=FUseCustomMenuFont};
+	__property bool UseCustomMenuFont = {read=FUseCustomMenuFont, write=FUseCustomMenuFont, default=0};
 };
 
 
@@ -663,7 +671,7 @@ enum TRzWindowsVersion { win95, winNT, win98, winMe, win2000, winXP, winServer20
 #pragma option pop
 
 //-- var, const, procedure ---------------------------------------------------
-#define RaizeComponents_Version L"5.4"
+#define RaizeComponents_Version L"5.5"
 static const Word cm_GetBlinking = 0xb3e8;
 static const Word cm_Blink = 0xb3e9;
 static const Word cm_ToolbarShowCaptionChanged = 0xb3ea;
@@ -673,6 +681,7 @@ static const Word cm_ToolbarVisualStyleChanged = 0xb3ed;
 static const Word cm_HidePreviewPanel = 0xb3ee;
 static const Word cm_GroupItemSelected = 0xb3ef;
 #define sdAllSides (Set<TSide, sdLeft, sdBottom> () << sdLeft << sdTop << sdRight << sdBottom )
+#define fsDoubleBorders (Set<TFrameStyleEx, fsNone, fsFlatRounded> () << fsGroove << fsBump << fsLowered << fsButtonDown << fsRaised << fsButtonUp << fsFlatBold << fsFlatRounded )
 extern PACKAGE StaticArray<Graphics::TColor, 11> ULFrameColor;
 extern PACKAGE StaticArray<Graphics::TColor, 11> LRFrameColor;
 extern PACKAGE StaticArray<System::Word, 3> DrawTextAlignments;

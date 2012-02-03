@@ -19,6 +19,11 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Fixed issue where an error message would be displayed if a TRzFormState
+      component was not connected to a TRzRegIniFile component even though the
+      TRzFormState.Enabled property was set to False.
+  ------------------------------------------------------------------------------
   4.1    (15 Dec 2006)
     * Restoring a maximized MDI Child form no longer results in a maximize-
       restore-maximize sequence when using the TRzFormState on the MDI Child.
@@ -194,6 +199,7 @@ type
 implementation
 
 uses
+  Types,
   IniFiles,
   Dialogs,
   MultiMon;
@@ -285,6 +291,9 @@ var
   F: TForm;
   S: string;
 begin
+  if not FEnabled then
+    Exit;
+
   if FRegIniFile = nil then
   begin
     MessageDlg( sRzCannotRestoreFormState, mtError, [ mbOK ], 0 );

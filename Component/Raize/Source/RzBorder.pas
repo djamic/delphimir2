@@ -26,6 +26,14 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Redesigned the TRzColorPicker so that it now handles using the keyboard
+      to change the selected color.
+    * Modified the display of selected and highlighted color values in the
+      TRzColorPicker control so that it has a much cleaner appearance when
+      running under Vista/XP themes.
+    * Added ButtonFontColor property to TRzColorPicker.
+  ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Added OnScrollDisplay event to TRzLEDDisplay. This event is fired each
       time the caption is scrolled across the display. The corresponding event
@@ -130,6 +138,7 @@ uses
   Dialogs,
   Menus,
   RzGrafx,
+  RzPanel,
   RzCommon;
 
 type
@@ -689,7 +698,7 @@ type
   {== TRzColorPicker Class Declaration ==}
   {======================================}
 
-  TRzColorPicker = class( TRzBorder )
+  TRzColorPicker = class( TRzCustomPanel )
   private
     FCustomColor: TColor;
     FDefaultColor: TColor;
@@ -709,17 +718,19 @@ type
     FShowColorHints: Boolean;
     FHintWnd: THintWindow;
     FButtonColor: TColor;
+    FButtonFontColor: TColor;
+    FIsPopup: Boolean;
 
     function Margin: Integer;
     procedure UpdateBounds;
     procedure CMFontChanged( var Msg: TMessage ); message cm_FontChanged;
     procedure CMMouseEnter( var Msg: TMessage ); message cm_MouseEnter;
     procedure CMMouseLeave( var Msg: TMessage ); message cm_MouseLeave;
+    procedure WMGetDlgCode( var Msg: TWMGetDlgCode ); message wm_GetDlgCode;
   protected
     procedure Loaded; override;
     procedure Notification( AComponent: TComponent; Operation: TOperation ); override;
 
-    function InteriorColor: TColor; override;
     procedure Paint; override;
     function CanAutoSize( var NewWidth, NewHeight: Integer ): Boolean; override;
     function HitTest( X, Y: Integer ): Integer;
@@ -735,9 +746,13 @@ type
     procedure ColorChanged; dynamic;
     procedure MouseDown( Button: TMouseButton; Shift: TShiftState; X, Y: Integer ); override;
     procedure MouseMove( Shift: TShiftState; X, Y: Integer ); override;
+    procedure DoEnter; override;
+    procedure DoExit; override;
+    procedure KeyDown( var Key: Word; Shift: TShiftState ); override;
 
     { Property Access Methods }
     procedure SetButtonColor( Value: TColor ); virtual;
+    procedure SetButtonFontColor( Value: TColor ); virtual;
     procedure SetCustomColorCaption( const Value: string ); virtual;
     procedure SetCustomColor( Value: TColor ); virtual;
     procedure SetCustomColors( Value: TRzCustomColors ); virtual;
@@ -755,6 +770,9 @@ type
   public
     constructor Create( AOwner: TComponent ); override;
 
+    property IsPopup: Boolean
+      write FIsPopup;
+
     property SelColorIndex: Integer
       read FSelColorIndex
       write SetSelColorIndex;
@@ -763,6 +781,11 @@ type
       read FButtonColor
       write SetButtonColor
       default clBtnFace;
+
+    property ButtonFontColor: TColor
+      read FButtonFontColor
+      write SetButtonFontColor
+      default clWindowText;
 
     property CustomColorCaption: string
       read FCustomColorCaption
@@ -831,26 +854,65 @@ type
 
     { Inherited Properties & Events }
     property Align;
+    property Anchors;
     property AutoSize default True;
-    property BorderWidth default 2;
+    property BevelWidth;
+    property BorderInner;
+    property BorderOuter default fsStatus;
+    property BorderSides;
     property BorderColor default clWindow;
+    property BorderHighlight;
+    property BorderShadow;
+    property BorderWidth default 2;
     property Color default clWindow;
+    property Constraints;
+    property Ctl3D;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
+    property Enabled;
+    property FlatColor;
     property FlatColorAdjustment default 0;
     property Font;
+    property FrameController;
+    property FrameControllerNotifications;
     property Hint;
+    property ParentColor;
     property ParentFont;
     property ParentShowHint;
-    property ParentColor;
+    property PopupMenu;
     property ShowHint;
+    property TabOrder;
+    property TabStop default True;
+    {$IFDEF VCL140_OR_HIGHER}
+    property Touch;
+    {$ENDIF}
+    property Visible;
 
+    property OnClick;
+    property OnContextPopup;
+    property OnDblClick;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnEndDrag;
+    property OnEndDock;
+    property OnEnter;
+    property OnExit;
+    {$IFDEF VCL140_OR_HIGHER}
+    property OnGesture;
+    {$ENDIF}
     {$IFDEF VCL90_OR_HIGHER}
     property OnMouseActivate;
     {$ENDIF}
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
-    property OnClick;
-    property OnDblClick;
+    property OnStartDock;
+    property OnStartDrag;
+    property OnKeyDown;
+    property OnKeyPress;
+    property OnKeyUp;
+
   end;
 
 
@@ -2954,12 +3016,18 @@ begin
   inherited;
 
   ControlStyle := ControlStyle + [ csOpaque ];
+
+  ControlStyle := ( ControlStyle - [ csAcceptsControls, csNoStdEvents, csSetCaption ] ) +
+                  [ csReflector ];
+
   AutoSize := True;
   BorderWidth := 2;
   Color := clWindow;
   FlatColorAdjustment := 0;
   BorderColor := clWindow;
   ParentColor := False;
+  PaintClientArea := False;
+  TabStop := True;
 
   FThemeBorderColor := clBtnShadow;
   if ThemeServices.ThemesEnabled then
@@ -2984,6 +3052,7 @@ begin
   FDefaultColor := clHighlight;
   FShowColorHints := True;
   FButtonColor := clBtnFace;
+  FButtonFontColor := clWindowText;
 end;
 
 
@@ -3010,26 +3079,20 @@ begin
 end;
 
 
-function TRzColorPicker.InteriorColor: TColor;
-begin
-  Result := Color;
-end;
-
-
 procedure TRzColorPicker.Paint;
 var
   CW, CH, CellX, CellY, CellIndex, Col, Row: Integer;
   R, CellRect: TRect;
   TopOffset, AdjHeight: Integer;
-  ElementDetails: TThemedElementDetails;
 
   procedure DrawButton( Bounds: TRect; const Caption: string );
   var
     X, Y: Integer;
     R: TRect;
   begin
-    R := DrawBox( Canvas, Bounds, FFlatColor );
+    R := DrawBox( Canvas, Bounds, FlatColor );
     Canvas.Brush.Color := FButtonColor;
+    Canvas.Font.Color := FButtonFontColor;
     X := R.Left + ( R.Right - R.Left - Canvas.TextWidth( Caption ) ) div 2;
     Y := R.Top + ( R.Bottom - R.Top - Canvas.TextHeight( Caption ) ) div 2;
     Canvas.TextRect( R, X, Y, Caption );
@@ -3043,36 +3106,18 @@ var
   begin
     R := Rect( ClientRect.Left, ClientRect.Top, ClientRect.Left + CW, TopOffset );
     CR := R;
+    InflateRect( CR, -1, -1 );
     InflateRect( R, -3, -3 );
 
     if FSelColorIndex = sciNoColor  then
     begin
       Canvas.Brush.Color := clWindow;
       Canvas.FillRect( CR );
-      if ThemeServices.ThemesEnabled then
-      begin
-        ElementDetails := ThemeServices.GetElementDetails( ttbButtonChecked );
-        ThemeServices.DrawElement( Canvas.Handle, ElementDetails, CR );
-      end
-      else
-        DrawBox( Canvas, CR, clHighlight );
+      DrawBox( Canvas, CR, clHighlight );
     end
     else if FHighlightColorIndex = sciNoColor  then
     begin
-      if ThemeServices.ThemesEnabled then
-      begin
-        ElementDetails := ThemeServices.GetElementDetails( ttbButtonHot );
-        ThemeServices.DrawElement( Canvas.Handle, ElementDetails, CR );
-        SetBkMode( Canvas.Handle, Windows.Transparent );
-        if FNoColorCaption <> '' then
-          S := FNoColorCaption
-        else
-          S := sRzNoColorCaption;
-        DrawStringCentered( Canvas, S, R );
-        ExcludeClipRect( Canvas.Handle, CR.Left, CR.Top, CR.Right, CR.Bottom );
-      end
-      else
-        DrawEdge( Canvas.Handle, CR, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Middle or bf_Soft );
+      DrawEdge( Canvas.Handle, CR, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Soft );
     end
     else
       CR := R;
@@ -3082,7 +3127,7 @@ var
     else
       S := sRzNoColorCaption;
     DrawButton( R, S );
-    
+
     ExcludeClipRect( Canvas.Handle, CR.Left, CR.Top, CR.Right, CR.Bottom );
   end; {= DrawNoColorArea =}
 
@@ -3098,6 +3143,7 @@ var
 
     SampleRect := AreaRect;
     SampleRect.Left := BtnRect.Right;
+    InflateRect( SampleRect, -1, -1 );
 
     InflateRect( BtnRect, -3, -3 );
 
@@ -3115,30 +3161,13 @@ var
     begin
       Canvas.Brush.Color := clWindow;
       Canvas.FillRect( SampleRect );
-      if ThemeServices.ThemesEnabled then
-      begin
-        ElementDetails := ThemeServices.GetElementDetails( ttbButtonChecked );
-        ThemeServices.DrawElement( Canvas.Handle, ElementDetails, SampleRect );
-      end
-      else
-        DrawBox( Canvas, SampleRect, clHighlight );
+      DrawBox( Canvas, SampleRect, clHighlight );
       ExcludeClipRect( Canvas.Handle, SampleRect.Left, SampleRect.Top, SampleRect.Right, SampleRect.Bottom );
     end
     else if FHighlightColorIndex = sciDefault then
     begin
-      if ThemeServices.ThemesEnabled then
-      begin
-        ElementDetails := ThemeServices.GetElementDetails( ttbButtonHot );
-        ThemeServices.DrawElement( Canvas.Handle, ElementDetails, AreaRect );
-        SetBkMode( Canvas.Handle, Windows.Transparent );
-        if FDefaultColorCaption <> '' then
-          S := FDefaultColorCaption
-        else
-          S := sRzDefaultColorCaption;
-        DrawStringCentered( Canvas, S, BtnRect );
-      end
-      else
-        DrawEdge( Canvas.Handle, AreaRect, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Soft );
+      InflateRect( AreaRect, -1, -1 );
+      DrawEdge( Canvas.Handle, AreaRect, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Soft );
       ExcludeClipRect( Canvas.Handle, AreaRect.Left, AreaRect.Top, AreaRect.Right, AreaRect.Bottom );
     end;
 
@@ -3172,50 +3201,26 @@ var
     DrawEdge( Canvas.Handle, CellRect, bdr_RaisedOuter, bf_Rect or bf_Flat );
     ExcludeClipRect( Canvas.Handle, CellRect.Left, CellRect.Top, CellRect.Right, CellRect.Bottom );
 
+    InflateRect( SampleRect, -1, -1 );
+
     if FSelColorIndex = sciCustom then
     begin
       Canvas.Brush.Color := clWindow;
       Canvas.FillRect( SampleRect );
-      if ThemeServices.ThemesEnabled then
-      begin
-        ElementDetails := ThemeServices.GetElementDetails( ttbButtonChecked );
-        ThemeServices.DrawElement( Canvas.Handle, ElementDetails, SampleRect );
-      end
-      else
-        DrawBox( Canvas, SampleRect, clHighlight );
+      DrawBox( Canvas, SampleRect, clHighlight );
       ExcludeClipRect( Canvas.Handle, SampleRect.Left, SampleRect.Top, SampleRect.Right, SampleRect.Bottom );
     end
     else if FHighlightColorIndex = sciCustom then
     begin
-      if ThemeServices.ThemesEnabled then
-      begin
-        ElementDetails := ThemeServices.GetElementDetails( ttbButtonHot );
-        ThemeServices.DrawElement( Canvas.Handle, ElementDetails, SampleRect );
-      end
-      else
-        DrawEdge( Canvas.Handle, SampleRect, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Middle or bf_Soft );
+      DrawEdge( Canvas.Handle, SampleRect, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Middle or bf_Soft );
       ExcludeClipRect( Canvas.Handle, SampleRect.Left, SampleRect.Top, SampleRect.Right, SampleRect.Bottom );
     end;
 
     if FHighlightColorIndex = sciCustomPick then
     begin
       TempRect := BtnRect;
-      InflateRect( TempRect, 3, 3 );
-
-      if ThemeServices.ThemesEnabled then
-      begin
-        ElementDetails := ThemeServices.GetElementDetails( ttbButtonHot );
-        ThemeServices.DrawElement( Canvas.Handle, ElementDetails, TempRect );
-        SetBkMode( Canvas.Handle, Windows.Transparent );
-        if FCustomColorCaption <> '' then
-          S := FCustomColorCaption
-        else
-          S := sRzCustomColorCaption;
-        DrawStringCentered( Canvas, S, BtnRect );
-
-      end
-      else
-        DrawEdge( Canvas.Handle, TempRect, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Soft );
+      InflateRect( TempRect, 2, 2 );
+      DrawEdge( Canvas.Handle, TempRect, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Soft );
       ExcludeClipRect( Canvas.Handle, TempRect.Left, TempRect.Top, TempRect.Right, TempRect.Bottom );
     end;
 
@@ -3263,24 +3268,12 @@ var
         begin
           Canvas.Brush.Color := clWindow;
           Canvas.FillRect( R );
-          if ThemeServices.ThemesEnabled then
-          begin
-            ElementDetails := ThemeServices.GetElementDetails( ttbButtonChecked );
-            ThemeServices.DrawElement( Canvas.Handle, ElementDetails, R );
-          end
-          else
-            DrawBox( Canvas, R, clHighlight );
+          DrawBox( Canvas, R, clHighlight );
           ExcludeClipRect( Canvas.Handle, R.Left, R.Top, R.Right, R.Bottom );
         end
         else if FHighlightColorIndex = CellIndex then
         begin
-          if ThemeServices.ThemesEnabled then
-          begin
-            ElementDetails := ThemeServices.GetElementDetails( ttbButtonHot );
-            ThemeServices.DrawElement( Canvas.Handle, ElementDetails, R );
-          end
-          else
-            DrawEdge( Canvas.Handle, R, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Middle or bf_Soft );
+          DrawEdge( Canvas.Handle, R, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Middle or bf_Soft );
           ExcludeClipRect( Canvas.Handle, R.Left, R.Top, R.Right, R.Bottom );
         end;
 
@@ -3358,24 +3351,12 @@ begin {= TRzColorPicker.Paint =}
       begin
         Canvas.Brush.Color := clWindow;
         Canvas.FillRect( R );
-        if ThemeServices.ThemesEnabled then
-        begin
-          ElementDetails := ThemeServices.GetElementDetails( ttbButtonChecked );
-          ThemeServices.DrawElement( Canvas.Handle, ElementDetails, R );
-        end
-        else
-          DrawBox( Canvas, R, clHighlight );
+        DrawBox( Canvas, R, clHighlight );
         ExcludeClipRect( Canvas.Handle, R.Left, R.Top, R.Right, R.Bottom );
       end
       else if CellIndex = FHighlightColorIndex then
       begin
-        if ThemeServices.ThemesEnabled then
-        begin
-          ElementDetails := ThemeServices.GetElementDetails( ttbButtonHot );
-          ThemeServices.DrawElement( Canvas.Handle, ElementDetails, R );
-        end
-        else
-          DrawEdge( Canvas.Handle, R, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Middle );
+        DrawEdge( Canvas.Handle, R, bdr_RaisedOuter, bf_Flat or bf_Rect or bf_Middle );
         ExcludeClipRect( Canvas.Handle, R.Left, R.Top, R.Right, R.Bottom );
       end;
 
@@ -3410,6 +3391,9 @@ procedure TRzColorPicker.MouseDown( Button: TMouseButton; Shift: TShiftState; X,
 var
   CellIndex: Integer;
 begin
+  if not ( csDesigning in ComponentState ) and not FIsPopup and IsWindowVisible( Handle ) then
+    SetFocus;
+
   if Button = mbLeft then
   begin
     CellIndex := HitTest( X, Y );
@@ -3451,6 +3435,184 @@ begin
 
   inherited;
 end;
+
+
+procedure TRzColorPicker.DoEnter;
+begin
+  inherited;
+  Invalidate;
+end;
+
+
+procedure TRzColorPicker.DoExit;
+begin
+  inherited;
+  Invalidate;
+end;
+
+
+procedure TRzColorPicker.KeyDown( var Key: Word; Shift: TShiftState );
+begin
+  inherited;
+
+  if Shift = [ ] then
+  begin
+    case Key of
+      vk_Up:
+      begin
+        case SelColorIndex of
+          sciNoColor:
+          begin
+            // Do not change color index
+          end;
+
+          sciDefault:
+          begin
+            if FShowNoColor then
+              SelColorIndex := sciNoColor;
+          end;
+
+          0..7:
+          begin
+            if FShowDefaultColor then
+              SelColorIndex := sciDefault
+            else if FShowNoColor then
+              SelColorIndex := sciNoColor;
+          end;
+
+          sciCustom:
+          begin
+            if FShowSystemColors then
+              SelColorIndex := 69
+            else
+              SelColorIndex := 39;
+          end;
+
+        else
+          SelColorIndex := SelColorIndex - 8;
+        end;
+      end;
+
+      vk_Down:
+      begin
+        case SelColorIndex of
+          sciNoColor:
+          begin
+            if FShowDefaultColor then
+              SelColorIndex := sciDefault
+            else
+              SelColorIndex := 0;
+          end;
+
+          sciDefault:
+          begin
+            SelColorIndex := 7; // Last color in first row of swatches
+          end;
+
+          32..39:
+          begin
+            if FShowSystemColors then
+              SelColorIndex := SelColorIndex + 8
+            else if FShowCustomColor then
+              SelColorIndex := sciCustom;
+          end;
+
+          62..69:
+          begin
+            if FShowCustomColor then
+              SelColorIndex := sciCustom;
+          end;
+
+          sciCustom:
+          begin
+            // Do not change color index
+          end;
+        else
+          SelColorIndex := SelColorIndex + 8;
+        end;
+      end;
+
+      vk_Left:
+      begin
+        case SelColorIndex of
+          sciNoColor:
+          begin
+            // Do not change color index
+          end;
+
+          sciDefault:
+          begin
+            if FShowNoColor then
+              SelColorIndex := sciNoColor;
+          end;
+
+          0:
+          begin
+            if FShowDefaultColor then
+              SelColorIndex := sciDefault
+            else if FShowNoColor then
+              SelColorIndex := sciNoColor;
+          end;
+
+          sciCustom:
+          begin
+            if FShowSystemColors then
+              SelColorIndex := 69
+            else
+              SelColorIndex := 39;
+          end;
+
+        else
+          SelColorIndex := SelColorIndex - 1;
+        end;
+      end;
+
+      vk_Right:
+      begin
+        case SelColorIndex of
+          sciNoColor:
+          begin
+            if FShowDefaultColor then
+              SelColorIndex := sciDefault
+            else
+              SelColorIndex := 0;
+          end;
+
+          sciDefault:
+          begin
+            SelColorIndex := 0;
+          end;
+
+          39:
+          begin
+            if FShowSystemColors then
+              SelColorIndex := 40
+            else if FShowCustomColor then
+              SelColorIndex := sciCustom;
+          end;
+
+          69:
+          begin
+            if FShowCustomColor then
+              SelColorIndex := sciCustom;
+          end;
+
+          sciCustom:
+          begin
+            // Do not change color index
+          end;
+
+        else
+          SelColorIndex := SelColorIndex + 1;
+        end;
+      end;
+
+    end;
+
+    if Key = vk_Return then
+      inherited Click;
+  end;
+end; {= TRzColorPicker.KeyDown =}
 
 
 function TRzColorPicker.Margin: Integer;
@@ -3733,6 +3895,16 @@ begin
 end;
 
 
+procedure TRzColorPicker.SetButtonFontColor( Value: TColor );
+begin
+  if FButtonFontColor <> Value then
+  begin
+    FButtonFontColor := Value;
+    Invalidate;
+  end;
+end;
+
+
 procedure TRzColorPicker.SetCustomColorCaption( const Value: string );
 begin
   if FCustomColorCaption <> Value then
@@ -3819,8 +3991,6 @@ begin
     FSelColorIndex := Value;
     Repaint;
     ColorChanged;
-    if FSelColorIndex = sciCustom then
-      Click;  // To close up the popup, when used in a TRzColorEdit
   end;
 end;
 
@@ -3926,6 +4096,12 @@ begin
   FHighlightColorIndex := sciNone;
   Repaint;
   ReleaseHintWindow;
+end;
+
+
+procedure TRzColorPicker.WMGetDlgCode( var Msg: TWMGetDlgCode );
+begin
+  Msg.Result := dlgc_WantArrows;
 end;
 
 

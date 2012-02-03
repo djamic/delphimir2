@@ -17,6 +17,20 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * The TRzPageControl and TRzTabControl have been updated such that the
+      controls will hide any accelerator characters in the tab captions until
+      the user presses the Alt key. Likewise, the controls will hide the focus
+      rectangle until the user navigates on the form using the keyboard. The
+      controls honor the Windows system setting that affects this behavior.
+    * Fixed issue in TRzPageControl and TRzTabControl where long text in a
+      tab's caption would not get clipped if a specific width was used for the
+      tab that was shorter than the length of the caption and the close button
+      was visible on the active tab.
+    * Fixed issue where an access violation would occur when destroying a
+      TRzPageControl that owned the TImageList component that was assigned to
+      the control's Images property.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * Fixed issue where ParentColor was getting reset to False in the
       TRzPageControl and TRzTabControl even though the property was specifically
@@ -955,7 +969,7 @@ type
     procedure DeselectFont;
     procedure DoRealign;
 
-    procedure DoTextOut( X, Y: Integer; const AString: string; ACanvas: TCanvas;
+    procedure DoTextOut( ARect: TRect; X, Y: Integer; const AString: string; ACanvas: TCanvas;
                          Horizontal: Boolean; AColor: TColor );
 
     procedure ProcessCommands;
@@ -1019,6 +1033,7 @@ type
     procedure AlignControls( AControl: TControl; var Rect: TRect ); override;
     procedure Changing( NewIndex: Integer; var Allowed: Boolean ); virtual;
     procedure CreateParams( var Params: TCreateParams ); override;
+    procedure CreateWnd; override;
 
     procedure DefineProperties( Filer: TFiler ); override;
 
@@ -1031,6 +1046,9 @@ type
     procedure AdjustClientRect( var Rect: TRect ); override;
     procedure Rebuild; virtual;
     procedure TabClick; virtual;
+
+    function ShowAccel: Boolean;
+    function ShowFocus: Boolean;
 
     function TabInView( TabData: TRzTabData ): Boolean;
 
@@ -3821,6 +3839,14 @@ begin
 end;
 
 
+procedure TRzCustomTabControl.CreateWnd;
+begin
+  inherited;
+  if RunningAtLeast( win2000 ) then
+    Perform( wm_ChangeUIState, MakeWParam( UIS_INITIALIZE, UISF_HIDEACCEL or UISF_HIDEFOCUS ), 0 );
+end;
+
+
 destructor TRzCustomTabControl.Destroy;
 begin
   CancelHotTrackTimer;
@@ -5270,7 +5296,7 @@ end;
 // If the text contains two successive ampersands (&&) then a single
 // ampersand will be output.
 
-procedure TRzCustomTabControl.DoTextOut( X, Y: Integer; const AString: string;
+procedure TRzCustomTabControl.DoTextOut( ARect: TRect; X, Y: Integer; const AString: string;
                                          ACanvas: TCanvas; Horizontal: Boolean; AColor: TColor );
 var
   P1, P2: Integer;
@@ -5341,7 +5367,9 @@ begin
 
     SetTextColor( ACanvas.Handle, ColorToRGB( AColor ) );
     SetBkMode( ACanvas.Handle, Windows.TRANSPARENT );
-    ACanvas.TextOut( X, Y, Part[ I ] );
+
+    ACanvas.Brush.Style := bsClear;
+    ACanvas.TextRect( ARect, X, Y, Part[ I ] );
 
     if MaxPartIdx > 0 then
     begin
@@ -5790,7 +5818,7 @@ var
         YPos := TextRect.Top + YOffset;
       end;
 
-      DoTextOut( XPos, YPos, Lines[ I ], FBuffer.Canvas, FTextOrientation = orHorizontal, AColor );
+      DoTextOut( TextRect, XPos, YPos, Lines[ I ], FBuffer.Canvas, FTextOrientation = orHorizontal, AColor );
 
       // Update offset to be used for position of next line
       if FTextOrientation = orVertical then
@@ -5999,7 +6027,7 @@ begin {= TRzCustomTabControl.DrawTabFace =}
   if FShowCloseButtonOnActiveTab and ( ATabIndex = FTabIndex ) then
     PositionActiveTabCloseButton;
 
-  if FShowFocusRect and ( ATabIndex = FTabIndex ) and Focused then
+  if ShowFocus and FShowFocusRect and ( ATabIndex = FTabIndex ) and Focused then
     DrawTabFocusRect;
 end; {= TRzCustomTabControl.DrawTabFace =}
 
@@ -8033,7 +8061,7 @@ begin
   // Size of Result includes the 1 pixel border for the focus rect -- deflate
   // to return just the text rect
 
-  if FShowFocusRect then
+  if ShowFocus and FShowFocusRect then
     InflateRect( Result, -1, -1 );
 end; {= TRzCustomTabControl.CalcTabFaceRect =}
 
@@ -8740,6 +8768,18 @@ begin
 end;
 
 
+function TRzCustomTabControl.ShowAccel: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEACCEL ) = 0;
+end;
+
+
+function TRzCustomTabControl.ShowFocus: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEFOCUS ) = 0;
+end;
+
+
 // TabInView
 //
 // Whereas TRzTabData.Visible indicates that the tab can be shown,
@@ -9336,8 +9376,7 @@ end;
 
 procedure TRzCustomTabControl.ParseTextLines( const S: string; Lines: TStrings );
 var
-  WorkText: string;
-  NextLine: string;
+  WorkText, NextLine: string;
 
   // ParseNextLine will get the next line of text (minus the trailing CRLF) from
   // WorkText and will then set the work string to the remainder
@@ -9363,6 +9402,10 @@ var
 begin {= TRzCustomTabControl.ParseTextLines =}
   Lines.Clear;
   WorkText := Copy( S, 1, Length( S ) );
+
+  if not ShowAccel then
+    WorkText := RemoveAccelerators( WorkText );
+
   while Length( WorkText ) > 0 do
   begin
     ParseNextLine;
@@ -9909,7 +9952,9 @@ begin
     FImages.RegisterChanges( FImagesChangeLink );
     FImages.FreeNotification( Self );
   end;
-  Rebuild;
+
+  if not ( csDestroying in ComponentState ) then
+    Rebuild;
 end;
 
 

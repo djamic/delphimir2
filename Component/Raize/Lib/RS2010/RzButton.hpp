@@ -69,11 +69,14 @@ protected:
 	bool FShowDownVersion;
 	bool FTransparent;
 	bool FThemeAware;
+	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall PaintBackground(HDC DC);
 	virtual void __fastcall UpdateDisplay(void);
 	virtual void __fastcall RepaintDisplay(void);
 	virtual Types::TRect __fastcall GetHotTrackRect(void);
 	HIDESBASE void __fastcall RemoveFocus(bool Removing);
+	bool __fastcall ShowAccel(void);
+	bool __fastcall ShowFocus(void);
 	virtual bool __fastcall UseThemes(void);
 	virtual void __fastcall Draw3DText(Graphics::TCanvas* Canvas, const Types::TRect &R, unsigned Flags);
 	DYNAMIC void __fastcall Click(void);

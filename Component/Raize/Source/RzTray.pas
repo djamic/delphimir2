@@ -15,6 +15,13 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Fixed issue where the TRzTrayIcon would not restore an application's main
+      window correctly, when the main window was minimized from the maximized
+      state.
+    * Fixed issue where destroying a TRzTrayIcon at runtime may result in an
+      exception when trying to minimize the application window.
+  ------------------------------------------------------------------------------
   5.1.2  (11 Jun 2009)
     * Fixed issue in TRzTrayIcon where application button on the Task Bar would 
       not get hidden when used in BDS 2007. This resulted from the fact that the
@@ -567,6 +574,9 @@ begin
   if not ( csDesigning in ComponentState ) then
     DeleteIcon;
 
+  Application.OnMinimize := nil;
+  Application.OnRestore := nil;
+
   // Classes prefix needed to eliminate Warning message under Delphi 6 and higher
   Classes.DeallocateHWnd( FMsgWindow );
 
@@ -888,7 +898,8 @@ begin
   {$IFDEF VCL100_OR_HIGHER}
   if MainFormOnTaskBar and ( Application.MainForm <> nil ) then
   begin
-    ShowWindow( Application.MainForm.Handle, sw_Restore );
+    // The following ShowWindow call interferes with the main window from restoring to maximized state
+    //ShowWindow( Application.MainForm.Handle, sw_Restore );
     SetForegroundWindow( Application.MainForm.Handle );
   end
   else

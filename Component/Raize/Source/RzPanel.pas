@@ -26,6 +26,22 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * The TRzGroupBox component now has a ShowCheckBox property. When this
+      this property is set to True, a check box is displayed next to the Caption
+      of the group box. There is also a new Checked property, which indicates
+      the current state of the check box. When the check box is clicked and the
+      state changes, the OnCheckBoxClick event is raised.  The new
+      EnableControlsOnCheck property (True by default) controls whether or not
+      any child controls of the group box are automatically enabled/disabled
+      as the check box state changes. When EnableControlsOnCheck is True, and
+      the check box is checked, then the child controls are enabled. Likewise,
+      when the check box is unchecked, the controls are disabled. The
+      TRzGroupBox remembers the current enabled/disabled states of the child
+      controls before disabling. Therefore, if a control was disabled before
+      un-checking the check box, the control remains disabled when re-checking
+      the check box.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * Fixed issue where the TRzToolbar would display the popup button (to access
       additional buttons displayed outside the bounds of the toolbar) even
@@ -404,6 +420,7 @@ type
     function GetClientRect: TRect; override;
     function GetControlRect: TRect; virtual;
     function InvalidateMarginSize: TPoint; virtual;
+    procedure EnableChildControls( Enabled: Boolean ); virtual;
 
     procedure GetGradientColors( var StartColor, StopColor: TColor ); virtual;
     procedure GetGradientFrameColor( var FrameColor: TColor;
@@ -731,6 +748,16 @@ type
     FBannerHeight: Integer;
     FCaptionFont: TFont;
     FCaptionFontChanged: Boolean;
+    FCaptionRect: TRect;
+    FEnableControlsOnCheck: Boolean;
+    FShowCheckBox: Boolean;
+    FCheckBoxSize: Integer;
+    FDragging: Boolean;
+    FMouseOverCheckBox: Boolean;
+    FKeyToggle: Boolean;
+    FShowDownVersion: Boolean;
+    FOnCheckBoxClick: TNotifyEvent;
+    FChecked: Boolean;
 
     // Internal Event Handlers
     procedure CaptionFontChangeHandler( Sender: TObject );
@@ -738,18 +765,60 @@ type
     // Message Handling Methods
     procedure CMDialogChar( var Msg: TCMDialogChar ); message cm_DialogChar;
     procedure CMFontChanged( var Msg: TMessage ); message cm_FontChanged;
+    procedure CMMouseLeave( var Msg: TMessage ); message cm_MouseLeave;
+    procedure WMSetFocus( var Msg: TWMSetFocus ); message wm_SetFocus;
+    procedure WMKillFocus( var Msg: TWMKillFocus ); message wm_KillFocus;
   protected
+    procedure CreateWnd; override;
     procedure CustomFramingChanged; override;
 
     procedure Paint; override;
+    procedure DrawThemedCheckBox;
+    procedure DrawNonThemedCheckBox;
+    function AdjustCaptionRectForCheckBox: TRect;
     procedure AdjustClientRect( var Rect: TRect ); override;
     procedure ChangeScale( M, D: Integer ); override;
+
+    function ShowAccel: Boolean;
+    function ShowFocus: Boolean;
+
+    procedure ChangeState; virtual;
+
+    // Event Dispatch Methods
+    procedure MouseDown( Button: TMouseButton; Shift: TShiftState; X, Y: Integer ); override;
+    procedure MouseMove( Shift: TShiftState; X, Y: Integer ); override;
+    procedure MouseUp( Button: TMouseButton; Shift: TShiftState; X, Y: Integer ); override;
+    procedure CheckBoxClick; dynamic;
+    procedure KeyDown( var Key: Word; Shift: TShiftState ); override;
+    procedure KeyUp( var Key: Word; Shift: TShiftState ); override;
 
     // Property Access Methods
     procedure SetBannerHeight( Value: Integer ); virtual;
     procedure SetGroupBoxStyle( Value: TRzGroupBoxStyle ); virtual;
     function IsCaptionFontStored: Boolean;
     procedure SetCaptionFont( Value: TFont ); virtual;
+    procedure SetChecked( Value: Boolean ); virtual;
+    procedure SetEnableControlsOnCheck( Value: Boolean ); virtual;
+    procedure SetShowCheckBox( Value: Boolean ); virtual;
+
+    property Checked: Boolean
+      read FChecked
+      write SetChecked
+      default True;
+
+    property EnableControlsOnCheck: Boolean
+      read FEnableControlsOnCheck
+      write SetEnableControlsOnCheck
+      default True;
+
+    property ShowCheckBox: Boolean
+      read FShowCheckBox
+      write SetShowCheckBox
+      default False;
+
+    property OnCheckBoxClick: TNotifyEvent
+      read FOnCheckBoxClick
+      write FOnCheckBoxClick;
 
 
     // Inherited Properties & Events
@@ -805,6 +874,7 @@ type
     property BorderWidth;
     property Caption;
     property CaptionFont;
+    property Checked;
     property Color;
     property Constraints;
     property Ctl3D;
@@ -816,6 +886,7 @@ type
     property DragKind;
     property DragMode;
     property Enabled;
+    property EnableControlsOnCheck;
     property FlatColor;
     property FlatColorAdjustment;
     property Font;
@@ -839,6 +910,7 @@ type
     property ParentFont;
     property ParentShowHint;
     property PopupMenu;
+    property ShowCheckBox;
     property ShowDockClientCaptions;
     property ShowHint;
     property TabOrder;
@@ -850,6 +922,7 @@ type
     property Visible;
     property VisualStyle;
 
+    property OnCheckBoxClick;
     property OnClick;
     property OnContextPopup;
     property OnDblClick;
@@ -2024,6 +2097,7 @@ implementation
 uses
   Themes,
   UxTheme,
+  RzRadChk,
   RzPopups,
   RzToolbarForm;
 
@@ -3018,13 +3092,10 @@ begin
 end;
 
 
-procedure TRzCustomPanel.CMEnabledChanged( var Msg: TMessage );
+procedure TRzCustomPanel.EnableChildControls( Enabled: Boolean );
 var
   I, Idx: Integer;
 begin
-  inherited;
-  Repaint;
-
   if not Enabled then
   begin
     FEnabledList.Clear;
@@ -3054,6 +3125,15 @@ begin
         Controls[ I ].Enabled := True;
     end;
   end;
+end;
+
+
+procedure TRzCustomPanel.CMEnabledChanged( var Msg: TMessage );
+begin
+  inherited;
+  Repaint;
+
+  EnableChildControls( Enabled );
 end;
 
 
@@ -3095,12 +3175,26 @@ begin
   FCaptionFontChanged := False;
   FCaptionFont.OnChange := CaptionFontChangeHandler;
 
+  FChecked := True;
+  FEnableControlsOnCheck := True;
+  FShowCheckBox := False;
+  FCheckBoxSize := DefaultGlyphWidth;
+  FDragging := False;
+  FMouseOverCheckBox := False;
 
   { Initializing GroupStyle must occur after BorderOuter/BorderInner settings
     b/c SetBorderOuter/SetBorderInner change GroupStyle to gsCustom }
   FGroupStyle := gsFlat;
   FBannerHeight := 0;
   {&RCI}
+end;
+
+
+procedure TRzCustomGroupBox.CreateWnd;
+begin
+  inherited;
+  if RunningAtLeast( win2000 ) then
+    Perform( wm_ChangeUIState, MakeWParam( UIS_INITIALIZE, UISF_HIDEACCEL or UISF_HIDEFOCUS ), 0 );
 end;
 
 
@@ -3197,6 +3291,17 @@ begin
 end;
 
 
+procedure TRzCustomGroupBox.CMMouseLeave( var Msg: TMessage );
+begin
+  inherited;
+  if FShowCheckBox then
+  begin
+    FMouseOverCheckBox := False;
+    Invalidate;
+  end;
+end;
+
+
 procedure TRzCustomGroupBox.CustomFramingChanged;
 begin
   if FFrameController.FrameVisible and ( FGroupStyle = gsCustom ) then
@@ -3204,16 +3309,15 @@ begin
 end;
 
 
-
-
 procedure TRzCustomGroupBox.Paint;
 var
   H: Integer;
-  R, CaptionRect, ExtentRect: TRect;
+  R, ExtentRect: TRect;
   C, StartColor, StopColor, DividerColor: TColor;
   S: string;
   CaptionSize: TSize;
-  ElementDetails: TThemedElementDetails;
+  GroupBoxDetails: TThemedElementDetails;
+  TempAlignment: TAlignment;
 
 
   function GetTextExtent( DC: HDC; Details: TThemedElementDetails; const S: WideString;
@@ -3225,22 +3329,21 @@ var
   end;
 
 
-begin
-//  Canvas.Font := Self.Font;
+begin {= TRzCustomGroupBox.Paint =}
   Canvas.Font := FCaptionFont;
   H := Canvas.TextHeight( 'Pp' );
 
 
-  // Calculate CaptionRect
+  // Calculate FCaptionRect
   if ( Caption <> '' ) and ( FGroupStyle <> gsCustom ) then
   begin
 
     if ( FVisualStyle = vsWinXP ) and ThemeServices.ThemesEnabled and
        ( FGroupStyle in [ gsStandard, gsFlat ] ) then
     begin
-      ElementDetails := ThemeServices.GetElementDetails( tbGroupBoxNormal );
+      GroupBoxDetails := ThemeServices.GetElementDetails( tbGroupBoxNormal );
 
-      ExtentRect := GetTextExtent( Canvas.Handle, ElementDetails, Caption, 0 );
+      ExtentRect := GetTextExtent( Canvas.Handle, GroupBoxDetails, Caption, 0 );
       CaptionSize.CX := ExtentRect.Right - ExtentRect.Left;
       CaptionSize.CY := ExtentRect.Bottom - ExtentRect.Top;
     end
@@ -3250,43 +3353,46 @@ begin
       GetTextExtentPoint32( Canvas.Handle, PChar( S ), Length( S ), CaptionSize );
     end;
 
+    if FShowCheckBox then
+    begin
+      // Adjust CaptionSize to take into account the size of the check box
+      Inc( CaptionSize.CX, FCheckBoxSize + 4 );
+    end;
 
     case FGroupStyle of
       gsStandard, gsFlat:
       begin
         if not UseRightToLeftAlignment then
-          CaptionRect := Rect( 8, 0, CaptionSize.CX + 8, CaptionSize.CY )
+          FCaptionRect := Rect( 8, 0, CaptionSize.CX + 8, CaptionSize.CY )
         else
-          CaptionRect := Rect( Width - CaptionSize.CX - 8, 0, Width - 8,
-                               CaptionSize.CY );
+          FCaptionRect := Rect( Width - CaptionSize.CX - 8, 0, Width - 8, CaptionSize.CY );
       end;
 
       gsTopLine:
       begin
         if not UseRightToLeftAlignment then
-          CaptionRect := Rect( 0, 0, CaptionSize.CX + 4, CaptionSize.CY )
+          FCaptionRect := Rect( 0, 0, CaptionSize.CX + 4, CaptionSize.CY )
         else
-          CaptionRect := Rect( Width - CaptionSize.CX - 4, 0, Width - 4,
-                               CaptionSize.CY );
+          FCaptionRect := Rect( Width - CaptionSize.CX - 4, 0, Width, CaptionSize.CY );
       end;
 
       gsBanner:
       begin
         if FBannerHeight = 0 then
-          CaptionRect := Rect( 0, 0, Width, CaptionSize.CY + 6 )
+          FCaptionRect := Rect( 0, 0, Width, CaptionSize.CY + 6 )
         else
-          CaptionRect := Rect( 0, 0, Width, FBannerHeight );
+          FCaptionRect := Rect( 0, 0, Width, FBannerHeight );
       end;
 
       gsUnderline:
       begin
-        CaptionRect := Rect( 0, 0, Width, CaptionSize.CY + 2 );
+        FCaptionRect := Rect( 0, 0, Width, CaptionSize.CY + 2 );
       end;
     end;
 
   end
   else
-    CaptionRect := Rect( 0, 0, 0, 0 );
+    FCaptionRect := Rect( 0, 0, 0, 0 );
 
 
   if ( FVisualStyle = vsWinXP ) and ThemeServices.ThemesEnabled and
@@ -3300,20 +3406,33 @@ begin
       DrawParentImage( Self, Canvas.Handle, True );
     end;
 
-    ExcludeClipRect( Canvas.Handle, CaptionRect.Left, CaptionRect.Top, CaptionRect.Right, CaptionRect.Bottom );
+    ExcludeClipRect( Canvas.Handle, FCaptionRect.Left, FCaptionRect.Top, FCaptionRect.Right, FCaptionRect.Bottom );
     R := Rect( 0, H div 2 - 1, Width, Height );
 
     if Enabled then
-      ElementDetails := ThemeServices.GetElementDetails( tbGroupBoxNormal )
+      GroupBoxDetails := ThemeServices.GetElementDetails( tbGroupBoxNormal )
     else
-      ElementDetails := ThemeServices.GetElementDetails( tbGroupBoxDisabled );
+      GroupBoxDetails := ThemeServices.GetElementDetails( tbGroupBoxDisabled );
 
-    ThemeServices.DrawElement( Canvas.Handle, ElementDetails, R );
+    ThemeServices.DrawElement( Canvas.Handle, GroupBoxDetails, R );
 
     SelectClipRgn( Canvas.Handle, 0 );
     if Caption <> '' then
-      ThemeServices.DrawText( Canvas.Handle, ElementDetails, Caption, CaptionRect,
+    begin
+      if FShowCheckBox then
+      begin
+        DrawThemedCheckBox;
+        R := AdjustCaptionRectForCheckBox;
+      end
+      else
+        R := FCaptionRect;
+
+      ThemeServices.DrawText( Canvas.Handle, GroupBoxDetails, Caption, R,
                               DrawTextAlignments[ Alignment ], 0 );
+
+      if FShowCheckBox and ShowFocus and Focused then
+        DrawFocusBorder( Canvas, R );
+    end;
   end
   else // No Themes
   begin
@@ -3325,8 +3444,8 @@ begin
       begin
         if FGroupStyle <> gsBanner then
         begin
-          ExcludeClipRect( Canvas.Handle, CaptionRect.Left, CaptionRect.Top,
-                           CaptionRect.Right, CaptionRect.Bottom );
+          ExcludeClipRect( Canvas.Handle, FCaptionRect.Left, FCaptionRect.Top,
+                           FCaptionRect.Right, FCaptionRect.Bottom );
         end;
       end
       else
@@ -3414,20 +3533,20 @@ begin
           end;
 
           // Left side
-          Canvas.MoveTo( CaptionRect.Left, CaptionRect.Top + 1 );
-          Canvas.LineTo( CaptionRect.Left, CaptionRect.Bottom - 1 );
+          Canvas.MoveTo( FCaptionRect.Left, FCaptionRect.Top + 1 );
+          Canvas.LineTo( FCaptionRect.Left, FCaptionRect.Bottom - 1 );
           // Top side
-          Canvas.MoveTo( CaptionRect.Left + 1, CaptionRect.Top );
-          Canvas.LineTo( CaptionRect.Right - 1, CaptionRect.Top );
+          Canvas.MoveTo( FCaptionRect.Left + 1, FCaptionRect.Top );
+          Canvas.LineTo( FCaptionRect.Right - 1, FCaptionRect.Top );
           // Right side
-          Canvas.MoveTo( CaptionRect.Right - 1, CaptionRect.Top + 1 );
-          Canvas.LineTo( CaptionRect.Right - 1, CaptionRect.Bottom - 1 );
+          Canvas.MoveTo( FCaptionRect.Right - 1, FCaptionRect.Top + 1 );
+          Canvas.LineTo( FCaptionRect.Right - 1, FCaptionRect.Bottom - 1 );
           // Bottom side
-          Canvas.MoveTo( CaptionRect.Left + 1, CaptionRect.Bottom - 1 );
-          Canvas.LineTo( CaptionRect.Right - 1, CaptionRect.Bottom - 1 );
+          Canvas.MoveTo( FCaptionRect.Left + 1, FCaptionRect.Bottom - 1 );
+          Canvas.LineTo( FCaptionRect.Right - 1, FCaptionRect.Bottom - 1 );
 
-          InflateRect( CaptionRect, -1, -1 );
-          PaintGradient( Canvas, CaptionRect, gdHorizontalEnd,
+          InflateRect( FCaptionRect, -1, -1 );
+          PaintGradient( Canvas, FCaptionRect, gdHorizontalEnd,
                          StartColor, StopColor );
         end;
 
@@ -3435,8 +3554,8 @@ begin
         begin
           C := AdjustColor( FFlatColor, FFlatColorAdjustment );
           Canvas.Pen.Color := C;
-          Canvas.MoveTo( CaptionRect.Left, CaptionRect.Bottom );
-          Canvas.LineTo( CaptionRect.Right, CaptionRect.Bottom );
+          Canvas.MoveTo( FCaptionRect.Left, FCaptionRect.Bottom );
+          Canvas.LineTo( FCaptionRect.Right, FCaptionRect.Bottom );
         end;
       end;
     end
@@ -3448,11 +3567,11 @@ begin
     if ( Caption <> '' ) and ( FGroupStyle <> gsCustom ) then
     begin
       if not FTransparent and ( FGroupStyle <> gsBanner ) then
-        Canvas.FillRect( CaptionRect );
+        Canvas.FillRect( FCaptionRect );
 
       if FGroupStyle = gsBanner then
       begin
-        InflateRect( CaptionRect, -4, -1 );
+        InflateRect( FCaptionRect, -4, -1 );
       end;
 
       Canvas.Brush.Style := bsClear;
@@ -3466,13 +3585,256 @@ begin
       end;
 
       SelectClipRgn( Canvas.Handle, 0 );
-      DrawString( Canvas, Caption, CaptionRect, DrawTextAlignments[ Alignment ] or
-                                                dt_VCenter or dt_SingleLine );
+
+      if FShowCheckBox then
+      begin
+        if ThemeServices.ThemesEnabled then
+          DrawThemedCheckBox
+        else
+          DrawNonThemedCheckBox;
+        R := AdjustCaptionRectForCheckBox;
+      end
+      else
+        R := FCaptionRect;
+
+      TempAlignment := Alignment;
+      if UseRightToLeftAlignment then
+        ChangeBiDiModeAlignment( TempAlignment );
+
+      DrawString( Canvas, Caption, R,
+                  DrawTextAlignments[ TempAlignment ] or dt_VCenter or dt_SingleLine );
     end;
   end;
 
   Canvas.Font := Self.Font;
 end; {= TRzCustomGroupBox.Paint =}
+
+
+procedure TRzCustomGroupBox.DrawThemedCheckBox;
+var
+  X, Y: Integer;
+  R: TRect;
+  CheckBoxDetails: TThemedElementDetails;
+begin
+  Y := FCaptionRect.Top + ( ( FCaptionRect.Bottom - FCaptionRect.Top ) - FCheckBoxSize ) div 2;
+  if not UseRightToLeftAlignment then
+    X := FCaptionRect.Left
+  else
+    X := FCaptionRect.Right - FCheckBoxSize;
+
+  R := Rect( X, Y, X + FCheckBoxSize, Y + FCheckBoxSize );
+
+
+  if FChecked then
+  begin
+    if Enabled then
+    begin
+      if FShowDownVersion then
+        CheckBoxDetails := ThemeServices.GetElementDetails( tbCheckBoxCheckedPressed )
+      else if FMouseOverCheckBox then
+        CheckBoxDetails := ThemeServices.GetElementDetails( tbCheckBoxCheckedHot )
+      else
+      CheckBoxDetails := ThemeServices.GetElementDetails( tbCheckBoxCheckedNormal );
+    end
+    else
+    begin
+      CheckBoxDetails := ThemeServices.GetElementDetails( tbCheckBoxCheckedDisabled );
+    end;
+  end
+  else // Unchecked
+  begin
+    if Enabled then
+    begin
+      if FShowDownVersion then
+        CheckBoxDetails := ThemeServices.GetElementDetails( tbCheckBoxUncheckedPressed )
+      else if FMouseOverCheckBox then
+        CheckBoxDetails := ThemeServices.GetElementDetails( tbCheckBoxUncheckedHot )
+      else
+      CheckBoxDetails := ThemeServices.GetElementDetails( tbCheckBoxUncheckedNormal );
+    end
+    else
+    begin
+      CheckBoxDetails := ThemeServices.GetElementDetails( tbCheckBoxUncheckedDisabled );
+    end;
+  end;
+
+  ThemeServices.DrawElement( Canvas.Handle, CheckBoxDetails, R );
+end;
+
+
+procedure TRzCustomGroupBox.DrawNonThemedCheckBox;
+var
+  X, Y, Flags: Integer;
+  R: TRect;
+begin
+  Y := FCaptionRect.Top + ( ( FCaptionRect.Bottom - FCaptionRect.Top ) - FCheckBoxSize ) div 2;
+  if not UseRightToLeftAlignment then
+    X := FCaptionRect.Left
+  else
+    X := FCaptionRect.Right - FCheckBoxSize;
+
+  R := Rect( X, Y, X + FCheckBoxSize, Y + FCheckBoxSize );
+
+  if FChecked then
+    Flags := dfcs_ButtonCheck or dfcs_Checked
+  else
+    Flags := dfcs_ButtonCheck;
+  if FShowDownVersion then
+    Flags := Flags or dfcs_Pushed;
+  if not Enabled then
+    Flags := Flags or dfcs_Inactive;
+
+  DrawFrameControl( Canvas.Handle, R, dfc_Button, Flags );
+end;
+
+
+function TRzCustomGroupBox.AdjustCaptionRectForCheckBox: TRect;
+begin
+  Result := FCaptionRect;
+  if not UseRightToLeftAlignment then
+    Inc( Result.Left, FCheckBoxSize + 4 )
+  else
+    Dec( Result.Right, FCheckBoxSize + 4 );
+end;
+
+
+function TRzCustomGroupBox.ShowAccel: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEACCEL ) = 0;
+end;
+
+
+function TRzCustomGroupBox.ShowFocus: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEFOCUS ) = 0;
+end;
+
+
+procedure TRzCustomGroupBox.ChangeState;
+begin
+  SetChecked( not FChecked );
+end;
+
+
+procedure TRzCustomGroupBox.MouseDown( Button: TMouseButton; Shift: TShiftState; X, Y: Integer );
+begin
+  inherited;
+
+  if not FShowCheckBox then
+    Exit;
+
+  if ( Button = mbLeft ) and Enabled and FMouseOverCheckBox then
+  begin
+    // Cannot call SetFocus method b/c if the control is active, it will not change the focus back to this control.
+    // This can happen if a dialog is displayed as a result of the clicking the button and the button is disabled.
+    Windows.SetFocus( Handle );
+
+    if Focused then
+    begin
+      FShowDownVersion := True;
+      Invalidate;
+      FDragging := True;
+    end;
+  end;
+
+end;
+
+
+procedure TRzCustomGroupBox.MouseMove( Shift: TShiftState; X, Y: Integer );
+var
+  NewState, OldMouseOverCheckBox: Boolean;
+begin
+  inherited;
+
+  if not FShowCheckBox then
+    Exit;
+
+  OldMouseOverCheckBox := FMouseOverCheckBox;
+  FMouseOverCheckBox := PtInRect( FCaptionRect, Point( X, Y ) );
+  if FMouseOverCheckBox <> OldMouseOverCheckBox then
+    Invalidate;
+
+  if FDragging then
+  begin
+    NewState := ( X >= 0 ) and ( X < ClientWidth ) and ( Y >= 0 ) and ( Y <= ClientHeight );
+
+    if NewState <> FShowDownVersion then
+    begin
+      FShowDownVersion := NewState;
+      Invalidate;
+    end;
+  end;
+end;
+
+
+procedure TRzCustomGroupBox.MouseUp( Button: TMouseButton; Shift: TShiftState; X, Y: Integer );
+begin
+  inherited;
+  if not FShowCheckBox then
+    Exit;
+
+  if FDragging then
+  begin
+    FDragging := False;
+    FShowDownVersion := False;
+    if FMouseOverCheckBox then
+      ChangeState;
+    Invalidate;
+  end;
+
+end;
+
+
+procedure TRzCustomGroupBox.WMSetFocus( var Msg: TWMSetFocus );
+begin
+  inherited;
+  Invalidate;
+end;
+
+
+procedure TRzCustomGroupBox.WMKillFocus( var Msg: TWMKillFocus );
+begin
+  inherited;
+  Invalidate;
+end;
+
+
+procedure TRzCustomGroupBox.CheckBoxClick;
+begin
+  if Assigned( FOnCheckBoxClick ) then
+    FOnCheckBoxClick( Self );
+end;
+
+
+procedure TRzCustomGroupBox.KeyDown( var Key: Word; Shift: TShiftState );
+begin
+  inherited;
+  if not FShowCheckBox {or FReadOnly} then
+    Exit;
+
+  if Key = vk_Space then
+  begin
+    FKeyToggle := True;
+    FShowDownVersion := True;
+    Invalidate;
+  end;
+end;
+
+
+procedure TRzCustomGroupBox.KeyUp( var Key: Word; Shift: TShiftState );
+begin
+  inherited;
+  if not FShowCheckBox {or FReadOnly} then
+    Exit;
+
+  if Key = vk_Space then
+  begin
+    FShowDownVersion := False;
+    if FKeyToggle then
+      ChangeState;
+    Invalidate;
+  end;
+end;
 
 
 procedure TRzCustomGroupBox.SetBannerHeight( Value: Integer );
@@ -3517,6 +3879,41 @@ begin
 end;
 
 
+procedure TRzCustomGroupBox.SetChecked( Value: Boolean );
+begin
+  if FChecked <> Value then
+  begin
+    FChecked := Value;
+    if FShowCheckBox and FEnableControlsOnCheck then
+      EnableChildControls( FChecked );
+    Invalidate;
+    CheckBoxClick;
+  end;
+end;
+
+
+procedure TRzCustomGroupBox.SetEnableControlsOnCheck( Value: Boolean );
+begin
+  if FEnableControlsOnCheck <> Value then
+  begin
+    FEnableControlsOnCheck := Value;
+    if FEnableControlsOnCheck and FShowCheckBox then
+      EnableChildControls( FChecked );
+  end;
+end;
+
+
+procedure TRzCustomGroupBox.SetShowCheckBox( Value: Boolean );
+begin
+  if FShowCheckBox <> Value then
+  begin
+    FShowCheckBox := Value;
+    TabStop := FShowCheckBox;
+    if FShowCheckBox and FEnableControlsOnCheck and not FChecked then
+      EnableChildControls( FChecked );
+    Invalidate;
+  end;
+end;
 
 
 {=======================}

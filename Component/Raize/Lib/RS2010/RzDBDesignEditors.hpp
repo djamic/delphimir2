@@ -30,6 +30,7 @@
 #include <Rzdbstat.hpp>	// Pascal unit
 #include <Rzdbnav.hpp>	// Pascal unit
 #include <Rzdbspin.hpp>	// Pascal unit
+#include <Rzdbrgrp.hpp>	// Pascal unit
 #include <Rzdbgrid.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
@@ -410,6 +411,28 @@ public:
 	
 public:
 	/* TObject.Destroy */ inline __fastcall virtual ~TRzDBCheckBoxEditor(void) { }
+	
+};
+
+
+class DELPHICLASS TRzDBCheckBoxGroupEditor;
+class PASCALIMPLEMENTATION TRzDBCheckBoxGroupEditor : public TRzDBControlEditor
+{
+	typedef TRzDBControlEditor inherited;
+	
+protected:
+	Rzdbrgrp::TRzDBCheckBoxGroup* __fastcall GroupBox(void);
+	virtual void __fastcall PrepareMenuItem(int Index, const Menus::TMenuItem* Item);
+	void __fastcall GroupStyleMenuHandler(System::TObject* Sender);
+	
+public:
+	virtual int __fastcall GetVerbCount(void);
+	virtual System::UnicodeString __fastcall GetVerb(int Index);
+public:
+	/* TComponentEditor.Create */ inline __fastcall virtual TRzDBCheckBoxGroupEditor(Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : TRzDBControlEditor(AComponent, ADesigner) { }
+	
+public:
+	/* TObject.Destroy */ inline __fastcall virtual ~TRzDBCheckBoxGroupEditor(void) { }
 	
 };
 

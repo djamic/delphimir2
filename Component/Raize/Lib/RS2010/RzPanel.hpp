@@ -30,6 +30,7 @@
 #include <Rzgrafx.hpp>	// Pascal unit
 #include <Rzcommon.hpp>	// Pascal unit
 #include <Rzbutton.hpp>	// Pascal unit
+#include <Types.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
 
@@ -120,6 +121,7 @@ protected:
 	virtual Types::TRect __fastcall GetClientRect(void);
 	virtual Types::TRect __fastcall GetControlRect(void);
 	virtual Types::TPoint __fastcall InvalidateMarginSize(void);
+	virtual void __fastcall EnableChildControls(bool Enabled);
 	virtual void __fastcall GetGradientColors(Graphics::TColor &StartColor, Graphics::TColor &StopColor);
 	virtual void __fastcall GetGradientFrameColor(Graphics::TColor &FrameColor, int &FrameColorAdjustment);
 	virtual void __fastcall DrawCaption(const Types::TRect &Rect);
@@ -329,19 +331,52 @@ private:
 	int FBannerHeight;
 	Graphics::TFont* FCaptionFont;
 	bool FCaptionFontChanged;
+	Types::TRect FCaptionRect;
+	bool FEnableControlsOnCheck;
+	bool FShowCheckBox;
+	int FCheckBoxSize;
+	bool FDragging;
+	bool FMouseOverCheckBox;
+	bool FKeyToggle;
+	bool FShowDownVersion;
+	Classes::TNotifyEvent FOnCheckBoxClick;
+	bool FChecked;
 	void __fastcall CaptionFontChangeHandler(System::TObject* Sender);
 	HIDESBASE MESSAGE void __fastcall CMDialogChar(Messages::TWMKey &Msg);
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Msg);
+	HIDESBASE MESSAGE void __fastcall CMMouseLeave(Messages::TMessage &Msg);
+	HIDESBASE MESSAGE void __fastcall WMSetFocus(Messages::TWMSetFocus &Msg);
+	HIDESBASE MESSAGE void __fastcall WMKillFocus(Messages::TWMKillFocus &Msg);
 	
 protected:
+	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall CustomFramingChanged(void);
 	virtual void __fastcall Paint(void);
+	void __fastcall DrawThemedCheckBox(void);
+	void __fastcall DrawNonThemedCheckBox(void);
+	Types::TRect __fastcall AdjustCaptionRectForCheckBox(void);
 	virtual void __fastcall AdjustClientRect(Types::TRect &Rect);
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
+	bool __fastcall ShowAccel(void);
+	bool __fastcall ShowFocus(void);
+	virtual void __fastcall ChangeState(void);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall CheckBoxClick(void);
+	DYNAMIC void __fastcall KeyDown(System::Word &Key, Classes::TShiftState Shift);
+	DYNAMIC void __fastcall KeyUp(System::Word &Key, Classes::TShiftState Shift);
 	virtual void __fastcall SetBannerHeight(int Value);
 	virtual void __fastcall SetGroupBoxStyle(TRzGroupBoxStyle Value);
 	bool __fastcall IsCaptionFontStored(void);
 	virtual void __fastcall SetCaptionFont(Graphics::TFont* Value);
+	virtual void __fastcall SetChecked(bool Value);
+	virtual void __fastcall SetEnableControlsOnCheck(bool Value);
+	virtual void __fastcall SetShowCheckBox(bool Value);
+	__property bool Checked = {read=FChecked, write=SetChecked, default=1};
+	__property bool EnableControlsOnCheck = {read=FEnableControlsOnCheck, write=SetEnableControlsOnCheck, default=1};
+	__property bool ShowCheckBox = {read=FShowCheckBox, write=SetShowCheckBox, default=0};
+	__property Classes::TNotifyEvent OnCheckBoxClick = {read=FOnCheckBoxClick, write=FOnCheckBoxClick};
 	__property Alignment = {default=0};
 	__property AlignmentVertical = {default=0};
 	__property BorderOuter = {default=0};
@@ -380,6 +415,7 @@ __published:
 	__property BorderWidth = {default=0};
 	__property Caption;
 	__property CaptionFont;
+	__property Checked = {default=1};
 	__property Color = {default=-16777201};
 	__property Constraints;
 	__property Ctl3D;
@@ -389,6 +425,7 @@ __published:
 	__property DragKind = {default=0};
 	__property DragMode = {default=0};
 	__property Enabled = {default=1};
+	__property EnableControlsOnCheck = {default=1};
 	__property FlatColor = {default=-16777200};
 	__property FlatColorAdjustment = {default=30};
 	__property Font;
@@ -408,6 +445,7 @@ __published:
 	__property ParentFont = {default=1};
 	__property ParentShowHint = {default=1};
 	__property PopupMenu;
+	__property ShowCheckBox = {default=0};
 	__property ShowDockClientCaptions = {default=1};
 	__property ShowHint;
 	__property TabOrder = {default=-1};
@@ -416,6 +454,7 @@ __published:
 	__property Transparent = {default=0};
 	__property Visible = {default=1};
 	__property VisualStyle = {default=1};
+	__property OnCheckBoxClick;
 	__property OnClick;
 	__property OnContextPopup;
 	__property OnDblClick;

@@ -19,6 +19,13 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (v)
+    * The TRzCheckBox and TRzRadioButton controls have been updated such that
+      the controls will hide any accelerator characters in the caption until the
+      user presses the Alt key. Likewise, the controls will hide the focus
+      rectangle until the user navigates on the form using the keyboard. The
+      controls honor the Windows system setting that affects this behavior.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * The TRzRadioButton and TRzCheckBox now scale the glyph image when using
       themes and the system is running at a higher DPI settings.
@@ -1441,7 +1448,7 @@ begin
     if (FAlignment = taRightJustify) xor UseRightToLeftAlignment then
       Inc( R.Left, FGlyphWidth + 4 )
     else
-      Dec( R.Right, FGlyphWidth + 4 );
+      Dec( R.Right, FGlyphWidth {+ 4} );
 
     if UseRightToLeftAlignment then
       Flags := dt_Right
@@ -1455,7 +1462,7 @@ begin
       Draw3DText( MemImage.Canvas, R, dt_ExpandTabs or Flags );
 
     InflateRect( R, 1, 1 );
-    if Focused and ( Caption <> '' ) then
+    if ShowFocus and Focused and ( Caption <> '' ) then
     begin
       W := R.Right - R.Left;
 

@@ -533,6 +533,8 @@ private:
 	bool FShowSystemColors;
 	Graphics::TColor FSelectedColor;
 	bool FShowColorHints;
+	Graphics::TColor FPopupButtonColor;
+	Graphics::TColor FPopupButtonFontColor;
 	HIDESBASE MESSAGE void __fastcall WMPaint(Messages::TWMPaint &Msg);
 	HIDESBASE MESSAGE void __fastcall WMSetFocus(Messages::TMessage &Msg);
 	HIDESBASE MESSAGE void __fastcall WMNCHitTest(Messages::TMessage &Msg);
@@ -559,6 +561,8 @@ __published:
 	__property System::UnicodeString DefaultColorCaption = {read=FDefaultColorCaption, write=FDefaultColorCaption};
 	__property bool ShowColorHints = {read=FShowColorHints, write=FShowColorHints, default=1};
 	__property System::UnicodeString NoColorCaption = {read=FNoColorCaption, write=FNoColorCaption};
+	__property Graphics::TColor PopupButtonColor = {read=FPopupButtonColor, write=FPopupButtonColor, default=-16777201};
+	__property Graphics::TColor PopupButtonFontColor = {read=FPopupButtonFontColor, write=FPopupButtonFontColor, default=-16777208};
 	__property Graphics::TColor SelectedColor = {read=FSelectedColor, write=SetSelectedColor, default=536870911};
 	__property bool ShowNoColor = {read=FShowNoColor, write=FShowNoColor, default=0};
 	__property bool ShowCustomColor = {read=FShowCustomColor, write=FShowCustomColor, default=0};

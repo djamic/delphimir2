@@ -85,6 +85,12 @@ begin
     RegisterComponents( PalettePage, [ TRzDBRadioGroup ] );
     RegisterComponentEditor( TRzDBRadioGroup, TRzDBRadioGroupEditor );
   end;
+
+  if R.ReadBool( RegisterSection, 'TRzDBCheckBoxGroup', True ) then
+  begin
+    RegisterComponents( PalettePage, [ TRzDBCheckBoxGroup ] );
+    RegisterComponentEditor( TRzDBCheckBoxGroup, TRzDBCheckBoxGroupEditor );
+  end;
 end; {= RegisterRaizePanels =}
 
 

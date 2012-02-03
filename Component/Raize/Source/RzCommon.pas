@@ -32,6 +32,19 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * The TRzMenuComponent now looks at the BiDiMode setting of the menu that
+      it is modifying to determine if the menu needs to be displayed in right-
+      to-left orientation. If so, the image bar of the custom menu appearance
+      is drawn on the right edge of the menu rather than the left. Menu item
+      captions, images, and short-cuts are also repositioned as appropriate.
+    * Added MenuFont and UseCustomMenuFont properties to the TRzMenuController.
+      When UseCustomMenuFont is set to True, the font attributes defined in
+      the MenuFont property are used to display the non-top-level menu items
+      in the menu. The height of top-level menu items do not change as a result
+      of the font changing. Therefore, the system defined menu font is used
+      for top level menus.
+  ------------------------------------------------------------------------------
   5.2    (05 Sep 2009)
     * Added new FirstNonWhitespaceChar function.
   ------------------------------------------------------------------------------
@@ -308,7 +321,7 @@ uses
   IniFiles;
 
 const
-  RaizeComponents_Version = '5.4';
+  RaizeComponents_Version = '5.5';
 
   cm_GetBlinking                = cm_Base + 1000;
   cm_Blink                      = cm_Base + 1001;
@@ -370,6 +383,7 @@ type
 
 const
   sdAllSides = [ sdLeft, sdTop, sdRight, sdBottom ];
+  fsDoubleBorders = [ fsGroove, fsBump, fsLowered, fsButtonDown, fsRaised, fsButtonUp, fsFlatBold, fsFlatRounded ];
 
 const                                                           { Color Arrays }
   { Frame Style Color constant arrays }
@@ -1455,6 +1469,8 @@ type
 
     FMenuColor: TColor;
     FMenuFontColor: TColor;
+    FMenuFont: TFont;
+    FUseCustomMenuFont: Boolean;
 
     function HideMenuPrefix: Boolean;
 
@@ -1462,11 +1478,15 @@ type
     procedure ReadOldGradientColorStopProp( Reader: TReader );
     procedure ReadOldFrameColorProp( Reader: TReader );
 
+    procedure SetMenuFontColor( Value: TColor );
+    procedure SetMenuFont( Value: TFont );
+
     { Internal Event Handlers }
     procedure AdvancedDrawItemHandler( Sender: TObject; ACanvas: TCanvas;
                                        ARect: TRect; State: TOwnerDrawState );
     procedure MeasureItemHandler( Sender: TObject; ACanvas: TCanvas;
                                   var Width, Height: Integer );
+    procedure MenuFontChangeHandler( Sender: TObject );
   protected
     procedure DefineProperties( Filer: TFiler ); override;
 
@@ -1479,6 +1499,8 @@ type
 
     procedure CleanupMenuItems;
     procedure CleanupMenuItem( Item: TMenuItem );
+
+    function MenuIsRightToLeft( Item: TMenuItem ): Boolean;
 
     procedure MeasureMenuItem( Item: TMenuItem; Canvas: TCanvas;
                                var Width, Height: Integer );
@@ -1530,8 +1552,18 @@ type
 
     property MenuFontColor: TColor
       read FMenuFontColor
-      write FMenuFontColor
+      write SetMenuFontColor
       default clWindowText;
+
+    property MenuFont: TFont
+      read FMenuFont
+      write SetMenuFont
+      stored FUseCustomMenuFont;
+
+    property UseCustomMenuFont: Boolean
+      read FUseCustomMenuFont
+      write FUseCustomMenuFont
+      default False;
   end;
 
 
@@ -2170,7 +2202,7 @@ begin
 
       xpcsSilver:
         Result := xpOfficeSilver_Panel_FrameColor;
-        
+
       else
         Result := clBtnShadow;
     end;
@@ -2263,7 +2295,7 @@ procedure GetGradientCategoryGroupColors( ColorStyle: TRzGradientColorStyle;
                                           SpecialGroup: Boolean;
                                           var CaptionBackColor, CaptionBackColorStart,
                                           CaptionBackColorStop, CaptionFontColor,
-                                          CaptionFontHotColor, 
+                                          CaptionFontHotColor,
                                           CaptionButtonColor, CaptionButtonBorderColor,
                                           CaptionDividerColor, GroupColor,
                                           GroupBorderColor: TColor );
@@ -4412,7 +4444,7 @@ var
 begin
   ImageIndex := -1;
   DisabledIndex := -1;
-  
+
   if ( ImageList <> nil ) and ( Glyph <> nil ) then
   begin
     if Glyph.Width = Glyph.Height then
@@ -5828,7 +5860,7 @@ const
   CSIDL_LOCAL_APPDATA = $001C;
 {$ENDIF}
 
-{$IFNDEF VCL110_OR_HIGHER}  
+{$IFNDEF VCL110_OR_HIGHER}
 const
   CSIDL_COMMON_APPDATA = $0023;
 {$ENDIF}
@@ -5888,7 +5920,7 @@ begin
     sfUserDocuments:
       Result := GetSpecialFolderPath( CSIDL_PERSONAL );
 
-    sfProgramData:                    
+    sfProgramData:
       Result := GetSpecialFolderPath( CSIDL_COMMON_APPDATA );
   end;
 
@@ -6740,7 +6772,7 @@ begin
 
         tkWString:
           FRegIniFile.WriteString( S, FullPropName, GetWideStrProp( Comp, PropName ) );
-                 
+
         {$IFDEF UNICODE}
         tkUString:
           FRegIniFile.WriteString( S, FullPropName, GetUnicodeStrProp( Comp, PropName ) );
@@ -6817,13 +6849,13 @@ begin
                 StrValue := FRegIniFile.ReadString( Section, FullPropName, '' );
                 SetWideStrProp( Obj, PropInfo, StrValue );
               end;
-                       
+
               {$IFDEF UNICODE}
               tkUString:
               begin
                 StrValue := FRegIniFile.ReadString( Section, FullPropName, '' );
                 SetUnicodeStrProp( Obj, PropInfo, StrValue );
-              end;           
+              end;
               {$ENDIF}
             end;
           end;
@@ -6957,7 +6989,7 @@ begin
             StrValue := FRegIniFile.ReadString( S, FullPropName, '' );
             SetWideStrProp( Comp, PropName, StrValue );
           end;
-                   
+
           {$IFDEF UNICODE}
           tkUString:
           begin
@@ -7153,6 +7185,17 @@ begin
 
   FMenuColor := clWindow;
   FMenuFontColor := clWindowText;
+
+  FMenuFont := TFont.Create;
+  if RunningAtLeast( winVista ) then
+    FMenuFont.Name := 'Segoe UI'
+  else
+    FMenuFont.Name := 'Tahoma';
+  FMenuFont.Style := [ ];
+  FMenuFont.Size := 8;
+  FMenuFont.Color := FMenuFontColor;
+  FMenuFont.OnChange := MenuFontChangeHandler;
+  FUseCustomMenuFont := False;
 end;
 
 
@@ -7161,6 +7204,7 @@ begin
   if not ( csDesigning in ComponentState ) then
     CleanupMenuItems;
   FMenuItemList.Free;
+  FMenuFont.Free;
   inherited;
 end;
 
@@ -7318,6 +7362,16 @@ begin
 end;
 
 
+function TRzMenuController.MenuIsRightToLeft( Item: TMenuItem ): Boolean;
+var
+  Menu: TMenu;
+begin
+  Result := False;
+  Menu := Item.GetParentMenu;
+  if ( Menu <> nil ) and ( Menu.IsRightToLeft ) then
+    Result := True;
+end;
+
 procedure TRzMenuController.AdvancedDrawItemHandler( Sender: TObject; ACanvas: TCanvas;
                                                      ARect: TRect; State: TOwnerDrawState );
 begin
@@ -7336,9 +7390,10 @@ procedure TRzMenuController.PaintMenuItem( Item: TMenuItem; Canvas: TCanvas;
                                            Rect: TRect; State: TOwnerDrawState );
 var
   R, GlyphRect, CaptionRect: TRect;
-  TopLevel, Win98Plus: Boolean;
+  TopLevel, Win98Plus, RightToLeftMenu: Boolean;
   FC, SelBarStartColor, SelBarStopColor, IcoStartColor, IcoStopColor: TColor;
   ImgList: TCustomImageList;
+  Y: Integer;
 
 
   procedure PaintCaption( Canvas: TCanvas; CaptionRect: TRect; Caption: string;
@@ -7356,7 +7411,10 @@ var
     if TopLevel then
       Flags := Flags or DT_CENTER
     else
-      Flags := Flags or DT_LEFT;
+      if RightToLeftMenu then
+        Flags := Flags or DT_RIGHT
+      else
+        Flags := Flags or DT_LEFT;
 
     if HideMenuPrefix and Win2K and ( odNoAccel in State ) then
       Flags := Flags or DT_HIDEPREFIX;
@@ -7370,16 +7428,30 @@ var
     if not Item.Enabled then
       Canvas.Font.Color := clGrayText;
 
-    DrawString( Canvas, Item.Caption, CaptionRect, Flags );
+    if RightToLeftMenu then
+      DrawString( Canvas, ' ' + Item.Caption, CaptionRect, Flags )
+    else
+      DrawString( Canvas, Item.Caption, CaptionRect, Flags );
 
 
     if ( Item.ShortCut <> 0) and not TopLevel then
     begin
       S := ShortCutToText( Item.ShortCut );
-      Flags := Flags or DT_RIGHT;
-      R := CaptionRect;
-      Dec( R.Right, 10 );
-      DrawString( Canvas, S, R, Flags );
+      if RightToLeftMenu then
+      begin
+        Flags := DT_VCENTER or DT_EXPANDTABS or DT_SINGLELINE;
+        Flags := Flags or DT_LEFT;
+        R := CaptionRect;
+        Inc( R.Left, 5 );
+        DrawString( Canvas, '  ' + S, R, Flags );
+      end
+     else
+     begin
+        Flags := Flags or DT_RIGHT;
+        R := CaptionRect;
+        Dec( R.Right, 10 );
+        DrawString( Canvas, S, R, Flags );
+      end;
     end;
 
     Canvas.Font.Style := OldStyle;
@@ -7450,6 +7522,7 @@ begin {= PaintMenuItem =}
                ( ( Win32MajorVersion = 4 ) and ( Win32MinorVersion > 0 ) );
   TopLevel := Item.GetParentComponent is TMainMenu;
   ImgList := Item.GetImageList;
+  RightToLeftMenu := MenuIsRightToLeft( Item );
 
   if FGradientColorStyle <> gcsCustom then
   begin
@@ -7465,16 +7538,32 @@ begin {= PaintMenuItem =}
     IcoStopColor := FIconBarColorStop;
   end;
 
-
   GlyphRect := Rect;
-  if ImgList <> nil then
-    GlyphRect.Right := GlyphRect.Left + ImgList.Width + 8
+  if RightToLeftMenu then
+  begin
+    if ImgList <> nil then
+      GlyphRect.Left := GlyphRect.Right - ImgList.Width - 8
+    else
+      GlyphRect.Left := GlyphRect.Right - 24;
+    CaptionRect := Rect;
+    if not TopLevel then
+      CaptionRect.Right := CaptionRect.Right - ( Rect.Right - GlyphRect.Left );
+  end
   else
-    GlyphRect.Right := GlyphRect.Left + 24;
-  CaptionRect := Rect;
-  if not TopLevel then
-    CaptionRect.Left := GlyphRect.Right;
+  begin
+    if ImgList <> nil then
+      GlyphRect.Right := GlyphRect.Left + ImgList.Width + 8
+    else
+      GlyphRect.Right := GlyphRect.Left + 24;
+    CaptionRect := Rect;
+    if not TopLevel then
+      CaptionRect.Left := GlyphRect.Right;
+  end;
 
+  if FUseCustomMenuFont and not TopLevel then
+    Canvas.Font := FMenuFont
+  else
+    Canvas.Font := Screen.MenuFont;
   Canvas.Font.Color := FMenuFontColor;
 
   if TopLevel then
@@ -7529,7 +7618,10 @@ begin {= PaintMenuItem =}
       // Paint IconBar Background
       if FullColorSupported then
       begin
-        PaintGradient( Canvas, GlyphRect, gdVerticalEnd, IcoStartColor, IcoStopColor );
+        if RightToLeftMenu then
+          PaintGradient( Canvas, GlyphRect, gdVerticalEnd, IcoStopColor, IcoStartColor )
+        else
+          PaintGradient( Canvas, GlyphRect, gdVerticalEnd, IcoStartColor, IcoStopColor );
       end
       else
       begin
@@ -7547,11 +7639,10 @@ begin {= PaintMenuItem =}
     // Adjust CaptionRect to Display Text
     Inc( CaptionRect.Left, 6 );
 
-    if ( ImgList <> nil ) and ( Item.ImageIndex > -1 ) and
-       ( Item.ImageIndex < ImgList.Count ) then
+    if ( ImgList <> nil ) and ( Item.ImageIndex > -1 ) and ( Item.ImageIndex < ImgList.Count ) then
     begin
-      ImgList.Draw( Canvas, GlyphRect.Left + 3, GlyphRect.Top + 3,
-                              Item.ImageIndex, Item.Enabled );
+      Y := ( ( Rect.Bottom - Rect.Top ) - ( ImgList.Height ) ) div 2;
+      ImgList.Draw( Canvas, GlyphRect.Left + 3, GlyphRect.Top + Y, Item.ImageIndex, Item.Enabled );
     end;
 
   end;
@@ -7560,7 +7651,10 @@ begin {= PaintMenuItem =}
   begin
     Canvas.Pen.Color := clBtnShadow;
     Canvas.MoveTo( CaptionRect.Left, CaptionRect.Top + 1 );
-    Canvas.LineTo( CaptionRect.Right, CaptionRect.Top + 1 );
+    if RightToLeftMenu then
+      Canvas.LineTo( CaptionRect.Right - Canvas.TextWidth( ' ' ), CaptionRect.Top + 1 )
+    else
+      Canvas.LineTo( CaptionRect.Right, CaptionRect.Top + 1 );
   end
   else
     PaintCaption( Canvas, CaptionRect, Item.Caption, TopLevel );
@@ -7570,24 +7664,29 @@ end; {= PaintMenuItem =}
 procedure TRzMenuController.MeasureMenuItem( Item: TMenuItem; Canvas: TCanvas;
                                              var Width, Height: Integer );
 var
+  H: Integer;
   TopLevel: Boolean;
   ImgList: TCustomImageList;
 begin
   ImgList := Item.GetImageList;
-  if Item.Caption = cLineCaption then
-    Height := 3
-  else
-  begin
-    if ImgList <> nil then
-      Height := ImgList.Height + 6
-    else
-      Height := 22;
-  end;
-
   TopLevel := Item.GetParentComponent is TMainMenu;
 
-  if not TopLevel and ( ImgList = nil ) then
-    Inc( Width, 31 );
+  if Item.Caption = cLineCaption then
+    Height := 3
+  else if not TopLevel then
+  begin
+    if FUseCustomMenuFont then
+      Canvas.Font := FMenuFont
+    else
+      Canvas.Font := Screen.MenuFont;
+
+    Width := Canvas.TextWidth( Item.Caption ) + 31;
+    H := Canvas.TextHeight( 'Yy' ) + 6;
+    if ImgList <> nil then
+      Height := Max( H, ImgList.Height + 6 )
+    else
+      Height := H;
+  end;
 end;
 
 
@@ -7624,6 +7723,28 @@ begin
   except
     Result := False;
   end;
+end;
+
+
+procedure TRzMenuController.SetMenuFontColor( Value: TColor );
+begin
+  if FMenuFontColor <> Value then
+  begin
+    FMenuFontColor := Value;
+    FMenuFont.Color := Value;
+  end;
+end;
+
+
+procedure TRzMenuController.SetMenuFont( Value: TFont );
+begin
+  FMenuFont.Assign( Value );
+end;
+
+
+procedure TRzMenuController.MenuFontChangeHandler( Sender: TObject );
+begin
+  FMenuFontColor := FMenuFont.Color;
 end;
 
 

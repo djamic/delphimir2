@@ -14,6 +14,10 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Fixed display issue that would occur when creating a new instance of
+      TRzCustomHintWindow and passing nil as the owner.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * Fixed display issue with setting Color property of TRzHintWindow.
   ------------------------------------------------------------------------------
@@ -421,6 +425,9 @@ var
   {$ENDIF}
 begin
   inherited;
+
+  if AOwner = nil then
+    AOwner := Application;
 
   if AOwner is TApplication then
   begin

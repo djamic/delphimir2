@@ -43,6 +43,10 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Added PopupButtonColor and PopupButtonFontColor properties to the
+      TRzColorEdit control.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * Fixed issue in TRzNumericEdit where pressing the keypad decimal key would
       not insert the DecimalSeparator character (based on user locale settings)
@@ -1189,6 +1193,9 @@ type
     FShowSystemColors: Boolean;
     FSelectedColor: TColor;
     FShowColorHints: Boolean;
+    FPopupButtonColor: TColor;
+    FPopupButtonFontColor: TColor;
+
 
     // Message Handling Methods
     procedure WMPaint( var Msg: TWMPaint ); message wm_Paint;
@@ -1251,6 +1258,16 @@ type
     property NoColorCaption: string
       read FNoColorCaption
       write FNoColorCaption;
+
+    property PopupButtonColor: TColor
+      read FPopupButtonColor
+      write FPopupButtonColor
+      default clBtnFace;
+
+    property PopupButtonFontColor: TColor
+      read FPopupButtonFontColor
+      write FPopupButtonFontColor
+      default clWindowText;
 
     property SelectedColor: TColor
       read FSelectedColor
@@ -4149,6 +4166,9 @@ begin
   FCustomColor := clWhite;
   FDefaultColor := clHighlight;
   FShowColorHints := True;
+
+  FPopupButtonColor := clBtnFace;
+  FPopupButtonFontColor := clWindowText;
 end;
 
 
@@ -4180,9 +4200,13 @@ begin
     try
       ColorPicker := TRzColorPicker.Create( PopupPanel );
       ColorPicker.Parent := PopupPanel;
+
       PopupPanel.Parent := Self.Parent;
       PopupPanel.Font.Name := Font.Name;
 
+      ColorPicker.IsPopup := True;
+      ColorPicker.ButtonColor := FPopupButtonColor;
+      ColorPicker.ButtonFontColor := FPopupButtonFontColor;
       ColorPicker.NoColorCaption := FNoColorCaption;
       ColorPicker.ShowNoColor := FShowNoColor;
       ColorPicker.CustomColorCaption := FCustomColorCaption;
@@ -4196,6 +4220,8 @@ begin
       ColorPicker.SelectedColor := FSelectedColor;
       ColorPicker.CustomColors := FCustomColors;
       ColorPicker.ColorDlgOptions := FColorDlgOptions;
+      ColorPicker.Handle;
+
       if FFrameVisible and not UseThemes and ( FFrameStyle = fsFlat ) or ( FFrameStyle = fsFlatBold ) then
       begin
         ColorPicker.BorderOuter := fsFlat;

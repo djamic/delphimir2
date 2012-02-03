@@ -14,6 +14,9 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Added WordWrap property to TRzBmpButton.
+  ------------------------------------------------------------------------------
   4.2    (29 May 2007)
     * Surfaced Align property in TRzBmpButton.
   ------------------------------------------------------------------------------
@@ -160,6 +163,7 @@ type
     FShowFocus: Boolean;
     FShowDownPattern: Boolean;
     FColor: TColor;
+    FWordWrap: Boolean;
     IsFocused: Boolean;
     FModalResult: TModalResult;
     {$IFNDEF VCL100_OR_HIGHER}
@@ -216,6 +220,7 @@ type
     procedure SetShowDownPattern( Value: Boolean ); virtual;
     procedure SetShowFocus( Value: Boolean ); virtual;
     procedure SetSpacing( Value: Integer ); virtual;
+    procedure SetWordWrap( Value: Boolean ); virtual;
   public
     constructor Create( AOwner: TComponent ); override;
     destructor Destroy; override;
@@ -299,6 +304,11 @@ type
       read FSpacing
       write SetSpacing
       default 4;
+
+    property WordWrap: Boolean
+      read FWordWrap
+      write SetWordWrap
+      default False;
 
     {$IFNDEF VCL100_OR_HIGHER}
     property OnMouseEnter: TNotifyEvent
@@ -598,6 +608,7 @@ var
   PaintRect, OrigRect, TextRect, Src, DRect: TRect;
   NewStyle: Boolean;
   Bevel: Integer;
+  Flags: UINT;
 begin
   { Create Memory Bitmap }
   MemImage := TBitmap.Create;
@@ -828,24 +839,30 @@ begin
 
     MemImage.Canvas.Font := Self.Font;
 
+
     { Put Caption on Button }
     if Caption <> '' then
     begin
+      if FWordWrap then
+        Flags := dt_Center or dt_VCenter or dt_WordBreak
+      else
+        Flags := dt_Center or dt_VCenter or dt_SingleLine;
+
       MemImage.Canvas.Brush.Style := bsClear;
       if FState = bsDisabled then
       begin
         OffsetRect( TextRect, 1, 1 );
         MemImage.Canvas.Font.Color := clWhite;
-        DrawStringCentered( MemImage.Canvas, Caption, TextRect );
+        DrawString( MemImage.Canvas, Caption, TextRect, Flags );
         OffsetRect( TextRect, -1, -1 );
         MemImage.Canvas.Font.Color := clDkGray;
-        DrawStringCentered( MemImage.Canvas, Caption, TextRect );
+        DrawString( MemImage.Canvas, Caption, TextRect, Flags );
       end
       else
       begin
         if ( FState = bsDown ) or ( FState = bsExclusive ) then
           OffsetRect( TextRect, FCaptionDownOffset, FCaptionDownOffset );
-        DrawStringCentered( MemImage.Canvas, Caption, TextRect );
+        DrawString( MemImage.Canvas, Caption, TextRect, Flags );
         MemImage.Canvas.Font.Color := clWindowText;
       end;
 
@@ -856,6 +873,7 @@ begin
         DrawFocusRect( MemImage.Canvas.Handle, TextRect );
       end;
     end;
+
 
     Canvas.CopyMode := cmSrcCopy;
     Canvas.Draw( 0, 0, MemImage );
@@ -889,7 +907,10 @@ begin
   if Length( Caption ) > 0 then
   begin
     TextBounds := Rect( 0, 0, ClientSize.x, 0 );
-    DrawString( Canvas, Caption, TextBounds, DT_CALCRECT );
+    if FWordWrap then
+      DrawString( Canvas, Caption, TextBounds, dt_CalcRect or dt_WordBreak )
+    else
+      DrawString( Canvas, Caption, TextBounds, dt_CalcRect );
   end
   else
     TextBounds := Rect( 0, 0, 0, 0 );
@@ -1210,6 +1231,17 @@ begin
     Invalidate;
   end;
 end;
+
+
+procedure TRzBmpButton.SetWordWrap( Value: Boolean );
+begin
+  if FWordWrap <> Value then
+  begin
+    FWordWrap := Value;
+    Invalidate;
+  end;
+end;
+
 
 procedure TRzBmpButton.SetAllowAllUp( Value: Boolean );
 begin

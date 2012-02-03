@@ -31,6 +31,13 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * Fixed issue in TRzComboBox and descendants with ReadOnly set to True and
+      Style set to csDropDownList where the drop down list could still be
+      displayed by using Alt+DownArrow.
+    * Fixed display issue in ReadOnly TRzComboBox and descendants under Windows
+      Vista and Windows 7 when the control was set to csDropDownList style.
+  ------------------------------------------------------------------------------
   5.4    (14 Sep 2010)
     * Fixed performance issue with TRzComboBox controls and descendants that set
       the Style property to csOwnerDrawFixed.
@@ -1987,6 +1994,7 @@ implementation
 {$R RzCmboBx.res}
 
 uses
+  Types,
   Themes,
   ClipBrd,
   TypInfo,
@@ -2305,7 +2313,7 @@ begin
 
   {$ENDIF}
 
-  if Msg.Msg = wm_KeyDown then
+  if ( Msg.Msg = wm_KeyDown ) or ( Msg.Msg = wm_SysKeyDown ) then
   begin
     if FReadOnly then
       Exit;
@@ -3034,7 +3042,7 @@ begin
     FReadOnly := Value;
 
     H := EditHandle;
-    if ( Style in [ csDropDown, csSimple ] ) and HandleAllocated then
+    if HandleAllocated then
       SendMessage( H, em_SetReadOnly, Ord( FReadOnly ), 0 );
 
     UpdateColors;
@@ -3403,8 +3411,14 @@ begin
       R.Left := BtnRect.Right;
 
     InflateRect( R, -1, -1 );
-    if ColorToRGB( Color ) <> clWhite then
-      DrawBevel( FCanvas, R, Color, Color, 2, sdAllSides );
+
+    if ( Style <> csDropDownList ) or not RunningAtLeast( winVista ) or not FReadOnly then
+    begin
+      // This block gets skipped if Style = csDropDownList and running Vista or higher, and ReadOnly
+      // which is necessary because of the way Vista/Win7 draw drop down list combo boxes.
+      if ColorToRGB( Color ) <> clWhite then
+        DrawBevel( FCanvas, R, Color, Color, 2, sdAllSides );
+    end;
   end;
 
   if ThemeServices.ThemesEnabled and ( Style <> csSimple ) and
@@ -3481,7 +3495,7 @@ begin
       end;
     end;
   end
-  else if FReadOnly then
+  else if FReadOnly and ( Style <> csDropDownList ) then
   begin
     // Erase drop down button
     FCanvas.Brush.Color := Color;

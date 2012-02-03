@@ -39,6 +39,14 @@
 
   Modification History
   ------------------------------------------------------------------------------
+  5.5    (06 Mar 2011)
+    * The TRzButton and descendant controls (e.g. TRzBitBtn and TRzMenuButton)
+      have been updated such that the controls will hide any accelerator
+      characters in the caption until the user presses the Alt key. Likewise,
+      the controls will hide the focus rectangle until the user navigates on
+      the form using the keyboard. The controls honor the Windows system setting
+      that affects this behavior.
+  ------------------------------------------------------------------------------
   5.3    (07 Feb 2010)
     * Fixed issue where calling Free on a TRzButton while it has the focus would
       result in an access violation.
@@ -362,6 +370,8 @@ type
     FTransparent: Boolean;
     FThemeAware: Boolean;
 
+    procedure CreateWnd; override;
+
     // BCB Header Translation Required for HDC
     procedure PaintBackground( DC: HDC ); virtual;
 
@@ -370,6 +380,8 @@ type
     function GetHotTrackRect: TRect; virtual;
     procedure RemoveFocus( Removing: Boolean );
 
+    function ShowAccel: Boolean;
+    function ShowFocus: Boolean;
     function UseThemes: Boolean; virtual;
 
     procedure Draw3DText( Canvas: TCanvas; R: TRect; Flags: DWord ); virtual;
@@ -1793,6 +1805,14 @@ begin
 end;
 
 
+procedure TRzCustomButton.CreateWnd;
+begin
+  inherited;
+  if RunningAtLeast( win2000 ) then
+    Perform( wm_ChangeUIState, MakeWParam( UIS_INITIALIZE, UISF_HIDEACCEL or UISF_HIDEFOCUS ), 0 );
+end;
+
+
 procedure TRzCustomButton.SetAlignmentVertical( Value: TAlignmentVertical );
 begin
   if FAlignmentVertical <> Value then
@@ -1870,6 +1890,18 @@ begin
     FTextStyle := Value;
     Invalidate;
   end;
+end;
+
+
+function TRzCustomButton.ShowAccel: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEACCEL ) = 0;
+end;
+
+
+function TRzCustomButton.ShowFocus: Boolean;
+begin
+  Result := ( Perform( wm_QueryUIState, 0, 0 ) and UISF_HIDEFOCUS ) = 0;
 end;
 
 
@@ -1970,6 +2002,7 @@ var
   TempRct: TRect;
   ULColor, LRColor: TColor;
   H: Integer;
+  S: string;
 begin
   Canvas.Brush.Style := bsClear;
 
@@ -1981,9 +2014,13 @@ begin
   Canvas.Font := Self.Font;
   TempRct := R;
 
-  H := DrawString( Canvas, Caption, TempRct,
-                 dt_CalcRect or dt_WordBreak or dt_ExpandTabs or
-                 dt_VCenter or dt_Center );
+  if ShowAccel then
+    S := Caption
+  else
+    S := RemoveAccelerators( Caption );
+
+
+  H := DrawString( Canvas, S, TempRct, dt_CalcRect or dt_WordBreak or dt_ExpandTabs or dt_VCenter or dt_Center );
 
   case FAlignmentVertical of
     avTop:
@@ -2022,7 +2059,7 @@ begin
       begin
         OffsetRect( TempRct, 1, 1 );
         Canvas.Font.Color := LRColor;
-        DrawString( Canvas, Caption, TempRct, Flags );
+        DrawString( Canvas, S, TempRct, Flags );
       end;
 
       if ( FTextStyle = tsRaised ) or not FLightTextStyle then
@@ -2030,7 +2067,7 @@ begin
         TempRct := R;
         OffsetRect( TempRct, -1, -1 );
         Canvas.Font.Color := ULColor;
-        DrawString( Canvas, Caption, TempRct, Flags );
+        DrawString( Canvas, S, TempRct, Flags );
       end;
     end
     else if FTextStyle = tsShadow then
@@ -2040,7 +2077,7 @@ begin
       else
         OffsetRect( TempRct, FTextShadowDepth, FTextShadowDepth );
       Canvas.Font.Color := FTextShadowColor;
-      DrawString( Canvas, Caption, TempRct, Flags );
+      DrawString( Canvas, S, TempRct, Flags );
     end;
 
     Canvas.Font.Color := Self.Font.Color;
@@ -2054,7 +2091,7 @@ begin
     else
       Canvas.Font.Color := clGrayText;
   end;
-  DrawString( Canvas, Caption, R, Flags );
+  DrawString( Canvas, S, R, Flags );
 
   Canvas.Brush.Style := bsSolid;
 end; {= TRzCustomButton.Draw3DText =}
@@ -2639,7 +2676,8 @@ begin {= TRzButton.Paint =}
 
   DrawButtonContent;
 
-  if Focused and FShowFocusRect then
+
+  if ShowFocus and Focused and FShowFocusRect then
     DrawFocusBorder( Canvas, FocusRect );
 
 end; {= TRzButton.Paint =}

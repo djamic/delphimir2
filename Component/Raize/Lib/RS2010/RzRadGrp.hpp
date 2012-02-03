@@ -99,6 +99,8 @@ protected:
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	virtual void __fastcall SetButtonCount(int Value);
 	virtual void __fastcall UpdateButtons(void);
+	void __fastcall FocusNextButton(void);
+	void __fastcall FocusPreviousButton(void);
 	virtual void __fastcall ReadState(Classes::TReader* Reader);
 	virtual bool __fastcall CanModify(void);
 	virtual void __fastcall CustomFramingChanged(void);

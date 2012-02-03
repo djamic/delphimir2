@@ -98,7 +98,7 @@ MINIMUM SYSTEM REQUIREMENTS
   
   At least one of the following compilers:
                  
-    Embarcadero RAD Studio XE      -- Delphi XE,   C++Builder XE
+    Embarcadero RAD Studio XE      -- Delphi XE,   C++Builder XE - Update 1
     Embarcadero RAD Studio 2010    -- Delphi 2010, C++Builder 2010   
     CodeGear RAD Studio 2009       -- Delphi 2009, C++Builder 2009
     CodeGear RAD Studio 2007       -- Delphi 2007, C++Builder 2007                    
