@@ -4,7 +4,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics,
-  Controls, Forms, Dialogs, StdCtrls, DB, DBTables, Grids, Buttons, HumDB, Grobal2;
+  Controls, Forms, Dialogs, StdCtrls, DB, DBTables, Grids, Buttons, HumDB,
+  Grobal2;
+
 type
   TFrmIDHum = class(TForm)
     Label3: TLabel;
@@ -58,7 +60,6 @@ var
 implementation
 
 uses HUtil32, MudUtil, CreateChr, viewrcd, EditRcd, DBShare;
-
 {$R *.DFM}
 
 procedure TFrmIDHum.FormCreate(Sender: TObject);
@@ -89,19 +90,26 @@ var
   I, nIndex: Integer;
   HumDBRecord: THumInfo;
 begin
-  if Key = #13 then begin
+  if Key = #13 then
+  begin
     Key := #0;
     sAccount := EdUserId.Text;
     ChrGrid.RowCount := 1;
-    if sAccount <> '' then begin
+    if sAccount <> '' then
+    begin
       try
-        if g_HumCharDB.OpenEx then begin
-          if g_HumCharDB.FindByAccount(sAccount, ChrList) >= 0 then begin
-            for I := 0 to ChrList.Count - 1 do begin
+        if g_HumCharDB.OpenEx then
+        begin
+          if g_HumCharDB.FindByAccount(sAccount, ChrList) >= 0 then
+          begin
+            for I := 0 to ChrList.Count - 1 do
+            begin
               nIndex := pTQuickID(ChrList.Items[I]).nIndex;
-              if nIndex >= 0 then begin
+              if nIndex >= 0 then
+              begin
                 g_HumCharDB.GetBy(nIndex, @HumDBRecord);
-                if CbShowDelChr.Checked then RefChrGrid(nIndex, HumDBRecord)
+                if CbShowDelChr.Checked then
+                  RefChrGrid(nIndex, HumDBRecord)
                 else if not HumDBRecord.boDeleted then
                   RefChrGrid(nIndex, HumDBRecord);
               end;
@@ -117,7 +125,8 @@ end;
 
 procedure TFrmIDHum.EdChrNameKeyPress(Sender: TObject; var Key: Char);
 begin
-  if Key = #13 then begin
+  if Key = #13 then
+  begin
     Key := #0;
     BtnChrNameSearchClick(Sender);
   end;
@@ -132,12 +141,16 @@ begin
   s64 := EdChrName.Text;
   ChrGrid.RowCount := 1;
   try
-    if g_HumCharDB.OpenEx then begin
+    if g_HumCharDB.OpenEx then
+    begin
       n08 := g_HumCharDB.Index(s64);
-      if n08 >= 0 then begin
+      if n08 >= 0 then
+      begin
         nIndex := g_HumCharDB.Get(n08, @HumDBRecord);
-        if nIndex >= 0 then begin
-          if CbShowDelChr.Checked then RefChrGrid(nIndex, HumDBRecord)
+        if nIndex >= 0 then
+        begin
+          if CbShowDelChr.Checked then
+            RefChrGrid(nIndex, HumDBRecord)
           else if not HumDBRecord.boDeleted then
             RefChrGrid(nIndex, HumDBRecord);
         end;
@@ -159,12 +172,17 @@ begin
   ChrGrid.RowCount := 1;
   ChrList := TList.Create;
   try
-    if g_HumCharDB.OpenEx then begin
-      if g_HumCharDB.FindByName(sChrName, ChrList) > 0 then begin
-        for I := 0 to ChrList.Count - 1 do begin
+    if g_HumCharDB.OpenEx then
+    begin
+      if g_HumCharDB.FindByName(sChrName, ChrList) > 0 then
+      begin
+        for I := 0 to ChrList.Count - 1 do
+        begin
           nIndex := Integer(ChrList.Items[I]);
-          if g_HumCharDB.GetBy(nIndex, @HumDBRecord) then begin
-            if CbShowDelChr.Checked then RefChrGrid(nIndex, HumDBRecord)
+          if g_HumCharDB.GetBy(nIndex, @HumDBRecord) then
+          begin
+            if CbShowDelChr.Checked then
+              RefChrGrid(nIndex, HumDBRecord)
             else if not HumDBRecord.boDeleted then
               RefChrGrid(nIndex, HumDBRecord);
           end;
@@ -182,10 +200,14 @@ var
   sChrName: string;
 begin
   sChrName := EdChrName.Text;
-  if sChrName = '' then Exit;
-  if MessageDlg('Bạn chắc chắn muốn xóa: ' + sChrName + '  không?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if sChrName = '' then
+    Exit;
+  if MessageDlg('Bạn chắc chắn muốn xóa: ' + sChrName + '  không?',
+    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
     try
-      if g_HumCharDB.Open then begin
+      if g_HumCharDB.Open then
+      begin
         g_HumCharDB.Delete(sChrName);
       end;
     finally
@@ -204,8 +226,10 @@ var
   nRow: Integer;
 begin
   nRow := ChrGrid.Row;
-  if nRow < 1 then Exit;
-  if ChrGrid.RowCount - 1 < nRow then Exit;
+  if nRow < 1 then
+    Exit;
+  if ChrGrid.RowCount - 1 < nRow then
+    Exit;
   EdChrName.Text := ChrGrid.Cells[1, nRow];
 end;
 
@@ -220,10 +244,13 @@ begin
   if (n8 >= 1) and (ChrGrid.RowCount - 1 >= n8) then
     s10 := ChrGrid.Cells[1, n8];
   try
-    if g_HumDataDB.OpenEx then begin
+    if g_HumDataDB.OpenEx then
+    begin
       nC := g_HumDataDB.Index(s10);
-      if nC >= 0 then begin
-        if g_HumDataDB.Get(nC, @ChrRecord) >= 0 then begin
+      if nC >= 0 then
+      begin
+        if g_HumDataDB.Get(nC, @ChrRecord) >= 0 then
+        begin
           FrmFDBViewer.n2F8 := nC;
           FrmFDBViewer.s2FC := s10;
           FrmFDBViewer.ChrRecord := ChrRecord;
@@ -246,10 +273,14 @@ var
   HumRecord: THumInfo;
 begin
   sChrName := EdChrName.Text;
-  if sChrName = '' then Exit;
-  if MessageDlg('Bạn chắc chắn muốn xóa: ' + sChrName + ' không?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if sChrName = '' then
+    Exit;
+  if MessageDlg('Bạn chắc chắn muốn xóa: ' + sChrName + ' không?',
+    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
     try
-      if g_HumCharDB.Open then begin
+      if g_HumCharDB.Open then
+      begin
         nIndex := g_HumCharDB.Index(sChrName);
         g_HumCharDB.Get(nIndex, @HumRecord);
         HumRecord.boDeleted := True;
@@ -270,10 +301,14 @@ var
   HumRecord: THumInfo;
 begin
   sChrName := EdChrName.Text;
-  if sChrName = '' then Exit;
-  if MessageDlg('Bạn chắn chắn chứ: ' + sChrName + ' không?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if sChrName = '' then
+    Exit;
+  if MessageDlg('Bạn chắn chắn chứ: ' + sChrName + ' không?', mtConfirmation,
+    [mbYes, mbNo], 0) = mrYes then
+  begin
     try
-      if g_HumCharDB.Open then begin
+      if g_HumCharDB.Open then
+      begin
         nIndex := g_HumCharDB.Index(sChrName);
         g_HumCharDB.Get(nIndex, @HumRecord);
         HumRecord.boDeleted := False;
@@ -288,7 +323,7 @@ end;
 
 procedure TFrmIDHum.SpeedButton1Click(Sender: TObject);
 begin
-  //FrmFDBExplore.Show;
+  // FrmFDBExplore.Show;
 end;
 
 procedure TFrmIDHum.BtnCreateChrClick(Sender: TObject);
@@ -296,31 +331,40 @@ var
   nCheckCode: Integer;
   HumRecord: THumInfo;
 begin
-  if not FrmCreateChr.IncputChrInfo then Exit;
+  if not FrmCreateChr.IncputChrInfo then
+    Exit;
   nCheckCode := 0;
   try
-    if g_HumCharDB.Open then begin
-      if g_HumCharDB.ChrCountOfAccount(FrmCreateChr.sUserId) < 2 then begin
+    if g_HumCharDB.Open then
+    begin
+      if g_HumCharDB.ChrCountOfAccount(FrmCreateChr.sUserId) < 2 then
+      begin
         HumRecord.Header.boDeleted := False;
         HumRecord.Header.boIsHero := False;
         HumRecord.Header.sName := FrmCreateChr.sChrName;
         HumRecord.Header.nSelectID := FrmCreateChr.nSelectID;
         HumRecord.boIsHero := False;
-        //HumRecord.boSelected := True;
+        // HumRecord.boSelected := True;
         HumRecord.sChrName := FrmCreateChr.sChrName;
         HumRecord.sAccount := FrmCreateChr.sUserId;
         HumRecord.boDeleted := False;
         HumRecord.btCount := 0;
-        if HumRecord.Header.sName <> '' then begin
-          if not g_HumCharDB.Add(@HumRecord) then nCheckCode := 2;
+        if HumRecord.Header.sName <> '' then
+        begin
+          if not g_HumCharDB.Add(@HumRecord) then
+            nCheckCode := 2;
         end;
-      end else nCheckCode := 3;
+      end
+      else
+        nCheckCode := 3;
     end;
   finally
     g_HumCharDB.Close;
   end;
-  if nCheckCode = 0 then ShowMessage('Tạo thành công...')
-  else ShowMessage('Có lỗi, tạo không thành công!')
+  if nCheckCode = 0 then
+    ShowMessage('Tạo thành công...')
+  else
+    ShowMessage('Có lỗi, tạo không thành công!')
 end;
 
 procedure TFrmIDHum.BtnDeleteChrAllInfoClick(Sender: TObject);
@@ -328,17 +372,23 @@ var
   sChrName: string;
 begin
   sChrName := EdChrName.Text;
-  if sChrName = '' then Exit;
-  if MessageDlg('Xóa mọi thông tin về: ' + sChrName + '!. Bạn có chắc chắn chứ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if sChrName = '' then
+    Exit;
+  if MessageDlg('Xóa mọi thông tin về: ' + sChrName +
+      '!. Bạn có chắc chắn chứ?', mtConfirmation,
+    [mbYes, mbNo], 0) = mrYes then
+  begin
     try
-      if g_HumCharDB.Open then begin
+      if g_HumCharDB.Open then
+      begin
         g_HumCharDB.Delete(sChrName);
       end;
     finally
       g_HumCharDB.Close;
     end;
     try
-      if g_HumDataDB.Open then g_HumDataDB.Delete(sChrName);
+      if g_HumDataDB.Open then
+        g_HumDataDB.Delete(sChrName);
     finally
       g_HumDataDB.Close;
     end;
@@ -352,13 +402,19 @@ var
   nRow: Integer;
 begin
   nRow := ChrGrid.Row;
-  if nRow < 1 then Exit;
-  if ChrGrid.RowCount - 1 < nRow then Exit;
+  if nRow < 1 then
+    Exit;
+  if ChrGrid.RowCount - 1 < nRow then
+    Exit;
   nIndex := Str_ToInt(ChrGrid.Cells[0, nRow], 0);
-  if MessageDlg('Bổ sung thông tin: ' + IntToStr(nIndex) + ' không?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+  if MessageDlg('Bổ sung thông tin: ' + IntToStr(nIndex) + ' không?',
+    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
     try
-      if g_HumCharDB.Open then begin
-        if g_HumCharDB.GetBy(nIndex, @HumRecord) then begin
+      if g_HumCharDB.Open then
+      begin
+        if g_HumCharDB.GetBy(nIndex, @HumRecord) then
+        begin
           HumRecord.boDeleted := True;
           HumRecord.dModDate := Now();
           Inc(HumRecord.btCount);
@@ -384,7 +440,8 @@ begin
   ChrGrid.Cells[3, nRowCount] := BoolToStr(HumDBRecord.boDeleted);
   if HumDBRecord.boDeleted then
     ChrGrid.Cells[4, nRowCount] := DateTimeToStr(HumDBRecord.dModDate)
-  else ChrGrid.Cells[4, nRowCount] := '';
+  else
+    ChrGrid.Cells[4, nRowCount] := '';
 
   ChrGrid.Cells[5, nRowCount] := IntToStr(HumDBRecord.btCount);
   ChrGrid.Cells[6, nRowCount] := IntToStr(HumDBRecord.Header.nSelectID);
@@ -402,12 +459,16 @@ begin
   nRow := ChrGrid.Row;
   if (nRow >= 1) and (ChrGrid.RowCount - 1 >= nRow) then
     sName := ChrGrid.Cells[1, nRow];
-  if sName = '' then Exit;
+  if sName = '' then
+    Exit;
   try
-    if g_HumDataDB.OpenEx then begin
+    if g_HumDataDB.OpenEx then
+    begin
       nIdx := g_HumDataDB.Index(sName);
-      if nIdx >= 0 then begin
-        if g_HumDataDB.Get(nIdx, @ChrRecord) >= 0 then begin
+      if nIdx >= 0 then
+      begin
+        if g_HumDataDB.Get(nIdx, @ChrRecord) >= 0 then
+        begin
           frmEditRcd.m_nIdx := nIdx;
           frmEditRcd.m_ChrRcd := ChrRecord;
         end;
@@ -422,4 +483,3 @@ begin
 end;
 
 end.
-

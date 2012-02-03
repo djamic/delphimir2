@@ -79,8 +79,8 @@ object frmRouteManage: TfrmRouteManage
       Height = 31
       Hint = '??????????'
       Caption = 'OK (&O)'
+      ModalResult = 11
       TabOrder = 3
-      OnClick = ButtonDeleteClick
     end
     object ButtonAddRoute: TButton
       Left = 10

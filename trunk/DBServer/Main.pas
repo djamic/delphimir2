@@ -1,4 +1,4 @@
-unit Main;
+ï»¿unit Main;
 
 interface
 
@@ -152,7 +152,7 @@ begin
   begin
     ModuleInfo.Module := Thread;
     ModuleInfo.ModuleName := 'test1';
-    ModuleInfo.Address := Format('%s:%d ¡ú %s:%d', [sRemoteAddress, Thread.ClientSocket.RemotePort, sRemoteAddress, ServerSocket.Port]);
+    ModuleInfo.Address := Format('%s:%d Â¡Ãº %s:%d', [sRemoteAddress, Thread.ClientSocket.RemotePort, sRemoteAddress, ServerSocket.Port]);
     ModuleInfo.Buffer := '0/0';
     TServerClient(Thread).m_Module := AddModule(@ModuleInfo);
   end;
@@ -189,7 +189,7 @@ begin
   begin
     ModuleInfo.Module := Thread;
     ModuleInfo.ModuleName := 'test4';
-    ModuleInfo.Address := Format('%s:%d ¡ú %s:%d', [sRemoteAddress, Thread.ClientSocket.RemotePort, sRemoteAddress, SelectSocket.Port]);
+    ModuleInfo.Address := Format('%s:%d Â¡Ãº %s:%d', [sRemoteAddress, Thread.ClientSocket.RemotePort, sRemoteAddress, SelectSocket.Port]);
     ModuleInfo.Buffer := '0/0';
     TSelectClient(Thread).m_Module := AddModule(@ModuleInfo);
   end;
@@ -225,7 +225,7 @@ begin
 
     ModuleInfo.Module := Socket;
     ModuleInfo.ModuleName := 'Connected';
-    ModuleInfo.Address := Format('%s:%d ¡ú %s:%d', [sRemoteAddress, Socket.RemotePort, sRemoteAddress, ServerSocket.Port]);
+    ModuleInfo.Address := Format('%s:%d Â¡Ãº %s:%d', [sRemoteAddress, Socket.RemotePort, sRemoteAddress, ServerSocket.Port]);
     ModuleInfo.Buffer := '0/0';
     TServerClient(Socket).m_Module := AddModule(@ModuleInfo);
   end;
@@ -273,7 +273,7 @@ begin
   begin
     ModuleInfo.Module := Socket;
     ModuleInfo.ModuleName := 'Connected';
-    ModuleInfo.Address := Format('%s:%d ¡ú %s:%d', [sRemoteAddress, Socket.RemotePort, sRemoteAddress, SelectSocket.Port]);
+    ModuleInfo.Address := Format('%s:%d Â¡Ãº %s:%d', [sRemoteAddress, Socket.RemotePort, sRemoteAddress, SelectSocket.Port]);
     ModuleInfo.Buffer := '0/0';
     TSelectClient(Socket).m_Module := AddModule(@ModuleInfo);
   end;
@@ -527,23 +527,23 @@ begin
     {DB_SAVEHUMANRCDEX: begin
         SaveHumanRcdEx(sData, DefMsg.Recog, Socket);
       end; }
-    DB_LOADHERORCD: begin //¶ÁÈ¡Ó¢ĞÛÊı¾İ
+    DB_LOADHERORCD: begin //Â¶ÃÃˆÂ¡Ã“Â¢ÃÃ›ÃŠÃ½Â¾Ã
         LabelWorkStatus.Font.Color := clGreen;
         LabelWorkStatus.Caption := 'Load Hero';
       end;
-    DB_NEWHERORCD: begin //ĞÂ½¨Ó¢ĞÛ
+    DB_NEWHERORCD: begin //ÃÃ‚Â½Â¨Ã“Â¢ÃÃ›
         LabelWorkStatus.Font.Color := clGreen;
         LabelWorkStatus.Caption := 'New Hero';
       end;
-    DB_DELHERORCD: begin //É¾³ıÓ¢ĞÛ
+    DB_DELHERORCD: begin //Ã‰Â¾Â³Ã½Ã“Â¢ÃÃ›
         LabelWorkStatus.Font.Color := clGreen;
         LabelWorkStatus.Caption := 'Del Hero';
       end;
-    DB_SAVEHERORCD: begin //±£´æÓ¢ĞÛÊı¾İ
+    DB_SAVEHERORCD: begin //Â±Â£Â´Ã¦Ã“Â¢ÃÃ›ÃŠÃ½Â¾Ã
         LabelWorkStatus.Font.Color := clGreen;
         LabelWorkStatus.Caption := 'Save Hero';
       end;
-    DB_LOADRANKING: begin //ÅÅĞĞ°ñ
+    DB_LOADRANKING: begin //Ã…Ã…ÃÃÂ°Ã±
         LabelWorkStatus.Font.Color := clGreen;
         LabelWorkStatus.Caption := 'Ranking';
       end;
@@ -675,7 +675,7 @@ begin
 
   SelectSocket.Active := False;
   ServerSocket.Active := False;
-  MainOutMessage('·şÎñÆ÷ÒÑÍ£Ö¹...');
+  MainOutMessage('ÄÃ£ ngá»«ng server...');
 end;
 
 procedure TFrmMain.TimerStartTimer(Sender: TObject);
@@ -784,7 +784,7 @@ begin
       TimerClose.Enabled := False;
       SelectSocket.Active := False;
       ServerSocket.Active := False;
-      MainOutMessage('·şÎñÆ÷ÒÑÍ£Ö¹...');
+      MainOutMessage('Â·Ã¾ÃÃ±Ã†Ã·Ã’Ã‘ÃÂ£Ã–Â¹...');
       Close;
     end;
   end;
